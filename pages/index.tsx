@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import Navigation from "../components/layout/Navigation";
 import { Button } from "../styled/reusable";
+import ShowcaseSlider from "../components/ShowcaseSlider/ShowcaseSlider";
+import Footer from "../components/layout/Footer";
 
 const Hero = styled.section`
   width: 100%;
@@ -118,6 +120,11 @@ const UIFeaturing = styled.section`
   text-align: center;
   display: flex;
   align-items: center;
+  padding: 10em 0;
+
+  .slider {
+    margin-top: 5em;
+  }
 
   h2 {
     font-size: 2rem;
@@ -155,6 +162,7 @@ const Home: NextPage = () => {
         <UIFeaturing>
           <Container>
             <h2>Clean UI for the best experience ever.</h2>
+            <ShowcaseSlider />
           </Container>
         </UIFeaturing>
         <MailSection>
@@ -177,6 +185,7 @@ const Home: NextPage = () => {
             </div>
           </Container>
         </MailSection>
+        <Footer />
       </div>
     </div>
   );
