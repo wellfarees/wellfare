@@ -1,15 +1,32 @@
 {
-  "name": "wellfare-api",
-  "version": "0.0.0",
-  "main": "dist/index.js",
-  "repository": "https://github.com/wellfaree/backend.git",
-  "author": "geenva <geenva@users.noreply.github.com>",
-  "license": "MIT",
-  "dependencies": {
-    "apollo-server": "^3.1.2",
-    "graphql": "^15.5.1"
-  },
+  "name": "apollo-server-template",
+  "version": "0.0.1",
+  "description": "A template for a typescript apollo server with mongodb",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "build": "tsc",
+    "start": "node .",
+    "dev": "nodemon src/main.ts",
+    "lint": "eslint src/.",
+    "lint:fix": "eslint src/. --fix",
+    "test:unit": "jest --coverage src/",
+    "test:server": "jest integration-tests/"
+  },
+  "author": "Stéphane Souron",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "apollo-server-testing": "^2.22.2",
+    "nodemon": "^2.0.7",
+    "prisma": "^2.29.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "apollo-server": "^2.22.1",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.5.0"
   }
 }
