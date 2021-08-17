@@ -40,6 +40,23 @@ const Slider = styled.div`
   img:last-of-type {
     right: 0;
   }
+
+  @media only screen and (max-width: 768px) {
+    img {
+      width: 100% !important;
+      border-radius: 5%;
+      margin-top: 4em;
+
+      &:first-of-type {
+        margin-top: -2em;
+      }
+    }
+
+    img:not(.main-img) {
+      position: static !important;
+      transform: translateY(0);
+    }
+  }
 `;
 
 const ShowcaseSlider: React.FC = () => {

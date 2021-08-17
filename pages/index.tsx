@@ -7,6 +7,7 @@ import Navigation from "../components/layout/Navigation";
 import { Button } from "../styled/reusable";
 import ShowcaseSlider from "../components/ShowcaseSlider/ShowcaseSlider";
 import Footer from "../components/layout/Footer";
+import ScrollableCards from "../components/ScrollableCards/ScrollableCards";
 
 const Hero = styled.section`
   width: 100%;
@@ -17,6 +18,7 @@ const Hero = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   .hero-info {
     text-align: center;
@@ -42,6 +44,30 @@ const Hero = styled.section`
 
     ${Button} {
       margin-top: 2em;
+    }
+  }
+
+  .scrollable-container {
+    display: none;
+  }
+
+  @media only screen and (max-width: 768px) {
+    height: 100vh;
+  }
+
+  @media only screen and (max-width: 425px) {
+    .hero-info {
+      align-items: flex-start;
+      text-align: start;
+
+      h1 {
+        font-size: 3rem;
+      }
+    }
+
+    .scrollable-container {
+      display: block;
+      margin-top: 4em;
     }
   }
 `;
@@ -82,8 +108,9 @@ const MailSection = styled.section`
     margin-top: 3em;
     border-radius: 6px;
     box-shadow: 0px 4px 23px rgba(0, 0, 0, 0.14);
-    min-width: 400px;
+    width: 400px;
     justify-content: space-between;
+    max-width: 100%;
 
     input {
       background-color: none;
@@ -111,6 +138,12 @@ const MailSection = styled.section`
         cursor: pointer;
         background: #2b95f8;
       }
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    button {
+      padding: 0.4em 1em !important;
     }
   }
 `;
@@ -158,6 +191,7 @@ const Home: NextPage = () => {
               <Button>Get Started</Button>
             </div>
           </Container>
+          <ScrollableCards changeInterval={5000}></ScrollableCards>
         </Hero>
         <UIFeaturing>
           <Container>

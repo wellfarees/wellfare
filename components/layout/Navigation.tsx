@@ -10,9 +10,7 @@ const NavWrapper = styled.div`
 
   ${Container} {
     position: relative;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5em 0;
+    padding: 5em 15px;
   }
 `;
 
@@ -57,7 +55,7 @@ const Nav = styled.nav`
     }
   }
 
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 768px) {
     .burger {
       display: flex;
     }

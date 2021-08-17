@@ -9,7 +9,11 @@ const FooterEl = styled.footer`
     display: flex;
 
     .nav-section {
-      margin-right: 3em;
+      margin-right: 5em;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
 
     h3 {
@@ -35,6 +39,22 @@ const FooterEl = styled.footer`
     font-size: 1.4rem;
     margin-top: 3em;
     color: #6b6b6b;
+    line-height: 1.7;
+  }
+
+  @media only screen and (max-width: 480px) {
+    .sections {
+      flex-direction: column;
+
+      .nav-section {
+        margin-right: 0;
+        margin-top: 4em;
+
+        &:first-of-type {
+          margin-top: 0em;
+        }
+      }
+    }
   }
 `;
 
