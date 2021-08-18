@@ -58,6 +58,8 @@ model User {
   configurations  Configuration @relation(fields: [configurationId], references: [id])
   configurationId String
   affirmations    String[]
+  record          Record[]      @relation(fields: [recordId], references: [id])
+  recordId        String
 }
 
 model VerificationRequest {
@@ -78,6 +80,7 @@ model Record {
   contents    String
   emoji       Emoji    @relation(fields: [emojiId], references: [id])
   emojiId     String
+  User        User[]
 }
 
 model Emoji {
