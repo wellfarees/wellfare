@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "apollo-boost": "^0.4.9",
     "babel-plugin-styled-components": "^1.13.2",
+    "graphql": "^15.5.1",
     "next": "11.1.0",
     "react": "17.0.2",
+    "react-apollo": "^3.1.5",
     "react-dom": "17.0.2",
     "react-horizontal-scrolling-menu": "^2.0.6",
     "react-spring": "^9.2.4",

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   padding-right: 15px;
@@ -18,7 +18,7 @@ export const Container = styled.div`
   }
 `;
 
-export const Button = styled.a`
+export const GlowingBLue = css`
   color: #fafafa;
   padding: 0.7em 4em;
   font-size: 1.4rem;
@@ -27,10 +27,19 @@ export const Button = styled.a`
   border-radius: 5px;
   display: inline-block;
   transition: 0.5s all;
+  outline: none;
+  border: none;
 
   &:hover {
     cursor: pointer;
-    transform: translateY(-3px);
     background: #2b95f8;
+  }
+`;
+
+export const Button = styled.a`
+  ${GlowingBLue}
+
+  &:hover {
+    transform: translateY(-3px);
   }
 `;

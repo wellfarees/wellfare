@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { NextPage } from "next";
+import Link from "next/Link";
 import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
@@ -188,7 +189,9 @@ const Home: NextPage = () => {
                 Ever felt lost and emotionally burnt out? Cut it! Organize
                 yourself and ur mental state using <b>Wellfaree</b>.
               </p>
-              <Button>Get Started</Button>
+              <Link href="/signup">
+                <Button>Get Started</Button>
+              </Link>
             </div>
           </Container>
           <ScrollableCards changeInterval={5000}></ScrollableCards>
