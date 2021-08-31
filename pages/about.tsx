@@ -1,5 +1,4 @@
-import Navigation from "../components/layout/Navigation";
-import Footer from "../components/layout/Footer";
+import { Navigation, Footer } from "../components";
 import { Container } from "../styled/reusable";
 import styled from "styled-components";
 import Head from "next/dist/shared/lib/head";
@@ -66,6 +65,11 @@ const AboutInfo = styled.main`
     p {
       font-size: 1.3rem;
     }
+  }
+
+  @media only screen and (max-width: 816px) and (max-height: 425px) {
+    height: auto;
+    padding: 14em 0;
   }
 `;
 
@@ -150,6 +154,11 @@ const DevelopersSection = styled.section`
       font-size: 2rem;
       margin-bottom: 0.5em;
     }
+  }
+
+  @media only screen and (max-width: 816px) and (max-height: 425px) {
+    height: auto;
+    padding: 14em 0;
   }
 `;
 

@@ -33,7 +33,8 @@ const ScrollableCards: React.FC<ScrollableCardsProps> = ({
 
     let interval = setInterval(() => {
       if (container.current) {
-        previousWidth.current = currentIndex > 0 ? 280 * currentIndex : 0;
+        previousWidth.current =
+          currentIndex > 0 ? 276 * currentIndex + currentIndex : 0;
 
         setScrollBy(previousWidth.current);
 

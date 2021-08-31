@@ -4,11 +4,8 @@ import Link from "next/Link";
 import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
-import Navigation from "../components/layout/Navigation";
 import { Button } from "../styled/reusable";
-import ShowcaseSlider from "../components/ShowcaseSlider/ShowcaseSlider";
-import Footer from "../components/layout/Footer";
-import ScrollableCards from "../components/ScrollableCards/ScrollableCards";
+import { Navigation, Footer, ScrollableCards, Showcase } from "../components";
 
 const Hero = styled.section`
   width: 100%;
@@ -69,6 +66,16 @@ const Hero = styled.section`
     .scrollable-container {
       display: block;
       margin-top: 4em;
+    }
+  }
+
+  @media only screen and (max-height: 425px) and (max-width: 812px) {
+    height: auto !important;
+    padding: 11em 0 !important;
+
+    h1 {
+      font-size: 2.5rem !important;
+      width: 300px;
     }
   }
 `;
@@ -199,7 +206,7 @@ const Home: NextPage = () => {
         <UIFeaturing>
           <Container>
             <h2>Clean UI for the best experience ever.</h2>
-            <ShowcaseSlider />
+            <Showcase />
           </Container>
         </UIFeaturing>
         <MailSection>
