@@ -4,6 +4,7 @@ export default gql`
   type Person {
     name: String!
     roles: [String]!
+    image: String!
   }
 
   type Roles {
