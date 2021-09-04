@@ -1,4 +1,3 @@
-import { Navigation, Footer } from "../components";
 import { Container } from "../styled/reusable";
 import styled from "styled-components";
 import Head from "next/dist/shared/lib/head";
@@ -164,8 +163,6 @@ const DevelopersSection = styled.section`
 
 const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
   data,
-  loading,
-  errors,
 }) => {
   return (
     <div>
@@ -173,7 +170,6 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
         <title>About Wellfaree</title>
       </Head>
 
-      <Navigation />
       <AboutInfo>
         <Container>
           <h1>About Wellfaree</h1>
@@ -216,7 +212,6 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
           </div>
         </Container>
       </DevelopersSection>
-      <Footer />
     </div>
   );
 };

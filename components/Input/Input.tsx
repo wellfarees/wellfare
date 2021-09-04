@@ -1,10 +1,11 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { MutableRefObject, useRef, useState, useEffect } from "react";
 import { animated, useSpring, config } from "react-spring";
 import styled from "styled-components";
 
 interface InputProps {
   type?: string;
   inputRef?: MutableRefObject<HTMLInputElement | null>;
+  setInputRef?: Function;
 }
 
 const Wrapper = styled.div`
@@ -28,17 +29,40 @@ const Wrapper = styled.div`
       outline: none;
       border: none;
       font-size: 1.5rem;
+      transition: 0.6s background;
 
       &::placeholder {
         color: #bfbfbf;
       }
     }
   }
+
+  @media only screen and (max-width: 425px) {
+    label {
+      position: static !important;
+      font-size: 1.4rem !important;
+      opacity: 1 !important;
+      display: inline-block !important;
+      margin-bottom: 0.3em;
+      transform: none !important;
+    }
+
+    input {
+      &::placeholder {
+        color: transparent !important;
+      }
+    }
+  }
 `;
 
-const Input: React.FC<InputProps> = ({ type, inputRef }) => {
+const Input: React.FC<InputProps> = ({ type, inputRef, setInputRef }) => {
   const [value, setValue] = useState();
   const label = useRef<HTMLLabelElement | null>(null);
+
+  useEffect(() => {
+    const setter = setInputRef!;
+    setter(inputRef);
+  }, []);
 
   const [labelStyles, api] = useSpring(() => {
     return {

@@ -20,7 +20,9 @@
     "react-hook-form": "^7.14.1",
     "react-horizontal-scrolling-menu": "^2.0.6",
     "react-spring": "^9.2.4",
-    "styled-components": "^5.3.0"
+    "read-file": "^0.2.0",
+    "styled-components": "^5.3.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@types/react": "17.0.18",

@@ -5,7 +5,7 @@ import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { Button } from "../styled/reusable";
-import { Navigation, Footer, ScrollableCards, Showcase } from "../components";
+import { ScrollableCards, Showcase } from "../components";
 
 const Hero = styled.section`
   width: 100%;
@@ -187,7 +187,6 @@ const Home: NextPage = () => {
       </Head>
 
       <div id="wrapper">
-        <Navigation />
         <Hero>
           <Container>
             <div className="hero-info">
@@ -229,7 +228,6 @@ const Home: NextPage = () => {
             </div>
           </Container>
         </MailSection>
-        <Footer />
       </div>
     </>
   );

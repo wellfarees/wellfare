@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../styled/reusable";
+import Link from "next/Link";
 
 const FooterEl = styled.footer`
   width: 100%;
@@ -69,27 +70,35 @@ const Footer = () => {
               <h3>Navigation</h3>
               <ul>
                 <li>
-                  <a href="#">Home</a>
+                  <Link href="/">
+                    <a href="#">Home</a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">Authorize</a>
+                  <Link href="/signup">
+                    <a href="#">Authorize</a>
+                  </Link>
                 </li>
               </ul>
             </div>
             <div className="nav-section">
-              <h3>About & Credits</h3>
+              <h3>About &amp; Credits</h3>
               <ul>
                 <li>
-                  <a href="#">About & Developer credits</a>
+                  <Link href="/about">
+                    <a href="#">About &amp; Developer credits</a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">Terms of Service</a>
+                  <Link href="/tos">
+                    <a href="#">Terms of Service</a>
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
           <p className="copyright">
-            Copyright ©Wellfare {year}. All rights resrved.
+            Copyright ©Wellfaree {year}. All rights reserved.
           </p>
         </div>
       </Container>

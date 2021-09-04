@@ -110,6 +110,7 @@ const Wrapper = styled.main`
     box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.05);
     border-radius: 9px;
     padding-top: 1em;
+    padding-bottom: 19em;
     width: 300px;
 
     form {
@@ -140,64 +141,6 @@ const Wrapper = styled.main`
 
     .input-block {
       margin-top: 2em;
-    }
-
-    .divider {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1.5em;
-
-      span {
-        color: #a6a6a6;
-        font-size: 1.2rem;
-      }
-
-      &:before,
-      &:after {
-        content: "";
-        display: inline-block;
-        height: 2px;
-        width: 40%;
-        background-color: #f0f0f0;
-        position: absolute;
-        top: 50%;
-        bottom: 50%;
-      }
-
-      &:before {
-        left: 0;
-      }
-
-      &:after {
-        right: 0;
-      }
-    }
-
-    .oAuth-methods {
-      .method {
-        padding: 0.9em;
-        background-color: #fff;
-        border: 1px solid #ececec;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1.4rem;
-        border-radius: 6px;
-        font-weight: 500;
-        margin-top: 1.5em;
-        transition: 0.3s;
-
-        &:hover {
-          background-color: #fafafa;
-        }
-
-        i {
-          margin-right: 0.7em;
-        }
-      }
     }
 
     .form-cta {
@@ -236,16 +179,6 @@ const Wrapper = styled.main`
       button {
         margin-top: 2.5em !important;
       }
-
-      .divider {
-        margin-top: 2.5em;
-      }
-
-      .method {
-        padding-top: 1.2em !important;
-        padding-bottom: 1.2em !important;
-        margin-top: 1.7em !important;
-      }
     }
   }
 
@@ -256,6 +189,7 @@ const Wrapper = styled.main`
         margin-left: 1.5em;
       }
     }
+
     ${Container} {
       flex-direction: column !important;
       justify-content: center;
@@ -285,16 +219,6 @@ const Wrapper = styled.main`
       button {
         margin-top: 2.5em !important;
       }
-
-      .divider {
-        margin-top: 2.5em;
-      }
-
-      .method {
-        padding-top: 1.2em !important;
-        padding-bottom: 1.2em !important;
-        margin-top: 1.7em !important;
-      }
     }
   }
 `;
@@ -308,7 +232,7 @@ const ErrorWrapper = styled.p`
 
 const signUp = () => {
   const { register, handleSubmit } = useForm();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<null | string>(null);
   const [buttonState, setButtonState] = useState("Sign up");
 
   const [indicatorStyles, indicatorApi] = useSpring(() => {
@@ -325,11 +249,8 @@ const signUp = () => {
     <Wrapper>
       <Container>
         <div className="info">
-          <h1>Sign up now &amp; start journaling</h1>
-          <p>
-            Wanna do it quick? We got you covered - choose whatever auth method
-            you like!
-          </p>
+          <h1>Sign in &amp; check back on your mental state</h1>
+          <p>Make sure to let your emotions out and journal them down.</p>
         </div>
         <div className="signUp-card">
           <form
@@ -373,7 +294,7 @@ const signUp = () => {
                   },
                 });
 
-                setButtonState("Registering");
+                setButtonState("Signing in");
 
                 try {
                   // TODO: Authorize user (send an http request or something)
@@ -406,7 +327,6 @@ const signUp = () => {
             className="signUp-form"
           >
             <div className="main-inputs">
-              <Input {...register("name")} />
               <Input {...register("email")} />
               <Input {...register("password")} />
             </div>
@@ -419,23 +339,16 @@ const signUp = () => {
             </button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
-          <div className="divider">
-            <span>or</span>
-          </div>
-          <div className="oAuth-methods">
-            <div className="method">
-              <i className="fab fa-apple"></i>
-              AppleId
-            </div>
-            <div className="method">
-              <i className="fab fa-google"></i>
-              Google
-            </div>
-          </div>
           <p className="form-cta">
-            Already been here?{" "}
-            <Link href="/signin">
-              <a href="#"> Sign in</a>
+            <Link href="/signup">
+              <a href="#"> Forgot your password?</a>
+            </Link>
+            !
+          </p>
+          <p className="form-cta">
+            New out here?
+            <Link href="/signup">
+              <a href="#"> Sign up</a>
             </Link>
             !
           </p>
