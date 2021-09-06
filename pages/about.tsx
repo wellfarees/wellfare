@@ -8,6 +8,7 @@ import { DEVELOPERS_QUERY } from "../graphql/queries";
 import { DevelopersQueryInterface } from "../graphql/queriesTypes";
 import client from "../graphql/client";
 import { ApolloQueryResult } from "apollo-client";
+import Fade from "react-reveal/Fade";
 
 const AboutInfo = styled.main`
   height: 70vh;
@@ -161,6 +162,35 @@ const DevelopersSection = styled.section`
   }
 `;
 
+const FallbackSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    font-size: 6rem;
+    font-weight: 800;
+    max-width: 600px;
+    display: inline-block;
+  }
+
+  p {
+    margin-top: 1em;
+    font-size: 1.6rem;
+    max-width: 500px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  @media only screen and (max-width: 768px) {
+    h1 {
+      font-size: 4rem;
+      max-width: 100%;
+    }
+  }
+`;
+
 const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
   data,
 }) => {
@@ -172,44 +202,77 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
 
       <AboutInfo>
         <Container>
-          <h1>About Wellfaree</h1>
+          <Fade bottom>
+            <h1>About Wellfaree</h1>
+          </Fade>
+
           <div className="description">
-            <p>
-              Wellfaree is an app thats allows you to journal your thoughts,
-              emotions &amp; feelings and store it all in one place.
-            </p>
-            <p>
-              We’re open source and using <b>React</b>, <b>Redux</b> &amp;{" "}
-              <b>NextJs</b> as far as fronted goes. As for backend, we use{" "}
-              <b>NodeJs</b>, <b>GraphQL</b> with <b>Prisma</b> and more!
-            </p>
+            <Fade bottom>
+              <p>
+                Wellfaree is an app thats allows you to journal your thoughts,
+                emotions &amp; feelings and store it all in one place.
+              </p>
+            </Fade>
+            <Fade bottom>
+              <p>
+                We’re open source and using <b>React</b>, <b>Redux</b> &amp;{" "}
+                <b>NextJs</b> as far as fronted goes. As for backend, we use{" "}
+                <b>NodeJs</b>, <b>GraphQL</b> with <b>Prisma</b> and more!
+              </p>
+            </Fade>
           </div>
-          <p className="cta">
-            Take a glance ar our source code <a href="#">Here</a>!
-          </p>
+          <Fade bottom>
+            <p className="cta">
+              Take a glance ar our source code{" "}
+              <a href="https://github.com/wellfaree/wellfare">Here</a>!
+            </p>
+          </Fade>
         </Container>
       </AboutInfo>
       <DevelopersSection>
         <Container>
-          <h1>Wellfaree Developers</h1>
-          <div className="developers">
-            {data &&
-              data.company.developers.map((developer, index) => {
-                const direction = index % 2 === 0 ? "ltr" : "rtl";
-                return (
-                  <div className={`developer ${direction}`} key={index}>
-                    {direction === "ltr" ? <div className="pfp"></div> : null}
+          {data ? (
+            <>
+              <Fade bottom>
+                <h1>Wellfaree Developers</h1>
+              </Fade>
+              <div className="developers">
+                {data &&
+                  data.company.developers.map((developer, index) => {
+                    const direction = index % 2 === 0 ? "ltr" : "rtl";
+                    return (
+                      <Fade bottom>
+                        <div className={`developer ${direction}`} key={index}>
+                          {direction === "ltr" ? (
+                            <div className="pfp"></div>
+                          ) : null}
 
-                    <div className="dev-info">
-                      <p className="role">{developer.roles.join(" & ")}</p>
-                      <p className="name">{developer.name}</p>
-                    </div>
+                          <div className="dev-info">
+                            <p className="role">
+                              {developer.roles.join(" & ")}
+                            </p>
+                            <p className="name">{developer.name}</p>
+                          </div>
 
-                    {direction === "rtl" ? <div className="pfp"></div> : null}
-                  </div>
-                );
-              })}
-          </div>
+                          {direction === "rtl" ? (
+                            <div className="pfp"></div>
+                          ) : null}
+                        </div>
+                      </Fade>
+                    );
+                  })}
+              </div>
+            </>
+          ) : (
+            <FallbackSection>
+              <h1>Server resulted with error code 503</h1>
+              <p>
+                Our server is currently down so you won't be able to see
+                information about or developers right now. Please, check back in
+                later.
+              </p>
+            </FallbackSection>
+          )}
         </Container>
       </DevelopersSection>
     </div>
@@ -218,9 +281,14 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
 
 export default About;
 export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await client.query({
-    query: DEVELOPERS_QUERY,
-  });
+  let res: ApolloQueryResult<any> | { data: null };
+  try {
+    res = await client.query({
+      query: DEVELOPERS_QUERY,
+    });
+  } catch (e) {
+    res = { data: null };
+  }
 
   return {
     props: res,

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useReadFile } from "../hooks/useReadFile";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
+import Fade from "react-reveal/Fade";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -50,8 +51,12 @@ const TOS = () => {
     <Wrapper>
       <Container>
         <div className="titles">
-          <h1>Terms of service</h1>
-          <p>For those who are concerned</p>
+          <Fade bottom>
+            <h1>Terms of service</h1>
+          </Fade>
+          <Fade bottom>
+            <p>For those who are concerned</p>
+          </Fade>
         </div>
         <div ref={tosContainer} className="tos"></div>
       </Container>

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useSpring, animated } from "react-spring";
 
 const Slider = styled.div`
   position: relative;

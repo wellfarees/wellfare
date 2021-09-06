@@ -1,1 +1,1 @@
-declare module "read-file";
+declare module "react-reveal/Fade";

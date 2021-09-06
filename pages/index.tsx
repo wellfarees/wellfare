@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { Button } from "../styled/reusable";
 import { ScrollableCards, Showcase } from "../components";
+import Fade from "react-reveal/Fade";
 
 const Hero = styled.section`
   width: 100%;
@@ -190,42 +191,57 @@ const Home: NextPage = () => {
         <Hero>
           <Container>
             <div className="hero-info">
-              <h1>Summarize your mental state in a single place</h1>
-              <p className="subtitle">
-                Ever felt lost and emotionally burnt out? Cut it! Organize
-                yourself and ur mental state using <b>Wellfaree</b>.
-              </p>
-              <Link href="/signup">
-                <Button>Get Started</Button>
-              </Link>
+              <Fade bottom>
+                <h1>Summarize your mental state in a single place</h1>
+              </Fade>
+              <Fade bottom>
+                <p className="subtitle">
+                  Ever felt lost and emotionally burnt out? Cut it! Organize
+                  yourself and ur mental state using <b>Wellfaree</b>.
+                </p>
+              </Fade>
+              <Fade bottom>
+                <Link href="/signup">
+                  <Button>Get Started</Button>
+                </Link>
+              </Fade>
             </div>
           </Container>
           <ScrollableCards changeInterval={5000}></ScrollableCards>
         </Hero>
         <UIFeaturing>
           <Container>
-            <h2>Clean UI for the best experience ever.</h2>
+            <Fade bottom>
+              <h2>Clean UI for the best experience ever.</h2>
+            </Fade>
             <Showcase />
           </Container>
         </UIFeaturing>
         <MailSection>
           <Container>
-            <h2>Dont miss out on the latest news!</h2>
-            <p className="subtitle">
-              Subscribe to our newsletter to stay up to date to the latest
-              updates
-            </p>
-            <div className="mail-input">
-              <input
-                type="text"
-                placeholder="example@mail.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <button>Subscribe</button>
-            </div>
+            <Fade bottom>
+              <h2>Dont miss out on the latest news!</h2>
+            </Fade>
+            <Fade bottom>
+              <p className="subtitle">
+                Subscribe to our newsletter to stay up to date to the latest
+                updates
+              </p>
+            </Fade>
+
+            <Fade bottom>
+              <div className="mail-input">
+                <input
+                  type="text"
+                  placeholder="example@mail.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+                <button>Subscribe</button>
+              </div>
+            </Fade>
           </Container>
         </MailSection>
       </div>
