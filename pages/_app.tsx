@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
+  useRef,
 } from "react";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "react-apollo";
@@ -18,21 +19,31 @@ const navStateContext = createContext<
 >(undefined!);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const loggedIn = false;
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
     setIsOpen(false);
+    setIsLoaded(true);
+
+    if (router.pathname.includes("/app")) {
+      setLoggedIn(true);
+      return;
+    }
+
+    setLoggedIn(false);
   }, [router.pathname]);
 
   // if router.path includes /app dir -> render another type of layout
+  // NOTE: Temporary solution with loggedIn variable -> to be replaced with secure implementation
 
   return (
     <ApolloProvider client={client}>
       <navStateContext.Provider value={[isOpen, setIsOpen]}>
-        <Layout loggedIn={loggedIn}>
+        <Layout loggedIn={loggedIn} isLoaded={isLoaded}>
           <Component {...pageProps} />
         </Layout>
       </navStateContext.Provider>
