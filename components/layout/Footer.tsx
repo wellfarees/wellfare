@@ -5,6 +5,9 @@ import Link from "next/Link";
 const FooterEl = styled.footer`
   width: 100%;
   padding: 9em 0;
+  position: relative;
+  z-index: 4;
+  background-color: #fff;
 
   .sections {
     display: flex;
