@@ -343,7 +343,6 @@ const signUp = () => {
             <Link href="/signup">
               <a href="#"> Forgot your password?</a>
             </Link>
-            !
           </p>
           <p className="form-cta">
             New out here?

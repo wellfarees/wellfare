@@ -10,10 +10,13 @@ const NavWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 4;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
 
   ${Container} {
     position: relative;
-    padding: 5em 15px;
+    padding: 3em 15px;
   }
 `;
 
