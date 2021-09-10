@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/Link";
 import { animated } from "react-spring";
 import { Container } from "../../styled/reusable";
 import styled from "styled-components";
 import useNavToggler from "../../hooks/useNavToggler";
+import { navStateContext } from "../../pages/_app";
 
 const NavWrapper = styled.div`
   position: absolute;
@@ -128,7 +129,8 @@ const Overlay = styled.div`
 `;
 
 const Navigation: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useContext(navStateContext);
+
   const [overlayStyles, navStyles] = useNavToggler(isOpen);
 
   return (
