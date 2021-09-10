@@ -18,6 +18,12 @@ export const Container = styled.div`
   }
 `;
 
+const flexCentered = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const GlowingBLue = css`
   color: #fafafa;
   padding: 0.7em 4em;
@@ -29,6 +35,8 @@ export const GlowingBLue = css`
   transition: 0.5s all;
   outline: none;
   border: none;
+
+  ${flexCentered}
 
   &:hover {
     cursor: pointer;

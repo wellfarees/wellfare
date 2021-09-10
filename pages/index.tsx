@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { NextPage } from "next";
 import Link from "next/Link";
 import Head from "next/head";
@@ -7,6 +7,9 @@ import { Container } from "../styled/reusable";
 import { Button } from "../styled/reusable";
 import { ScrollableCards, Showcase } from "../components";
 import Fade from "react-reveal/Fade";
+import { emailRegExp } from "../utils/emailRegExp";
+import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
+import { useSpring, animated, config } from "react-spring";
 
 const Hero = styled.section`
   width: 100%;
@@ -42,6 +45,9 @@ const Hero = styled.section`
     }
 
     ${Button} {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-top: 2em;
     }
   }
@@ -110,6 +116,12 @@ const MailSection = styled.section`
     display: inline-block;
   }
 
+  .email-error {
+    margin-top: 2em;
+    font-size: 1.2rem;
+    color: red;
+  }
+
   .mail-input {
     background-color: #fff;
     display: inline-flex;
@@ -127,6 +139,11 @@ const MailSection = styled.section`
       outline: none;
       width: 100%;
       padding-right: 1.2em;
+
+      &:disabled {
+        cursor: not-allowed;
+        background: none;
+      }
     }
 
     button {
@@ -137,11 +154,13 @@ const MailSection = styled.section`
       box-shadow: 0px 0px 7px 1px rgba(48, 89, 232, 0.65);
       border-radius: 3px;
       margin-top: 0.1em;
-      display: inline-block;
+      display: inline-flex;
       transition: 0.5s all;
       outline: none;
       border: none;
       margin-top: 0;
+      justify-content: center;
+      align-items: center;
 
       &:hover {
         cursor: pointer;
@@ -179,6 +198,22 @@ const UIFeaturing = styled.section`
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
+  const emailRef = useRef<HTMLInputElement | null>(null);
+
+  const [buttonStyles, buttonSpringApi] = useSpring(() => {
+    return {
+      from: {
+        backgroundColor: "#117ee3",
+        boxShadow: "0px 0px 7px 1px rgba(48, 89, 232, 0.65)",
+      },
+      config: config.molasses,
+    };
+  });
+
+  const [buttonState, setButtonState] = useState("Subscribe");
+
   return (
     <>
       <Head>
@@ -232,15 +267,65 @@ const Home: NextPage = () => {
             <Fade bottom>
               <div className="mail-input">
                 <input
-                  type="text"
+                  ref={emailRef}
+                  type="email"
                   placeholder="example@mail.com"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
                 />
-                <button>Subscribe</button>
+                <animated.button
+                  style={buttonStyles}
+                  onClick={() => {
+                    setEmailError("");
+
+                    if (!email.length) {
+                      setEmailError("Please, enter your email address.");
+                      return;
+                    }
+
+                    if (!emailRegExp.test(email)) {
+                      setEmailError("Please, enter a valid email address.");
+                      return;
+                    }
+
+                    setEmailError("");
+                    // start loading indicator and register an email
+                    startSpinner();
+
+                    // registration completion -> SIMULATION
+                    // TODO: To be replaced with an actual implementation
+                    let successful = true;
+
+                    setTimeout(() => {
+                      // gotta stop the spinner in any way
+                      stopSpinner();
+
+                      if (!successful) {
+                        setEmailError(
+                          "We couldn't add you to our mailing list. Please, try once again later,"
+                        );
+                      }
+
+                      // if successful
+                      setButtonState("Subscribed!");
+                      if (emailRef.current) emailRef.current.disabled = true;
+
+                      buttonSpringApi.start({
+                        to: {
+                          backgroundColor: "#23db45",
+                          boxShadow: "0px 0px 7px 1px rgba(58, 240, 91, 0.6)",
+                        },
+                      });
+                    }, 1000);
+                  }}
+                >
+                  {Spinner}
+                  {buttonState}
+                </animated.button>
               </div>
+              <p className="email-error">{emailError}</p>
             </Fade>
           </Container>
         </MailSection>

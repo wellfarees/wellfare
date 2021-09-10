@@ -7,7 +7,7 @@ import styled from "styled-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
-import { animated, useSpring, config } from "react-spring";
+import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -121,16 +121,6 @@ const Wrapper = styled.main`
         display: inline-flex;
         align-items: center;
         justify-content: center;
-
-        .loading-indicator {
-          width: 15px;
-          height: 15px;
-          border-radius: 100%;
-          display: inline-block;
-          border: 3px solid #fff;
-          border-bottom: 3px solid #0bf5f56a;
-          margin-right: 0.7em;
-        }
       }
     }
 
@@ -234,16 +224,7 @@ const signUp = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<null | string>(null);
   const [buttonState, setButtonState] = useState("Sign up");
-
-  const [indicatorStyles, indicatorApi] = useSpring(() => {
-    return {
-      from: {
-        display: "none",
-        opacity: 0,
-        rotateZ: 0,
-      },
-    };
-  });
+  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
 
   return (
     <Wrapper>
@@ -277,22 +258,7 @@ const signUp = () => {
                 setError(null);
 
                 // activating the loading indicator animation
-                indicatorApi.start({
-                  to: async (animate) => {
-                    await animate({
-                      to: { display: "inline-block" },
-                    });
-                    await animate({
-                      to: { opacity: 1 },
-                    });
-                    await animate({
-                      to: { rotateZ: 360 },
-                      loop: true,
-                      delay: 0,
-                      config: config.molasses,
-                    });
-                  },
-                });
+                startSpinner();
 
                 setButtonState("Signing in");
 
@@ -303,21 +269,7 @@ const signUp = () => {
                   // redirect after successful registration
                 } catch (err) {
                   // Handling server-side errors
-                  indicatorApi.start({
-                    to: async (animate) => {
-                      await animate({
-                        to: { opacity: 0 },
-                      });
-                      await animate({
-                        to: { display: "none" },
-                      });
-                      await animate({
-                        to: { rotateZ: 0 },
-                        loop: false,
-                        delay: 0,
-                      });
-                    },
-                  });
+                  stopSpinner();
 
                   setError("Couldn't reach our database, pease, try again!");
                   setButtonState("Sign Up");
@@ -331,10 +283,7 @@ const signUp = () => {
               <Input {...register("password")} />
             </div>
             <button>
-              <animated.span
-                style={indicatorStyles}
-                className="loading-indicator"
-              ></animated.span>
+              {Spinner}
               {buttonState}
             </button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}

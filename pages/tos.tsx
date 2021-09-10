@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { useReadFile } from "../hooks/useReadFile";
+import { staticFileFetch } from "../hooks/useReadFile";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import Fade from "react-reveal/Fade";
+import { GetStaticProps, NextPage } from "next";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -38,15 +39,15 @@ const Wrapper = styled.div`
   }
 `;
 
-const TOS = () => {
-  const [loading, tosText] = useReadFile("tos.txt");
+const TOS: NextPage<{ text: string }> = ({ text }) => {
   const tosContainer = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (tosContainer.current) {
-      tosContainer.current.innerHTML = tosText;
+      tosContainer.current.innerHTML = text;
     }
-  }, [loading]);
+  }, []);
+
   return (
     <Wrapper>
       <Container>
@@ -65,3 +66,12 @@ const TOS = () => {
 };
 
 export default TOS;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const text = await staticFileFetch("http://localhost:3000/tos.txt");
+
+  return {
+    props: { text },
+    revalidate: 100,
+  };
+};
