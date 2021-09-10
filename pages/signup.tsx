@@ -8,6 +8,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
 import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
+import { useRouter } from "next/router";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -301,6 +302,7 @@ const signUp = () => {
   const [error, setError] = useState<string | null>(null);
   const [buttonState, setButtonState] = useState("Sign up");
   const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
+  const router = useRouter();
 
   return (
     <Wrapper>
@@ -346,6 +348,7 @@ const signUp = () => {
 
                   setError(null);
                   // redirect after successful registration
+                  router.push("/app");
                 } catch (err) {
                   // Handling server-side errors
                   stopSpinner();

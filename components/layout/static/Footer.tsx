@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Container } from "../../styled/reusable";
+import { Container } from "../../../styled/reusable";
 import Link from "next/Link";
 
 const FooterEl = styled.footer`
