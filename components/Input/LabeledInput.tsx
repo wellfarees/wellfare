@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef, useState, useEffect } from "react";
+import React, { MutableRefObject, useRef, useEffect } from "react";
 import { animated, useSpring, config } from "react-spring";
 import styled from "styled-components";
 
@@ -55,8 +55,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const Input: React.FC<InputProps> = ({ type, inputRef, setInputRef }) => {
-  const [value, setValue] = useState();
+const LabeledInput: React.FC<InputProps> = ({
+  type,
+  inputRef,
+  setInputRef,
+}) => {
   const label = useRef<HTMLLabelElement | null>(null);
 
   useEffect(() => {
@@ -130,4 +133,4 @@ const Input: React.FC<InputProps> = ({ type, inputRef, setInputRef }) => {
   );
 };
 
-export default Input;
+export default LabeledInput;

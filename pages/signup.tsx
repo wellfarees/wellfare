@@ -1,6 +1,6 @@
 import Link from "next/Link";
 import { useState } from "react";
-import { Input } from "../components";
+import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
 import styled from "styled-components";
@@ -348,7 +348,7 @@ const signUp = () => {
 
                   setError(null);
                   // redirect after successful registration
-                  router.push("/app");
+                  router.push("/app/entry");
                 } catch (err) {
                   // Handling server-side errors
                   stopSpinner();
@@ -361,9 +361,9 @@ const signUp = () => {
             className="signUp-form"
           >
             <div className="main-inputs">
-              <Input {...register("name")} />
-              <Input {...register("email")} />
-              <Input {...register("password")} />
+              <LabeledInput {...register("name")} />
+              <LabeledInput {...register("email")} />
+              <LabeledInput {...register("password")} />
             </div>
             <button>
               {Spinner}

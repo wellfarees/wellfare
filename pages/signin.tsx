@@ -1,6 +1,6 @@
 import Link from "next/Link";
 import { useState } from "react";
-import { Input } from "../components";
+import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
 import styled from "styled-components";
@@ -282,8 +282,8 @@ const signUp = () => {
             className="signUp-form"
           >
             <div className="main-inputs">
-              <Input {...register("email")} />
-              <Input {...register("password")} />
+              <LabeledInput {...register("email")} />
+              <LabeledInput {...register("password")} />
             </div>
             <button>
               {Spinner}

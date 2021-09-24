@@ -38,3 +38,8 @@ a {
     font-size: 9px;
   }
 }
+
+.error::placeholder {
+  color: rgb(255, 0, 0, 0.4) !important;
+  transition: 0.3s;
+}
