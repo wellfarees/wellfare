@@ -36,6 +36,10 @@ export const GlowingBLue = css`
   outline: none;
   border: none;
 
+  @media only screen and (max-width: 425px) {
+    padding: 1em 4em;
+  }
+
   ${flexCentered}
 
   &:hover {
@@ -49,5 +53,16 @@ export const Button = styled.a`
 
   &:hover {
     transform: translateY(-3px);
+  }
+`;
+
+export const Error = styled.p`
+  color: red;
+  font-size: 1.6rem;
+  max-width: 450px;
+  line-height: 1.5;
+
+  @media only screen and (max-width: 425px) {
+    width: 100%;
   }
 `;
