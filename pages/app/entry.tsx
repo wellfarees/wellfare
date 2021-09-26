@@ -7,6 +7,7 @@ import { WatermarkInput, Pfp } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
+import { MouseEvent, TouchEvent } from "react";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -87,6 +88,25 @@ const Wrapper = styled.main`
         border-radius: 20px;
       }
     }
+
+    .summarize.error {
+      color: rgb(255, 0, 0, 0.4);
+
+      &::before {
+        background-color: rgb(255, 0, 0, 0.4);
+      }
+    }
+
+    .summarize.active {
+      span {
+        margin-left: 0.8em;
+      }
+      color: ${(props) => props.theme.mainColor};
+
+      &::before {
+        display: none;
+      }
+    }
   }
 
   footer {
@@ -127,6 +147,7 @@ const Wrapper = styled.main`
   }
 `;
 
+// Emoji modal
 const EmojiWrapper = styled.div`
   position: fixed;
   left: 0;
@@ -155,7 +176,7 @@ const EmojiWrapper = styled.div`
   }
 
   .modal {
-    background-color: ${(props: any) => props.theme.backgroundColor};
+    background-color: ${(props: any) => props.theme.maximum};
     padding: 4em;
     border-radius: 16px;
     position: relative;
@@ -164,7 +185,11 @@ const EmojiWrapper = styled.div`
     gap: 3em;
     flex-direction: column;
     display: none;
-    opacity: 0;
+
+    .draggable {
+      display: none;
+      cursor: pointer;
+    }
 
     .row {
       .emojis {
@@ -199,6 +224,36 @@ const EmojiWrapper = styled.div`
       }
     }
   }
+
+  @media only screen and (max-width: 425px) {
+    .draggable {
+      display: inline-block !important;
+      width: 80px;
+      height: 3px;
+      border-radius: 30px;
+      background-color: ${(props: any) => props.theme.shadedColor};
+      margin-bottom: 1em;
+    }
+
+    .modal {
+      width: 100vw;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+      border-top-left-radius: 40px;
+      border-top-right-radius: 40px;
+      justify-content: center;
+      align-items: center;
+      padding: 6em 0 !important;
+      padding-top: 3em !important;
+    }
+
+    .close {
+      display: none;
+    }
+  }
 `;
 
 const emojisList = [
@@ -224,6 +279,79 @@ const Entry: NextPage = () => {
     useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
   const router = useRouter();
+  const [currentEmoji, setCurrentEmoji] = useState("");
+  const [isMobile, setIssMobile] = useState(false);
+  const modalRef = useRef<null | HTMLDivElement>(null);
+  const lastDeltaY = useRef(0);
+  const emojiSelector = useRef<HTMLParagraphElement | null>(null);
+
+  // Variables for mobile popup window
+  let touchStart = 0;
+  let startTime = 0;
+  let endTime = 0;
+
+  const startDragging = (e: TouchEvent<HTMLDivElement>): void => {
+    if (!modalRef || !modalRef.current) return;
+
+    let deltaTop = window.innerHeight - e.touches[0].clientY;
+
+    let touchEnd = window.innerHeight - deltaTop;
+    endTime = performance.now();
+
+    const deltaY = touchEnd - touchStart;
+
+    lastDeltaY.current = deltaY;
+
+    if (deltaY < 0) return;
+
+    if (Math.round(deltaY) > 40 && Math.round(deltaY) < 50) {
+      // deltaSpeed = v(final) - v(initial) = 0 = v(final)
+      const deltaSpeed = deltaY / ((endTime - startTime) / 1000); // pixels per second (px/s)
+
+      // if above 300 to 350 px/s then it's a pretty fast swipe
+      if (deltaSpeed > 350) {
+        closeModal();
+        return;
+      }
+    }
+
+    mobileModalApi.start({
+      to: { y: String(deltaY) + "px" },
+      immediate: true,
+    });
+  };
+
+  const stopDragging = (e: TouchEvent<HTMLDivElement>): void => {
+    if (modalRef && modalRef.current) {
+      if (lastDeltaY.current + 20 >= modalRef.current.offsetHeight / 2) {
+        closeModal();
+        return;
+      }
+
+      if (lastDeltaY.current <= modalRef?.current.offsetHeight / 2) {
+        mobileModalApi.start({
+          to: { y: "0px" },
+        });
+      }
+    }
+
+    window.removeEventListener("touchmove", startDragging as any);
+  };
+
+  const initDrag = (e: TouchEvent<HTMLDivElement>): void => {
+    let deltaTop = window.innerHeight - e.touches[0].clientY;
+    touchStart = window.innerHeight - deltaTop;
+
+    startTime = performance.now();
+    window.addEventListener("touchmove", startDragging as any);
+    window.addEventListener("touchend", stopDragging as any);
+  };
+
+  useEffect(() => {
+    closeModal();
+
+    return () => {};
+  }, [isMobile]);
 
   // Spring styles for modal
   const [modalWrapperStyles, modalWrapperApi] = useSpring(
@@ -244,6 +372,14 @@ const Entry: NextPage = () => {
   const [modalStyles, modalApi] = useSpring(
     {
       from: { display: "none", opacity: 0, scale: 0.8 },
+    },
+
+    []
+  );
+
+  const [mobileModalStyles, mobileModalApi] = useSpring(
+    {
+      from: { display: "none", y: "600px" },
     },
 
     []
@@ -271,6 +407,7 @@ const Entry: NextPage = () => {
         });
 
         // start the actual modal
+
         modalApi.start({
           to: async (animate) => {
             await animate({
@@ -281,11 +418,35 @@ const Entry: NextPage = () => {
             });
           },
         });
+
+        mobileModalApi.start({
+          to: async (animate) => {
+            await animate({
+              to: { display: "flex" },
+            });
+
+            await animate({
+              to: { y: "0px" },
+            });
+          },
+        });
       },
     });
   };
 
   const closeModal = (): void => {
+    mobileModalApi.start({
+      to: async (animate) => {
+        await animate({
+          to: { y: "600px" },
+        });
+
+        await animate({
+          to: { display: "none" },
+        });
+      },
+    });
+
     // hide the modal
     modalApi.start({
       to: async (animate) => {
@@ -323,7 +484,17 @@ const Entry: NextPage = () => {
   };
 
   useEffect(() => {
-    ref.current?.focus();
+    setIssMobile(document.body.offsetWidth <= 425);
+
+    const resizeFn = () => {
+      setIssMobile(document.body.offsetWidth <= 425);
+    };
+
+    window.addEventListener("resize", resizeFn);
+
+    return () => {
+      window.removeEventListener("resize", resizeFn);
+    };
   }, []);
 
   return (
@@ -360,8 +531,15 @@ const Entry: NextPage = () => {
                   label="Gratefulness for"
                   {...register()}
                 />
-                <p className="summarize" onClick={openModal}>
-                  Summarize your day with an emoji
+                <p
+                  ref={emojiSelector}
+                  className="summarize"
+                  onClick={openModal}
+                >
+                  {currentEmoji
+                    ? `Report summarized with`
+                    : `Summarize your day with an emoji`}
+                  {currentEmoji && <span>{currentEmoji}</span>}
                 </p>
               </div>
             </form>
@@ -372,9 +550,19 @@ const Entry: NextPage = () => {
           <div className="btns">
             <button
               onClick={() => {
+                // custom check if an emoji has been selected
+                if (!currentEmoji) {
+                  emojiSelector.current?.classList.add("error");
+                }
+
                 const raw_data = handleTextareaSubmit();
                 const res = handleResults(raw_data);
                 setError(res);
+
+                if (!res && !currentEmoji) {
+                  setError("Please, summarize your day with one emoji");
+                  return;
+                }
 
                 if (!res) {
                   router.push("/app");
@@ -392,14 +580,30 @@ const Entry: NextPage = () => {
             className="overlay"
             style={overlayStyles}
           ></animated.div>
-          <animated.div style={modalStyles} className="modal">
-            {emojisList.map((emoji) => {
+          <animated.div
+            style={isMobile ? mobileModalStyles : modalStyles}
+            className="modal"
+            ref={modalRef}
+            onTouchStart={initDrag}
+          >
+            <div className="draggable" onTouchStart={initDrag}></div>
+            {emojisList.map((emoji, index) => {
               return (
-                <div className="row">
+                <div className="row" key={index}>
                   <p className="name">{emoji.name}</p>
                   <div className="emojis">
                     {emoji.emojis.map((symbol) => (
-                      <span className="emoji">{symbol}</span>
+                      <span
+                        key={symbol}
+                        onClick={() => {
+                          setCurrentEmoji(symbol);
+                          emojiSelector.current?.classList.add("active");
+                          closeModal();
+                        }}
+                        className="emoji"
+                      >
+                        {symbol}
+                      </span>
                     ))}
                   </div>
                 </div>
