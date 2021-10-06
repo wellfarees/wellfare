@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const Container = styled.div`
+const ContainerStyles = css`
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -15,6 +15,18 @@ export const Container = styled.div`
   }
   @media (min-width: 1200px) {
     width: 1170px;
+  }
+`;
+
+export const Container = styled.div`
+  ${ContainerStyles}
+`;
+
+export const ShrankContainer = styled.div`
+  ${ContainerStyles};
+
+  @media only screen and (min-width: 768px) {
+    padding-left: 420px;
   }
 `;
 

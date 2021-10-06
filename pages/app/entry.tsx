@@ -11,7 +11,7 @@ import { MouseEvent, TouchEvent } from "react";
 
 const Wrapper = styled.main`
   min-height: 100vh;
-  width: 100vw;
+  /* width: 100vw; */
   height: auto;
   background-color: ${(props: any) => props.theme.backgroundColor};
   color: ${(props: any) => props.theme.mainColor};
@@ -27,8 +27,6 @@ const Wrapper = styled.main`
     align-items: flex-start;
     min-height: 80vh;
     margin: 8em 0;
-
-    justify-content: space-between;
   }
 
   .upper {

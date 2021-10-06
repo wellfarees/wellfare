@@ -7,12 +7,14 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
-  useRef,
 } from "react";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "react-apollo";
 import client from "../graphql/client";
 import Layout from "../components/layout/Layout";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -41,13 +43,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   // NOTE: Temporary solution with loggedIn variable -> to be replaced with secure implementation
 
   return (
-    <ApolloProvider client={client}>
-      <navStateContext.Provider value={[isOpen, setIsOpen]}>
-        <Layout loggedIn={loggedIn} isLoaded={isLoaded}>
-          <Component {...pageProps} />
-        </Layout>
-      </navStateContext.Provider>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <navStateContext.Provider value={[isOpen, setIsOpen]}>
+          <Layout loggedIn={loggedIn} isLoaded={isLoaded}>
+            <Component {...pageProps} />
+          </Layout>
+        </navStateContext.Provider>
+      </ApolloProvider>
+    </Provider>
   );
 }
 
