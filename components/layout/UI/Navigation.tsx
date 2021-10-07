@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
 import { Pfp } from "../..";
-import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { useRouter } from "next/router";
+import { useActions } from "../../../hooks/useActions";
 
 const NavContainer = styled.div`
   width: 100%;
@@ -45,9 +46,15 @@ const ActionPoint = styled.span`
 
   .fa-bars {
     font-size: 2.4rem;
+    cursor: pointer;
   }
 
   span.back {
+    cursor: pointer;
+
+    i {
+      margin-right: 0.5em;
+    }
   }
 
   @media only screen and (max-width: 768px) {
@@ -57,17 +64,31 @@ const ActionPoint = styled.span`
 
 const Navigation: React.FC = () => {
   const storage = useTypedSelector((state) => state.localStorage!);
+  const router = useRouter();
+  const { toggleSidebar } = useActions();
 
   return (
     <NavContainer>
       <Container>
         <ActionPoint>
-          {/* <i className="fas fa-bars"></i> */}
-
-          <span className="back">
-            <i className="fas fa-angle-left"></i>
-            {storage.lastRoute}
-          </span>
+          {router.pathname === "/app" ? (
+            <i
+              onClick={() => {
+                toggleSidebar(true);
+              }}
+              className="fas fa-bars"
+            ></i>
+          ) : (
+            <span
+              className="back"
+              onClick={() => {
+                router.push("/app");
+              }}
+            >
+              <i className="fas fa-angle-left"></i>
+              Home
+            </span>
+          )}
         </ActionPoint>
         <Pfp url="/img/sample_pfp.jpg"></Pfp>
       </Container>
