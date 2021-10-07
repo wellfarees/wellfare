@@ -1,4 +1,4 @@
-import { RetrieveLocalStorage, SetLocalStorage } from ".";
+import { RetrieveLocalStorage, SetLocalStorage, ToggleSidebar } from ".";
 import { ActionType } from "./actionTypes";
 
 export const retrieveLocalStorage = (key: string): RetrieveLocalStorage => {
@@ -19,6 +19,15 @@ export const setLocalStorage = (
     payload: {
       key,
       value,
+    },
+  };
+};
+
+export const toggleSidebar = (state: boolean): ToggleSidebar => {
+  return {
+    type: ActionType.TOGGLE_SIDEBAR,
+    payload: {
+      state,
     },
   };
 };

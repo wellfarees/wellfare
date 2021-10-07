@@ -15,4 +15,11 @@ export interface SetLocalStorage {
   };
 }
 
-export type Action = RetrieveLocalStorage | SetLocalStorage;
+export interface ToggleSidebar {
+  type: ActionType.TOGGLE_SIDEBAR;
+  payload: {
+    state: boolean;
+  };
+}
+
+export type Action = RetrieveLocalStorage | SetLocalStorage | ToggleSidebar;

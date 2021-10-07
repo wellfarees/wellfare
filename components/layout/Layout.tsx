@@ -45,14 +45,19 @@ const UserStyles = createGlobalStyle`
   li {
     font-size: ${fontSizes.base}px;
   }
+
+  span {
+    font-size: ${fontSizes.base}px;
+  }
 `;
 
 const MainContainer = styled.main`
-  min-height: 100vh;
+  min-height: calc(100vh - 9em);
 
   @media only screen and (max-width: 768px) {
     aside {
-      display: none;
+      position: absolute;
+      left: -100%;
     }
   }
 `;
@@ -72,7 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   const newDay = false;
   const router = useRouter();
   const history = useRef<string[]>([]);
-  const { setLocalStorage } = useActions();
+  const { setLocalStorage, toggleSidebar } = useActions();
 
   useEffect(() => {
     if (history.current.length <= 1) {
@@ -91,6 +96,9 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
       "lastRoute",
       history.current.length === 1 ? "null" : history.current[0]
     );
+
+    // hide sidebar on mobile whenever change a path
+    toggleSidebar(false);
   }, [router.pathname]);
 
   return (
