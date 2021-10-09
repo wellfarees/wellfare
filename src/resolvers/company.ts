@@ -3,12 +3,12 @@ const company = {
     {
       name: "Roland Fridemanis",
       roles: ["UI/UX Designer", "Frontend Developer"],
-      image: "https://w.shx.is/58Sqak_pc.png",
+      image: "https://avatars.githubusercontent.com/u/35779160?v=4",
     },
     {
       name: "geneva",
       roles: ["Backend Developer", "Database Engineer"],
-      image: "https://w.shx.is/58Sr3wk0N.png",
+      image: "https://avatars.githubusercontent.com/u/34730060?v=4",
     },
   ],
 };
