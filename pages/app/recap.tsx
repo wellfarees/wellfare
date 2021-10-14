@@ -114,7 +114,7 @@ const Recap: NextPage = () => {
 
           <div className="records">
             {size ? (
-              size < 768 && (
+              size < 768 ? (
                 <Scroller>
                   <Record
                     data={{
@@ -144,45 +144,45 @@ const Recap: NextPage = () => {
                     }}
                   />
                 </Scroller>
+              ) : (
+                <>
+                  {" "}
+                  <AdaptiveAnimation>
+                    <Record
+                      data={{
+                        date: new Date(),
+                        description:
+                          "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
+                        emoji: "😈",
+                        feelings: "Feeling fresh",
+                      }}
+                    />
+                  </AdaptiveAnimation>
+                  <AdaptiveAnimation>
+                    <Record
+                      data={{
+                        date: new Date(),
+                        description:
+                          "Feelings are good today tbh, nothing special, you know? Just on my grind, isall.",
+                        emoji: "😈",
+                        feelings: "Feeling fresh",
+                      }}
+                    />
+                  </AdaptiveAnimation>
+                  <AdaptiveAnimation>
+                    <Record
+                      data={{
+                        date: new Date(),
+                        description:
+                          "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
+                        emoji: "😈",
+                        feelings: "Feeling fresh",
+                      }}
+                    />
+                  </AdaptiveAnimation>
+                </>
               )
-            ) : (
-              <>
-                {" "}
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings are good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
-              </>
-            )}
+            ) : null}
           </div>
         </div>
       </ShrankContainer>

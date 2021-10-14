@@ -9,11 +9,11 @@ import { navStateContext } from "../../../pages/_app";
 const NavWrapper = styled.div`
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100%;
   z-index: 4;
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(20px);
+  /* backdrop-filter: blur(20px); */
 
   ${Container} {
     position: relative;

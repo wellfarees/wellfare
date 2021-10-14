@@ -7,7 +7,7 @@ import { WatermarkInput, Pfp } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
-import { MouseEvent, TouchEvent } from "react";
+import { TouchEvent } from "react";
 
 const Wrapper = styled.main`
   min-height: 100vh;

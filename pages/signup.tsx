@@ -114,6 +114,9 @@ const Wrapper = styled.main`
     width: 300px;
 
     form {
+      * {
+        text-align: left !important;
+      }
       button {
         ${GlowingBLue}
         width: 100%;
