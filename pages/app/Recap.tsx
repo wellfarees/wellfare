@@ -164,7 +164,7 @@ const Recap: NextPage = () => {
                     data={{
                       date: new Date(),
                       description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
+                        "Feelings are good today tbh, nothing special, you know? Just on my grind, isall.",
                       emoji: "😈",
                       feelings: "Feeling fresh",
                     }}
