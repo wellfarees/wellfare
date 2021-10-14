@@ -10,6 +10,17 @@ import client from "../graphql/client";
 import { ApolloQueryResult } from "apollo-client";
 import Fade from "react-reveal/Fade";
 
+const Pfp: React.FC<{ url: string }> = ({ url }) => {
+  console.log(url);
+  const Wrapper = styled.div`
+    background-image: url(${url}) !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+  `;
+
+  return <Wrapper className="pfp"></Wrapper>;
+};
+
 const AboutInfo = styled.main`
   height: 70vh;
   display: flex;
@@ -241,24 +252,26 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
                   data.company.developers.map((developer, index) => {
                     const direction = index % 2 === 0 ? "ltr" : "rtl";
                     return (
-                      <Fade bottom>
-                        <div className={`developer ${direction}`} key={index}>
-                          {direction === "ltr" ? (
-                            <div className="pfp"></div>
-                          ) : null}
+                      <div key={index}>
+                        <Fade bottom>
+                          <div className={`developer ${direction}`}>
+                            {direction === "ltr" ? (
+                              <Pfp url={developer.image}></Pfp>
+                            ) : null}
 
-                          <div className="dev-info">
-                            <p className="role">
-                              {developer.roles.join(" & ")}
-                            </p>
-                            <p className="name">{developer.name}</p>
+                            <div className="dev-info">
+                              <p className="role">
+                                {developer.roles.join(" & ")}
+                              </p>
+                              <p className="name">{developer.name}</p>
+                            </div>
+
+                            {direction === "rtl" ? (
+                              <Pfp url={developer.image}></Pfp>
+                            ) : null}
                           </div>
-
-                          {direction === "rtl" ? (
-                            <div className="pfp"></div>
-                          ) : null}
-                        </div>
-                      </Fade>
+                        </Fade>
+                      </div>
                     );
                   })}
               </div>
@@ -267,7 +280,7 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
             <FallbackSection>
               <h1>Server resulted with error code 503</h1>
               <p>
-                Our server is currently down so you won't be able to see
+                Our server is currently down so you won&apos;t be able to see
                 information about or developers right now. Please, check back in
                 later.
               </p>

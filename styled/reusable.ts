@@ -25,7 +25,7 @@ export const Container = styled.div`
 export const ShrankContainer = styled.div`
   ${ContainerStyles};
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 1024px) {
     padding-left: 420px;
   }
 `;

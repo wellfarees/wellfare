@@ -68,10 +68,14 @@ const TOS: NextPage<{ text: string }> = ({ text }) => {
 export default TOS;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const text = await staticFileFetch("http://localhost:3000/tos.txt");
-
-  return {
-    props: { text },
-    revalidate: 100,
-  };
+  let text = "";
+  try {
+    text = await staticFileFetch("http://localhost:3000/tos.txt");
+  } catch (e) {
+  } finally {
+    return {
+      props: { text },
+      revalidate: 100,
+    };
+  }
 };

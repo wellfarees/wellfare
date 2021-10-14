@@ -136,6 +136,7 @@ const Wrapper = styled.main`
         flex-direction: column;
         width: 100%;
         gap: 4em;
+        margin-top: 3em;
 
         button {
           width: 100%;
@@ -504,7 +505,7 @@ const Entry: NextPage = () => {
             <Pfp url="/img/sample_pfp.jpg"></Pfp>
           </div>
           <h3 className="greetings">
-            Welcome back, <span className="name">{username}</span>
+            Welcome back, <b className="name">{username}</b>
           </h3>
           <div className="questions">
             <form>

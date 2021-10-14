@@ -151,7 +151,7 @@ const Custom404: React.FC = () => {
           />
 
           <h1>
-            <p>OOPS...</p>Couldn't find anything here.
+            <p>OOPS...</p>Couldn&apos;t find anything here.
           </h1>
 
           <p className="description">

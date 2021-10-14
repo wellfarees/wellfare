@@ -16,4 +16,5 @@ export const fontSizes = {
   h1: userConfig.baseFontSize * 2.5,
   h2: userConfig.baseFontSize * 2,
   h3: userConfig.baseFontSize * 1.5,
+  h4: userConfig.baseFontSize * 1.2,
 };

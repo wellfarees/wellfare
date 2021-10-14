@@ -66,11 +66,11 @@ const WatermarkInput: React.FC<InputProps> = ({
     };
   });
 
-  if (toFocus) {
-    useEffect(() => {
+  useEffect(() => {
+    if (toFocus) {
       areaRef.current?.focus();
-    }, []);
-  }
+    }
+  }, []);
 
   useEffect(() => {
     const OnInput = () => {
