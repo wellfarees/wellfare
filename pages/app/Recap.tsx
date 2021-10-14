@@ -5,6 +5,7 @@ import { formatDate } from "../../utils/formatDate";
 import styled from "styled-components";
 import Scroller from "../../components/Scroller/Scroller";
 import { useScreenSize } from "../../hooks/useScreenSize";
+import { NextPage } from "next";
 
 const Wrapper = styled.div`
   margin-bottom: 6em;
@@ -72,7 +73,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Recap = (): JSX.Element => {
+const Recap: NextPage = () => {
   const size = useScreenSize();
 
   return (
