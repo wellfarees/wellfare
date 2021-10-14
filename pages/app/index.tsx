@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
-import Link from "next/Link";
+import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
 import Record from "../../components/Records/Record";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";

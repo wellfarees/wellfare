@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import Link from "next/Link";
+import Link from "next/link";
 import styled from "styled-components";
 import { Container, GlowingBLue, Error } from "../../styled/reusable";
 import { WatermarkInput, Pfp } from "../../components";

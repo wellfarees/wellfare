@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
-import Link from "next/Link";
+import Link from "next/link";
 
 const FooterEl = styled.footer`
   width: 100%;
