@@ -74,6 +74,11 @@ const ChildrenContainer = styled.div`
   }
 `;
 
+const StaticLayoutWrapper = styled.div`
+  width: 100vw;
+  overflow-x: hidden;
+`;
+
 const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   // TODO: Replace with actual graphql / redux data
   // -> basically instead of showing full UI, inquires user to journal their day first (so there's no typical UI layout, just the bare minimum)
@@ -134,12 +139,12 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
             </SpringContext>
           </ThemeProvider>
         ) : (
-          <>
+          <StaticLayoutWrapper>
             {/* Static sided Layout */}
             <Navigation />
             {children}
             <Footer />
-          </>
+          </StaticLayoutWrapper>
         )
       ) : null}
     </>
