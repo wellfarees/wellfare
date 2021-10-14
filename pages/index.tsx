@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import type { NextPage } from "next";
-import Link from "next/Link";
+import Link from "next/link";
 import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";

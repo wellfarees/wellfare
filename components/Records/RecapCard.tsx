@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Link from "next/Link";
+import Link from "next/link";
 
 const Card = styled.div`
   background: ${(props: any) =>

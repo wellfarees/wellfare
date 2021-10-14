@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import Link from "next/Link";
+import Link from "next/link";
 import { animated } from "react-spring";
 import { Container } from "../../../styled/reusable";
 import styled from "styled-components";

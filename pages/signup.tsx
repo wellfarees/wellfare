@@ -1,4 +1,4 @@
-import Link from "next/Link";
+import Link from "next/link";
 import { useState } from "react";
 import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";

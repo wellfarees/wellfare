@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
-import Link from "next/Link";
+import Link from "next/link";
 
 const Wrapper = styled.main`
   min-height: 100vh;
