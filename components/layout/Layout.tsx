@@ -7,7 +7,6 @@ import styled, { createGlobalStyle } from "styled-components";
 import { userConfig } from "../../config/userConfig";
 import { fontSizes } from "../../config/userConfig";
 import { GetStaticProps } from "next";
-import { ShrankContainer } from "../../styled/reusable";
 import { useEffect, useRef } from "react";
 import { useActions } from "../../hooks/useActions";
 
@@ -38,6 +37,10 @@ const UserStyles = createGlobalStyle`
     font-size: ${fontSizes.h3}px;
   }
 
+  h4 {
+    font-size: ${fontSizes.h4}px;
+  }
+
   label {
     color: ${(props: any) => props.theme.label};
   }
@@ -53,8 +56,9 @@ const UserStyles = createGlobalStyle`
 
 const MainContainer = styled.main`
   min-height: calc(100vh - 9em);
+  height: 100%;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1024px) {
     aside {
       position: absolute;
       left: -100%;
@@ -65,7 +69,7 @@ const MainContainer = styled.main`
 const ChildrenContainer = styled.div`
   padding-top: 8.5em;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1024px) {
     padding-top: 3em;
   }
 `;
@@ -74,8 +78,15 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   // TODO: Replace with actual graphql / redux data
   // -> basically instead of showing full UI, inquires user to journal their day first (so there's no typical UI layout, just the bare minimum)
   // newDay determines whether or not we enter the REAL layout
-  const newDay = false;
+  let newDay = false;
   const router = useRouter();
+
+  if (router.pathname === "/app/entry") {
+    newDay = true;
+  } else {
+    newDay = false;
+  }
+
   const history = useRef<string[]>([]);
   const { setLocalStorage, toggleSidebar } = useActions();
 
@@ -116,9 +127,7 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
                   <TopMenu />
                   <MainContainer>
                     <Sidebar />
-                    <ChildrenContainer>
-                      <ShrankContainer>{children}</ShrankContainer>
-                    </ChildrenContainer>
+                    <ChildrenContainer>{children}</ChildrenContainer>
                   </MainContainer>
                 </>
               )}

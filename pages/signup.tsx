@@ -297,12 +297,13 @@ const ErrorWrapper = styled.p`
   line-height: 1.5;
 `;
 
-const signUp = () => {
+const SignUp = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string | null>(null);
   const [buttonState, setButtonState] = useState("Sign up");
   const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
   const router = useRouter();
+  const handleErrors = useHandleFormErrors();
 
   return (
     <Wrapper>
@@ -323,8 +324,7 @@ const signUp = () => {
               const credentials = handleSubmit();
 
               // if success is true there's no errors
-              const { success, message, target } =
-                useHandleFormErrors(credentials);
+              const { success, message, target } = handleErrors(credentials);
 
               credentials.refs.forEach((input) => {
                 input.style.background = "#ffffff";
@@ -397,4 +397,4 @@ const signUp = () => {
   );
 };
 
-export default signUp;
+export default SignUp;

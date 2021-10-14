@@ -29,7 +29,7 @@ const NavContainer = styled.div`
     right: 0;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1024px) {
     .pfp {
       position: static;
     }
@@ -57,7 +57,7 @@ const ActionPoint = styled.span`
     }
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1024px) {
     display: inline-block;
   }
 `;

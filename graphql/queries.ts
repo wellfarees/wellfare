@@ -6,6 +6,7 @@ export const DEVELOPERS_QUERY = gql`
       developers {
         name
         roles
+        image
       }
     }
   }

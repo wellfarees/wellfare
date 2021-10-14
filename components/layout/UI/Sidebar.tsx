@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Link from "next/Link";
 import { useRouter } from "next/router";
 import { useSpring, animated, config } from "react-spring";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useActions } from "../../../hooks/useActions";
+import { userConfig } from "../../../config/userConfig";
+import { themes } from "../../../styled/themes";
 
 const Wrapper = styled.div`
   .overlay {
@@ -31,7 +33,7 @@ const SidebarEl = styled.aside`
   width: 400px;
   background: ${(props: any) => props.theme.sidebar};
   color: ${(props: any) => props.theme.mainColor};
-  height: 100vh;
+  min-height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
@@ -47,7 +49,7 @@ const SidebarEl = styled.aside`
     border-radius: 13px;
 
     &:hover {
-      background: ${(props: any) => props.theme.maximum};
+      background: ${(props: any) => props.theme.maximum} !important;
     }
 
     i {
@@ -65,11 +67,11 @@ const SidebarEl = styled.aside`
   }
 
   .signOut span:hover {
-    background-color: ${(props: any) => props.theme.error};
+    background-color: ${(props: any) => props.theme.error} !important;
     color: white;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1023px) {
     width: 80%;
     padding: 0;
 
@@ -84,13 +86,78 @@ const SidebarEl = styled.aside`
     }
   }
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 1024px) {
     left: 0 !important;
   }
 `;
 
+const NavPoint: React.FC<{ active?: boolean }> = ({ active, children }) => {
+  const { currentPoint } = useTypedSelector((state) => state.point);
+  const itemRef = useRef<HTMLLIElement | null>(null);
+  const { indicatePoint } = useActions();
+
+  const disableCurrentPoints = (parent: HTMLUListElement): void => {
+    parent.querySelectorAll<HTMLElement>(".active")[0].style.backgroundColor =
+      "rgba(0, 0, 0, 0)";
+
+    let nodes = parent.querySelectorAll("span")!;
+
+    nodes.forEach((node) => {
+      node.style.backgroundColor = "rgba(0, 0, 0, 0)";
+    });
+  };
+
+  useEffect(() => {
+    if (!itemRef) return;
+    if (!itemRef.current) return;
+    let span = itemRef.current.querySelector<HTMLElement>("span")!;
+    let children = span.childNodes[1]!;
+
+    const pointText = children.textContent?.trim();
+
+    if (currentPoint === pointText) {
+      disableCurrentPoints(itemRef.current.closest("ul")!);
+
+      span.style.backgroundColor = themes[userConfig.theme].maximum;
+    }
+  }, [currentPoint]);
+
+  return (
+    <li
+      ref={itemRef}
+      className={active ? "active" : ""}
+      onClick={(e) => {
+        let spanChild = itemRef?.current?.querySelector<HTMLElement>("span")!;
+        let childNodes = spanChild.childNodes[1]!;
+        const txt = childNodes.textContent?.trim()!;
+
+        indicatePoint(txt);
+        let parent = e.currentTarget.closest("ul")!;
+
+        if (document?.body?.offsetWidth < 1024) {
+          const homePoint = parent.querySelector<HTMLElement>(".home")!;
+          homePoint.style.backgroundColor = themes[userConfig.theme].maximum;
+          return;
+        }
+
+        disableCurrentPoints(parent);
+
+        spanChild.style.backgroundColor = e.currentTarget
+          .querySelector("span")
+          ?.classList.contains("signOut")
+          ? "red"
+          : themes[userConfig.theme].maximum;
+      }}
+    >
+      {children}
+    </li>
+  );
+};
+
 const Sidebar: React.FC = () => {
   const router = useRouter();
+  const sideBar = useRef<HTMLDivElement>(null);
+
   const [sidebarStyles, sidebarApi] = useSpring(() => {
     return {
       from: { left: "-100%" },
@@ -157,9 +224,13 @@ const Sidebar: React.FC = () => {
     } else {
       closeSidebar();
     }
-
-    console.log(asideToggled);
   }, [asideToggled]);
+
+  useEffect(() => {
+    if (sideBar && sideBar.current) {
+      sideBar.current.style.height = document.body.clientHeight + "px";
+    }
+  }, [document.body.clientHeight]);
 
   return (
     <Wrapper>
@@ -168,38 +239,38 @@ const Sidebar: React.FC = () => {
         style={overlayStyles}
         className="overlay"
       ></animated.div>
-      <SidebarEl as={animated.aside} style={sidebarStyles}>
+      <SidebarEl ref={sideBar} as={animated.aside} style={sidebarStyles}>
         <ul>
-          <li className="active">
+          <NavPoint active={true}>
             <Link href="/app/">
-              <span>
-                <i className="fas fa-home"></i> Home
+              <span className="home">
+                <i className="fas fa-home"></i>Home
               </span>
             </Link>
-          </li>
-          <li>
+          </NavPoint>
+          <NavPoint>
             <Link href="/app/affirmations">
               <span>
                 <i className="fas fa-brain"></i>Affirmations
               </span>
             </Link>
-          </li>
-          <li>
+          </NavPoint>
+          <NavPoint>
             <Link href="/app/config">
               <span>
                 <i className="fas fa-sliders-h"></i>
                 Design configuration
               </span>
             </Link>
-          </li>
-          <li>
+          </NavPoint>
+          <NavPoint>
             <Link href="/app/archive">
               <span>
                 <i className="fas fa-archive"></i>Weekly recap archive
               </span>
             </Link>
-          </li>
-          <li>
+          </NavPoint>
+          <NavPoint>
             <a
               className="signOut"
               onClick={(e) => {
@@ -215,7 +286,7 @@ const Sidebar: React.FC = () => {
                 Sign out
               </span>
             </a>
-          </li>
+          </NavPoint>
         </ul>
       </SidebarEl>
     </Wrapper>

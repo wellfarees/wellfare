@@ -22,4 +22,15 @@ export interface ToggleSidebar {
   };
 }
 
-export type Action = RetrieveLocalStorage | SetLocalStorage | ToggleSidebar;
+export interface IndicatePoint {
+  type: ActionType.INDICATE_POINT;
+  payload: {
+    activePoint: string;
+  };
+}
+
+export type Action =
+  | RetrieveLocalStorage
+  | SetLocalStorage
+  | ToggleSidebar
+  | IndicatePoint;
