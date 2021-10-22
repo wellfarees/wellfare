@@ -62,9 +62,9 @@ const ShowcaseSlider: React.FC = () => {
   return (
     <div className="slider">
       <Slider>
-        <img src="./img/UI/ui_settings.png" alt="Main UI" />
-        <img className="main-img" src="./img/UI/main_ui.png" alt="Main UI" />
-        <img src="./img/UI/weekly_recap.png" alt="Main UI" />
+        <img src="./img/ui_settings.png" alt="Main UI" />
+        <img className="main-img" src="./img/main_ui.png" alt="Main UI" />
+        <img src="./img/weekly_recap.png" alt="Main UI" />
       </Slider>
     </div>
   );

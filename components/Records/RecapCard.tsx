@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import { useActions } from "../../hooks/useActions";
 
 const Card = styled.div`
   background: ${(props: any) =>
@@ -62,6 +63,8 @@ const Card = styled.div`
 `;
 
 const RecapCard: React.FC<{ records: number }> = ({ records }) => {
+  const { indicatePoint } = useActions();
+
   return (
     <Card className="recap">
       <div className="contents">
@@ -73,7 +76,12 @@ const RecapCard: React.FC<{ records: number }> = ({ records }) => {
         </p>
 
         <Link href="/app/recap">
-          <span className="cta">
+          <span
+            className="cta"
+            onClick={() => {
+              indicatePoint(null);
+            }}
+          >
             Let&apos;s check it out <i className="fas fa-arrow-right"></i>
           </span>
         </Link>

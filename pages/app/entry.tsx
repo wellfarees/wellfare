@@ -117,6 +117,7 @@ const Wrapper = styled.main`
       display: flex;
       gap: 3em;
       align-items: center;
+      margin-top: 3em;
     }
 
     button {
@@ -136,7 +137,6 @@ const Wrapper = styled.main`
         flex-direction: column;
         width: 100%;
         gap: 4em;
-        margin-top: 3em;
 
         button {
           width: 100%;
@@ -385,6 +385,8 @@ const Entry: NextPage = () => {
   );
 
   const openModal = (): void => {
+    document.documentElement.style.overscrollBehaviorY = "contain";
+
     modalWrapperApi.start({
       // start the wrapper
       to: async (animate) => {
@@ -434,6 +436,8 @@ const Entry: NextPage = () => {
   };
 
   const closeModal = (): void => {
+    document.documentElement.style.overscrollBehaviorY = "auto";
+
     mobileModalApi.start({
       to: async (animate) => {
         await animate({

@@ -13,7 +13,6 @@ body {
   width: 100vw;
   overflow-x: hidden;
   font-family: "Inter", sans-serif;
-  overscroll-behavior-y: contain;
 }
 
 body {

@@ -68,9 +68,11 @@ const TOS: NextPage<{ text: string }> = ({ text }) => {
 export default TOS;
 
 export const getStaticProps: GetStaticProps = async () => {
-  let text = "";
+  let text = "Failed to fetch Wellfare TOS";
   try {
-    text = await staticFileFetch("http://localhost:3000/tos.txt");
+    // TODO: Change to actual url when deploying the whole app
+    const currentUrl = "http://localhost:3000/tos.txt";
+    text = await staticFileFetch(currentUrl);
   } catch (e) {
   } finally {
     return {

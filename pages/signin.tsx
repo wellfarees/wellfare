@@ -115,6 +115,8 @@ const Wrapper = styled.main`
     width: 300px;
 
     form {
+      text-align: left;
+
       button {
         ${GlowingBLue}
         width: 100%;
@@ -224,7 +226,7 @@ const ErrorWrapper = styled.p`
 const SignIn = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<null | string>(null);
-  const [buttonState, setButtonState] = useState("Sign up");
+  const [buttonState, setButtonState] = useState("Sign in");
   const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
   const router = useRouter();
   const handleErrors = useHandleFormErrors();

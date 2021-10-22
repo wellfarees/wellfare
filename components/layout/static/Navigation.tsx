@@ -46,6 +46,7 @@ const Nav = styled.nav`
   .logo {
     font-size: 1.4rem;
     font-weight: bold;
+    cursor: pointer;
   }
 
   .burger {
@@ -145,7 +146,9 @@ const Navigation: React.FC = () => {
 
       <Container>
         <Nav>
-          <span className="logo">Wellfaree</span>
+          <Link href="/">
+            <span className="logo">Wellfare</span>
+          </Link>
 
           <animated.div style={navStyles} className="nav-points-wrapper">
             <span

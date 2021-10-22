@@ -55,7 +55,7 @@ const useForm = (): useFormReturned => {
           type: "empty",
           ref,
         });
-      } else if (ref.name === "email") {
+      } else if (ref.name.toLocaleLowerCase() === "email") {
         if (!ref.value.match(emailRegExp))
           errors.push({
             type: "invalid_email",

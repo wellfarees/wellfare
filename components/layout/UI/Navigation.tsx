@@ -23,14 +23,14 @@ const NavContainer = styled.div`
     margin-top: -8em;
   }
 
-  .pfp {
+  .pfpContainer {
     position: absolute;
     top: 7.5em;
     right: 0;
   }
 
   @media only screen and (max-width: 1024px) {
-    .pfp {
+    .pfpContainer {
       position: static;
     }
 
@@ -65,7 +65,7 @@ const ActionPoint = styled.span`
 const Navigation: React.FC = () => {
   const storage = useTypedSelector((state) => state.localStorage!);
   const router = useRouter();
-  const { toggleSidebar } = useActions();
+  const { toggleSidebar, indicatePoint } = useActions();
 
   return (
     <NavContainer>
@@ -83,6 +83,7 @@ const Navigation: React.FC = () => {
               className="back"
               onClick={() => {
                 router.push("/app");
+                indicatePoint("Home");
               }}
             >
               <i className="fas fa-angle-left"></i>
@@ -90,7 +91,14 @@ const Navigation: React.FC = () => {
             </span>
           )}
         </ActionPoint>
-        <Pfp url="/img/sample_pfp.jpg"></Pfp>
+        <div
+          className="pfpContainer"
+          onClick={(e) => {
+            indicatePoint(null);
+          }}
+        >
+          <Pfp url="/img/sample_pfp.jpg"></Pfp>
+        </div>
       </Container>
     </NavContainer>
   );

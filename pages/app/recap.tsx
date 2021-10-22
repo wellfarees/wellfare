@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Scroller from "../../components/Scroller/Scroller";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { NextPage } from "next";
+import GoBack from "../../components/Routing/GoBack";
 
 const Wrapper = styled.div`
   margin-bottom: 6em;
@@ -80,6 +81,7 @@ const Recap: NextPage = () => {
     <Wrapper>
       <ShrankContainer>
         <header>
+          <GoBack />
           <span className="interval">
             {formatDate(new Date())} - {formatDate(new Date())}
           </span>

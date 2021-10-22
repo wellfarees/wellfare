@@ -146,7 +146,7 @@ const Custom404: React.FC = () => {
         <div className="info">
           <img
             className="mobile_illustration"
-            src="img/404_mobile-svg.svg"
+            src="/img/404_mobile-svg.svg"
             alt="404"
           />
 
@@ -179,7 +179,7 @@ const Custom404: React.FC = () => {
       </Container>
       <img
         className="desktop_illustration"
-        src="img/404_desktop-svg.svg"
+        src="/img/404_desktop-svg.svg"
         alt="404"
       />
     </Wrapper>

@@ -27,7 +27,7 @@ const Scroller: React.FC = ({ children }) => {
   const [styles, api] = useSpring(() => {
     return {
       from: { left: -25 },
-      config: config.wobbly,
+      config: config.stiff,
     };
   });
 
@@ -51,31 +51,38 @@ const Scroller: React.FC = ({ children }) => {
   let touchEnd = 0;
 
   const startDragging = (e: TouchEvent<HTMLDivElement>): void => {
-    endTime = performance.now();
+    if (container.current) {
+      const lastChildWidth = container.current.querySelectorAll(
+        ".inner-container > *"
+      )[container.current.querySelectorAll(".inner-container > *").length - 1]
+        .clientWidth;
 
-    const deltaX = touchStart - e.touches[0].clientX;
+      endTime = performance.now();
 
-    let displacement = touchEnd + deltaX;
+      const deltaX = touchStart - e.touches[0].clientX;
 
-    if (displacement < 25) {
-      displacement = 25;
+      let displacement = touchEnd + deltaX;
+
+      if (displacement < 25 / 2) {
+        displacement = 25 / 2;
+      }
+
+      if (displacement > containerWidth / 2 - lastChildWidth / 2 + 9) {
+        displacement = containerWidth / 2 - lastChildWidth / 2 + 9;
+      }
+
+      prevOffset.current = displacement;
+
+      api.start({
+        left: -displacement * 2,
+      });
+
+      // TODO: Add velocity into account when calculating offset by which to move the scroller container
+
+      const velocity = Math.round(
+        Math.abs(deltaX / ((endTime - startTime) / 1000))
+      ); // pixels per second (px/s)
     }
-
-    if (displacement > containerWidth / 1.45) {
-      displacement = containerWidth / 1.45;
-    }
-
-    prevOffset.current = displacement;
-
-    api.start({
-      left: -displacement,
-    });
-
-    // TODO: Add velocity into account when calculating offset by which to move the scroller container
-
-    const velocity = Math.round(
-      Math.abs(deltaX / ((endTime - startTime) / 100))
-    ); // pixels per second (px/s)
   };
 
   const stopDragging = (e: TouchEvent<HTMLDivElement>): void => {
