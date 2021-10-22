@@ -5,7 +5,6 @@ import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
 import Record from "../../components/Records/Record";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
-import { useActions } from "../../hooks/useActions";
 
 const Wrapper = styled.main`
   color: ${(props: any) => props.theme.mainColor};
@@ -185,7 +184,6 @@ const Wrapper = styled.main`
 
 const App: NextPage = () => {
   const name = "Roland"; // TODO: Replace with graphql data
-  const { indicatePoint } = useActions();
 
   return (
     <Wrapper>
@@ -216,11 +214,7 @@ const App: NextPage = () => {
             <br />
             <div className="affirmations-cta">
               <Link href="/app/affirmations">
-                <span
-                  onClick={(e) => {
-                    indicatePoint("Affirmations");
-                  }}
-                >
+                <span>
                   Read your affirmations
                   <i className="fas fa-arrow-right"></i>
                 </span>

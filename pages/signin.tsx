@@ -158,17 +158,6 @@ const Wrapper = styled.main`
       box-shadow: none;
       margin-top: 0em !important;
 
-      input {
-        width: 100%;
-      }
-
-      input,
-      button {
-        padding-top: 1em !important;
-        padding-bottom: 1em !important;
-        margin-top: 0.7em;
-      }
-
       button {
         margin-top: 2.5em !important;
       }
