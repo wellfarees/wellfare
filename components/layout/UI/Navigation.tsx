@@ -65,7 +65,7 @@ const ActionPoint = styled.span`
 const Navigation: React.FC = () => {
   const storage = useTypedSelector((state) => state.localStorage!);
   const router = useRouter();
-  const { toggleSidebar, indicatePoint } = useActions();
+  const { toggleSidebar } = useActions();
 
   return (
     <NavContainer>
@@ -83,7 +83,6 @@ const Navigation: React.FC = () => {
               className="back"
               onClick={() => {
                 router.push("/app");
-                indicatePoint("Home");
               }}
             >
               <i className="fas fa-angle-left"></i>
@@ -91,12 +90,7 @@ const Navigation: React.FC = () => {
             </span>
           )}
         </ActionPoint>
-        <div
-          className="pfpContainer"
-          onClick={(e) => {
-            indicatePoint(null);
-          }}
-        >
+        <div className="pfpContainer">
           <Pfp url="/img/sample_pfp.jpg"></Pfp>
         </div>
       </Container>

@@ -43,7 +43,9 @@ const Wrapper = styled.div`
 
       .change-btn {
         ${GlowingBLue}
-        padding: 0.4em 2em;
+        padding: 0.4em 2em !important;
+        display: inline-block;
+        width: auto !important;
       }
     }
   }
@@ -85,10 +87,12 @@ const Wrapper = styled.div`
     transition: 0.3s;
   }
 
-  .saving {
+  .saving,
+  .hasError {
     cursor: not-allowed !important;
     .save-btn {
       pointer-events: none !important;
+      filter: brightness(8%);
     }
   }
 
@@ -96,6 +100,22 @@ const Wrapper = styled.div`
     color: ${(props) => props.theme.error};
     margin-top: 2em;
     margin-bottom: -0.5em;
+    line-height: 1.5;
+  }
+
+  @media only screen and (max-width: 768px) {
+    input {
+      width: 100%;
+    }
+
+    .inputs {
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .save-btn {
+      margin-bottom: 4em;
+    }
   }
 `;
 
@@ -267,7 +287,10 @@ const User: NextPage<UserDataProps> = ({
 
           <footer>
             <p className="error">{error}</p>
-            <div className={`btw-wrapper ${!isSaved ? "" : "saving"}`}>
+            <div
+              className={`btw-wrapper ${!isSaved ? "" : "saving"}
+              `}
+            >
               <button className="save-btn">
                 {Spinner}Sav{!isSaved ? "e" : "ing"} changes
               </button>

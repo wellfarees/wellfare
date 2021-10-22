@@ -52,6 +52,11 @@ const Wrapper = styled.div`
       &::placeholder {
         color: transparent !important;
       }
+
+      padding-top: 1em !important;
+      padding-bottom: 1em !important;
+      margin-top: 0.7em;
+      width: 100%;
     }
   }
 `;
