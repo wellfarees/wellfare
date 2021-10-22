@@ -10,6 +10,8 @@ interface Themes {
     error: string;
     banner: string;
     input: string;
+    secondaryButton: string;
+    lighterHover: string;
   };
 }
 
@@ -25,6 +27,8 @@ const themes: Themes = {
     error: "#ff2b2b",
     banner: "#F6F6F6",
     input: "#ECECEC",
+    secondaryButton: "F0F0F0",
+    lighterHover: "#E1E1E1",
   },
   dark: {
     backgroundColor: "#202020",
@@ -37,6 +41,8 @@ const themes: Themes = {
     error: "#ff2b2b",
     banner: "#1E1E1E",
     input: "#2D2D2D",
+    secondaryButton: "#333333",
+    lighterHover: "#4F4F4F",
   },
 }; // ... TODO: Add more and more properties to each theme (so that css heavily depends on these properties depending on the current theme)
 

@@ -5,11 +5,12 @@ import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { Button } from "../styled/reusable";
-import { ScrollableCards, Showcase } from "../components";
+import { Showcase, Card } from "../components";
 import Fade from "react-reveal/Fade";
 import { emailRegExp } from "../utils/emailRegExp";
 import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
 import { useSpring, animated, config } from "react-spring";
+import Scroller from "../components/Scroller/Scroller";
 
 const Hero = styled.section`
   width: 100%;
@@ -52,7 +53,7 @@ const Hero = styled.section`
     }
   }
 
-  .scrollable-container {
+  .scroller {
     display: none;
   }
 
@@ -70,9 +71,10 @@ const Hero = styled.section`
       }
     }
 
-    .scrollable-container {
+    .scroller {
       display: block;
       margin-top: 4em;
+      margin-left: -30em;
     }
   }
 
@@ -242,7 +244,36 @@ const Home: NextPage = () => {
               </Fade>
             </div>
           </Container>
-          <ScrollableCards changeInterval={5000}></ScrollableCards>
+          <Scroller>
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+            <Card
+              title="Journal your feelings"
+              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+            />
+          </Scroller>
         </Hero>
         <UIFeaturing>
           <Container>

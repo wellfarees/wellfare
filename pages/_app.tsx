@@ -31,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     setIsOpen(false);
     setIsLoaded(true);
 
+    // TODO: Replace these state pieces with data fetched from getStaticProps in Layout.tsx itself
     if (router.pathname.includes("/app")) {
       setLoggedIn(true);
       return;

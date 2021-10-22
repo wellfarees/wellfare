@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSpring, animated, config } from "react-spring";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, MutableRefObject } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useActions } from "../../../hooks/useActions";
 import { userConfig } from "../../../config/userConfig";
@@ -91,64 +91,83 @@ const SidebarEl = styled.aside`
   }
 `;
 
-const NavPoint: React.FC<{ active?: boolean }> = ({ active, children }) => {
-  const { currentPoint } = useTypedSelector((state) => state.point);
+const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
+  active,
+  children,
+  endPoint,
+}) => {
   const itemRef = useRef<HTMLLIElement | null>(null);
-  const { indicatePoint } = useActions();
+  const router = useRouter();
 
-  const disableCurrentPoints = (parent: HTMLUListElement): void => {
+  const retrieveTextFromSpan = (span: HTMLSpanElement): string => {
+    let children = span.childNodes[1]!;
+    return children.textContent?.trim()!;
+  };
+
+  const retrievePointText = (
+    target: MutableRefObject<HTMLLIElement | null>
+  ): string => {
+    if (!target.current) return "";
+    let span = target.current.querySelector<HTMLElement>("span")!;
+    return retrieveTextFromSpan(span);
+  };
+
+  const disableCurrentPoints = (
+    parent: HTMLUListElement,
+    activePoint: string | null
+  ): void => {
     parent.querySelectorAll<HTMLElement>(".active")[0].style.backgroundColor =
       "rgba(0, 0, 0, 0)";
 
     let nodes = parent.querySelectorAll("span")!;
 
     nodes.forEach((node) => {
+      if (retrieveTextFromSpan(node) === activePoint) return;
       node.style.backgroundColor = "rgba(0, 0, 0, 0)";
     });
   };
 
-  useEffect(() => {
-    if (!itemRef) return;
+  const indicatePointWithCss = (point: string | null): void => {
     if (!itemRef.current) return;
+
+    if (!point || point === "null") {
+      console.log(point);
+      itemRef.current.querySelectorAll("span").forEach((el) => {
+        el.style.backgroundColor = "rgba(0, 0, 0, 0)";
+      });
+      return;
+    }
+
+    disableCurrentPoints(itemRef.current.closest("ul")!, point);
     let span = itemRef.current.querySelector<HTMLElement>("span")!;
-    let children = span.childNodes[1]!;
+    const pointText = retrievePointText(itemRef);
 
-    const pointText = children.textContent?.trim();
-
-    if (currentPoint === pointText) {
-      disableCurrentPoints(itemRef.current.closest("ul")!);
-
+    if (pointText === point) {
       span.style.backgroundColor = themes[userConfig.theme].maximum;
     }
-  }, [currentPoint]);
+  };
+
+  const getLastPathPiece = (thePath: string): string =>
+    thePath.substring(thePath.lastIndexOf("/") + 1);
+
+  useEffect(() => {
+    if (!itemRef.current) return;
+
+    if (!endPoint) return;
+
+    // Reset all point indications in case page in not available through the sidebar
+    itemRef.current.querySelectorAll("span").forEach((el) => {
+      el.style.backgroundColor = "rgba(0, 0, 0, 0)";
+    });
+
+    // indicate the sidebar point
+    if (getLastPathPiece(router.pathname) === endPoint) {
+      indicatePointWithCss(retrievePointText(itemRef));
+    }
+  }, [router.pathname]);
 
   return (
-    <li
-      ref={itemRef}
-      className={active ? "active" : ""}
-      onClick={(e) => {
-        let spanChild = itemRef?.current?.querySelector<HTMLElement>("span")!;
-        let childNodes = spanChild.childNodes[1]!;
-        const txt = childNodes.textContent?.trim()!;
-
-        indicatePoint(txt);
-        let parent = e.currentTarget.closest("ul")!;
-
-        if (document?.body?.offsetWidth < 1024) {
-          const homePoint = parent.querySelector<HTMLElement>(".home")!;
-          homePoint.style.backgroundColor = themes[userConfig.theme].maximum;
-          return;
-        }
-
-        disableCurrentPoints(parent);
-
-        spanChild.style.backgroundColor = e.currentTarget
-          .querySelector("span")
-          ?.classList.contains("signOut")
-          ? "red"
-          : themes[userConfig.theme].maximum;
-      }}
-    >
+    <li ref={itemRef} className={active ? "active" : ""}>
       {children}
     </li>
   );
@@ -241,21 +260,21 @@ const Sidebar: React.FC = () => {
       ></animated.div>
       <SidebarEl ref={sideBar} as={animated.aside} style={sidebarStyles}>
         <ul>
-          <NavPoint active={true}>
+          <NavPoint endPoint="app" active={true}>
             <Link href="/app/">
               <span className="home">
                 <i className="fas fa-home"></i>Home
               </span>
             </Link>
           </NavPoint>
-          <NavPoint>
+          <NavPoint endPoint="affirmations">
             <Link href="/app/affirmations">
               <span>
                 <i className="fas fa-brain"></i>Affirmations
               </span>
             </Link>
           </NavPoint>
-          <NavPoint>
+          <NavPoint endPoint="config">
             <Link href="/app/config">
               <span>
                 <i className="fas fa-sliders-h"></i>
@@ -263,7 +282,7 @@ const Sidebar: React.FC = () => {
               </span>
             </Link>
           </NavPoint>
-          <NavPoint>
+          <NavPoint endPoint="archive">
             <Link href="/app/archive">
               <span>
                 <i className="fas fa-archive"></i>Weekly recap archive

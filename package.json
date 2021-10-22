@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@types/react-slider": "^1.3.1",
+    "@types/react-toggle": "^4.0.3",
     "@use-gesture/react": "^10.0.3",
     "apollo-boost": "^0.4.9",
     "babel-plugin-styled-components": "^1.13.2",
@@ -25,7 +27,9 @@
     "react-horizontal-scrolling-menu": "^2.4.1",
     "react-redux": "^7.2.5",
     "react-reveal": "^1.2.2",
+    "react-slider": "^1.3.1",
     "react-spring": "^9.2.4",
+    "react-toggle": "^4.1.2",
     "read-file": "^0.2.0",
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",

@@ -6,6 +6,7 @@ interface InputProps {
   type?: string;
   inputRef?: MutableRefObject<HTMLInputElement | null>;
   setInputRef?: Function;
+  defaultValue?: string | number;
 }
 
 const Wrapper = styled.div`
@@ -59,6 +60,7 @@ const LabeledInput: React.FC<InputProps> = ({
   type,
   inputRef,
   setInputRef,
+  defaultValue,
 }) => {
   const label = useRef<HTMLLabelElement | null>(null);
 
@@ -114,6 +116,12 @@ const LabeledInput: React.FC<InputProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (!defaultValue) return;
+
+    showLabel();
+  }, []);
+
   return (
     <Wrapper>
       <div className="input-block">
@@ -123,10 +131,11 @@ const LabeledInput: React.FC<InputProps> = ({
         <input
           ref={inputRef}
           onChange={handleLabel}
-          type={type}
+          type={type?.toLowerCase().includes("password") ? "password" : type}
           name={type}
           id={type}
           placeholder={`Your ${type}`}
+          defaultValue={defaultValue || ""}
         />
       </div>
     </Wrapper>

@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { fontSizes } from "../config/userConfig";
 
 const ContainerStyles = css`
   padding-right: 15px;
@@ -37,9 +38,8 @@ const flexCentered = css`
 `;
 
 export const GlowingBLue = css`
-  color: #fafafa;
+  color: #fafafa !important;
   padding: 0.7em 4em;
-  font-size: 1.4rem;
   background: #117ee3;
   box-shadow: 0px 0px 7px 1px rgba(48, 89, 232, 0.65);
   border-radius: 5px;
@@ -47,16 +47,19 @@ export const GlowingBLue = css`
   transition: 0.5s all;
   outline: none;
   border: none;
+  display: inline-block;
+  font-size: ${fontSizes.base}px;
 
   @media only screen and (max-width: 425px) {
     padding: 1em 4em;
+    width: 100%;
   }
 
   ${flexCentered}
 
   &:hover {
     cursor: pointer;
-    background: #2b95f8;
+    background: #2b95f8 !important;
   }
 `;
 

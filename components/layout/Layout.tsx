@@ -21,10 +21,6 @@ const UserStyles = createGlobalStyle`
     color: ${(props: any) => props.theme.mainColor};
   }
 
-  p {
-    font-size: ${fontSizes.base}px;
-  }
-
   h1 {
     font-size: ${fontSizes.h1}px;
   }
@@ -45,12 +41,8 @@ const UserStyles = createGlobalStyle`
     color: ${(props: any) => props.theme.label};
   }
 
-  li {
-    font-size: ${fontSizes.base}px;
-  }
-
-  span {
-    font-size: ${fontSizes.base}px;
+  p, li, button, span, a {
+    font-size: ${fontSizes.base}px !important;
   }
 `;
 
