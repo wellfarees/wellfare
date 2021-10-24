@@ -224,14 +224,18 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             </AdaptiveAnimation>
             <div className="records">
               <div className="current">
-                {mapRecordsToJsx(records).map((record) => (
-                  <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                {mapRecordsToJsx(records).map((record, index) => (
+                  <div key={index}>
+                    <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                  </div>
                 ))}
               </div>
               <div className="last-week">
                 <p className="time">Last week</p>
-                {mapRecordsToJsx(records).map((record) => (
-                  <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                {mapRecordsToJsx(records).map((record, index) => (
+                  <div key={index}>
+                    <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                  </div>
                 ))}
               </div>
             </div>

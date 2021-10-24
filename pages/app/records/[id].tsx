@@ -30,7 +30,6 @@ const RecordPage: NextPage<RecordProps> = ({ data, isMobile }) => {
 
   if (!isMobile) {
     router.push("/404");
-    return <></>;
   }
 
   useEffect(() => {
