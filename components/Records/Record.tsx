@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import { formatDate } from "../../utils/formatDate";
+import { useScreenSize } from "../../hooks/useScreenSize";
+import { useRouter } from "next/router";
+import { useActions } from "../../hooks/useActions";
+import DetailedRecord from "./DetailedRecord";
+import { RecordsData } from "./RecordTypes";
 
 interface RecordProps {
   data: {
     emoji: string;
     date: Date;
     feelings: string;
-    description: string;
+    gratefulness: string;
+    unease: string;
   };
 }
 
@@ -47,18 +53,42 @@ const Wrapper = styled.div`
 `;
 
 const Record: React.FC<RecordProps> = ({
-  data: { date, feelings, emoji, description },
+  data: { date, feelings, emoji, unease, gratefulness },
 }) => {
   const dateString = formatDate(date);
+  const size = useScreenSize();
+  const router = useRouter();
+  const { initModal } = useActions();
 
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        const RecordContent = (
+          <DetailedRecord
+            data={{
+              date: date.getMilliseconds(),
+              emoji,
+              feelings,
+              gratefulness,
+              unease,
+            }}
+          />
+        );
+        if (size! > 425 && !(size! <= 812 && window.innerHeight <= 425)) {
+          initModal(true, RecordContent);
+          return;
+        }
+
+        // TODO: redirect to the record with the appropriate (fetched) id
+        router.push("/app/records/ez");
+      }}
+    >
       <span className="date">{dateString}</span>
       <div className="feelings-container">
         <span className="emoji">{emoji}</span>
         <h4 className="feelings">{feelings}</h4>
       </div>
-      <p className="description">{description}</p>
+      <p className="description">{unease}</p>
     </Wrapper>
   );
 };

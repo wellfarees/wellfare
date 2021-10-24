@@ -72,7 +72,7 @@ const RecapCard: React.FC<{ records: number }> = ({ records }) => {
           You&apos;ve got <b>{records} new records</b> this week.
         </p>
 
-        <Link href="/app/recap">
+        <Link href="/app/recaps/ez">
           <span className="cta">
             Let&apos;s check it out <i className="fas fa-arrow-right"></i>
           </span>

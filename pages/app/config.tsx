@@ -68,6 +68,8 @@ const Thumb = (props: any, state: any) => (
 );
 
 const Wrapper = styled.div`
+  margin-bottom: 5em;
+
   h2 {
     font-weight: 500;
     max-width: 300px;
@@ -162,6 +164,21 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 425px) {
     .block {
       min-width: 100% !important;
+      padding: 0 !important;
+      background: none !important;
+    }
+
+    .togglers {
+      flex-direction: column;
+      align-items: flex-start !important;
+
+      .togglers-block {
+        align-items: flex-start !important;
+      }
+    }
+
+    .fontSize {
+      margin-top: 5em !important;
     }
   }
 `;

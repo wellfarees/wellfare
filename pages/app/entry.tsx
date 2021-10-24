@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
-
 const Wrapper = styled.main`
   min-height: 100vh;
   /* width: 100vw; */

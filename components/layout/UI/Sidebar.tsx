@@ -57,11 +57,6 @@ const SidebarEl = styled.aside`
     }
   }
 
-  li.active {
-    background: ${(props: any) => props.theme.maximum};
-    border-radius: 13px;
-  }
-
   li {
     margin-top: 1.5em;
   }
@@ -116,9 +111,6 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
     parent: HTMLUListElement,
     activePoint: string | null
   ): void => {
-    parent.querySelectorAll<HTMLElement>(".active")[0].style.backgroundColor =
-      "rgba(0, 0, 0, 0)";
-
     let nodes = parent.querySelectorAll("span")!;
 
     nodes.forEach((node) => {
@@ -282,8 +274,8 @@ const Sidebar: React.FC = () => {
               </span>
             </Link>
           </NavPoint>
-          <NavPoint endPoint="archive">
-            <Link href="/app/archive">
+          <NavPoint endPoint="recaps">
+            <Link href="/app/recaps">
               <span>
                 <i className="fas fa-archive"></i>Weekly recap archive
               </span>

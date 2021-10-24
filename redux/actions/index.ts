@@ -22,4 +22,16 @@ export interface ToggleSidebar {
   };
 }
 
-export type Action = RetrieveLocalStorage | SetLocalStorage | ToggleSidebar;
+export interface InitModal {
+  type: ActionType.INIT_MODAL;
+  payload: {
+    content?: JSX.Element;
+    open: boolean;
+  };
+}
+
+export type Action =
+  | RetrieveLocalStorage
+  | SetLocalStorage
+  | ToggleSidebar
+  | InitModal;

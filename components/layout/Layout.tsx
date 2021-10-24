@@ -6,9 +6,12 @@ import { SpringContext } from "react-spring";
 import styled, { createGlobalStyle } from "styled-components";
 import { userConfig } from "../../config/userConfig";
 import { fontSizes } from "../../config/userConfig";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useEffect, useRef } from "react";
 import { useActions } from "../../hooks/useActions";
+import { useScreenSize } from "../../hooks/useScreenSize";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import Modal from "../../components/Modal/Modal";
 
 interface LayoutProps {
   loggedIn: boolean;
@@ -41,7 +44,7 @@ const UserStyles = createGlobalStyle`
     color: ${(props: any) => props.theme.label};
   }
 
-  p, li, button, span, a {
+  p, li, button, span, a, input {
     font-size: ${fontSizes.base}px !important;
   }
 `;
@@ -55,6 +58,10 @@ const MainContainer = styled.main`
       position: absolute;
       left: -100%;
     }
+  }
+
+  @media only screen and (max-height: 425px) and (max-width: 812px) {
+    min-height: auto !important;
   }
 `;
 
@@ -77,6 +84,9 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   // newDay determines whether or not we enter the REAL layout
   let newDay = false;
   const router = useRouter();
+  const size = useScreenSize();
+  const isMobileOnly = /app\/records\/\[id\]+/.test(router.pathname);
+  const { content, open } = useTypedSelector((state) => state.modal);
 
   if (router.pathname === "/app/entry") {
     newDay = true;
@@ -111,7 +121,11 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
 
   return (
     <>
-      {isLoaded ? (
+      {isMobileOnly &&
+      size! > 425 &&
+      !(size! <= 812 && window.innerHeight <= 425) ? (
+        <>{children}</>
+      ) : isLoaded ? (
         loggedIn ? (
           <ThemeProvider theme={themes[userConfig.theme]}>
             <UserStyles />
@@ -139,18 +153,11 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
           </StaticLayoutWrapper>
         )
       ) : null}
+      <ThemeProvider theme={themes[userConfig.theme]}>
+        <Modal state={open}>{content}</Modal>
+      </ThemeProvider>
     </>
   );
 };
 
 export default Layout;
-
-export const getStaticProps: GetStaticProps = (context) => {
-  const pid = context;
-
-  return {
-    props: {
-      pid,
-    },
-  };
-};

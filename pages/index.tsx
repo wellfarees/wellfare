@@ -203,6 +203,7 @@ const Home: NextPage = () => {
   const [emailError, setEmailError] = useState("");
   const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
   const emailRef = useRef<HTMLInputElement | null>(null);
+  const successfullyMailListed = useRef(false);
 
   const [buttonStyles, buttonSpringApi] = useSpring(() => {
     return {
@@ -309,6 +310,7 @@ const Home: NextPage = () => {
                 <animated.button
                   style={buttonStyles}
                   onClick={() => {
+                    if (successfullyMailListed.current) return;
                     setEmailError("");
 
                     if (!email.length) {
@@ -349,6 +351,7 @@ const Home: NextPage = () => {
                           boxShadow: "0px 0px 7px 1px rgba(58, 240, 91, 0.6)",
                         },
                       });
+                      successfullyMailListed.current = true;
                     }, 1000);
                   }}
                 >

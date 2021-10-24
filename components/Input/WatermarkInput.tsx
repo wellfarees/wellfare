@@ -60,7 +60,7 @@ const WatermarkInput: React.FC<InputProps> = ({
   label,
   toFocus,
   defaultValue,
-  isLocked = false,
+  isLocked,
 }) => {
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
   const [labelStyles, labelApi] = useSpring(() => {
@@ -74,9 +74,11 @@ const WatermarkInput: React.FC<InputProps> = ({
   });
 
   useEffect(() => {
-    if (toFocus) {
+    if (!toFocus) return;
+
+    setTimeout(() => {
       areaRef.current?.focus();
-    }
+    }, 1);
   }, []);
 
   useEffect(() => {
@@ -126,13 +128,14 @@ const WatermarkInput: React.FC<InputProps> = ({
         ref={areaRef}
         main={main}
         defaultValue={defaultValue}
-        readOnly={isLocked}
+        readOnly={isLocked ? true : false}
         onChange={(e) => {
           const areaNonNull = areaRef.current!;
           if (defaultValue) return;
+
           const { value } = e.target;
 
-          if (!isLocked) {
+          if (isLocked === false) {
             areaNonNull.closest("div")?.classList.remove("active-textarea");
 
             labelApi.start({
@@ -154,6 +157,8 @@ const WatermarkInput: React.FC<InputProps> = ({
 
             return;
           }
+
+          console.log("ez");
 
           if (value.length) {
             labelApi.start({
