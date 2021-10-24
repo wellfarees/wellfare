@@ -10,6 +10,7 @@ import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { useLoadingIndicator } from "../../hooks/useLoadingIndicator";
 import { useState, useEffect } from "react";
 import GoBack from "../../components/Routing/GoBack";
+import { scrollToBottom } from "../../utils/scrollToBottom";
 
 interface UserDataProps {
   name: string;
@@ -19,6 +20,7 @@ interface UserDataProps {
 }
 
 const Wrapper = styled.div`
+  margin-bottom: 5em;
   header {
     max-width: 300px;
 
@@ -244,11 +246,15 @@ const User: NextPage<UserDataProps> = ({
                       const files = e.target.files!;
 
                       if (!isImage(files[0].type)) {
+                        scrollToBottom();
+
                         setError("File has to have a type of an image!");
                         return;
                       }
 
                       if (files[0].size > 80000) {
+                        scrollToBottom();
+
                         setError(
                           "Could not upload the file because size exceeds limit of 8MB."
                         );

@@ -1,10 +1,12 @@
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
 import Record from "../../components/Records/Record";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
+import { RecordsData } from "../../components/Records/RecordTypes";
+import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
 
 const Wrapper = styled.main`
   color: ${(props: any) => props.theme.mainColor};
@@ -136,12 +138,6 @@ const Wrapper = styled.main`
     }
   }
 
-  /* @media only screen and (max-width: 1024px) {
-    .ctas {
-      margin-top: 0;
-    }
-  } */
-
   @media only screen and (max-width: 930px) {
     main {
       margin-top: 3em;
@@ -182,7 +178,7 @@ const Wrapper = styled.main`
   }
 `;
 
-const App: NextPage = () => {
+const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const name = "Roland"; // TODO: Replace with graphql data
 
   return (
@@ -228,53 +224,15 @@ const App: NextPage = () => {
             </AdaptiveAnimation>
             <div className="records">
               <div className="current">
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
+                {mapRecordsToJsx(records).map((record) => (
+                  <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                ))}
               </div>
               <div className="last-week">
                 <p className="time">Last week</p>
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
-                <AdaptiveAnimation>
-                  <Record
-                    data={{
-                      date: new Date(),
-                      description:
-                        "Feelings good today tbh, nothing special, you know? Just on my grind, isall.",
-                      emoji: "😈",
-                      feelings: "Feeling fresh",
-                    }}
-                  />
-                </AdaptiveAnimation>
+                {mapRecordsToJsx(records).map((record) => (
+                  <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                ))}
               </div>
             </div>
           </div>
@@ -285,3 +243,37 @@ const App: NextPage = () => {
 };
 
 export default App;
+
+export const getServerSideProps: GetServerSideProps<{ records: RecordsData }> =
+  async () => {
+    return {
+      props: {
+        records: [
+          {
+            date: Date.now(),
+            unease:
+              "Nothing, really, ive just been craving for tacos lately ://",
+            gratefulness: "Being able to breathe fresh air, because air >>",
+            emoji: "😍",
+            feelings: "adventurous",
+          },
+          {
+            date: Date.now(),
+            unease:
+              "Nothing, really, ive just been craving for tacos lately ://",
+            gratefulness: "Being able to breathe fresh air, because air >>",
+            emoji: "😍",
+            feelings: "adventurous",
+          },
+          {
+            date: Date.now(),
+            unease:
+              "Nothing, really, ive just been craving for tacos lately ://",
+            gratefulness: "Being able to breathe fresh air, because air >>",
+            emoji: "😍",
+            feelings: "adventurous",
+          },
+        ],
+      },
+    };
+  };

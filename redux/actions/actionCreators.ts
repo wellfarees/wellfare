@@ -1,4 +1,9 @@
-import { RetrieveLocalStorage, SetLocalStorage, ToggleSidebar } from ".";
+import {
+  RetrieveLocalStorage,
+  SetLocalStorage,
+  ToggleSidebar,
+  InitModal,
+} from ".";
 import { ActionType } from "./actionTypes";
 
 export const retrieveLocalStorage = (key: string): RetrieveLocalStorage => {
@@ -28,6 +33,16 @@ export const toggleSidebar = (state: boolean): ToggleSidebar => {
     type: ActionType.TOGGLE_SIDEBAR,
     payload: {
       state,
+    },
+  };
+};
+
+export const initModal = (open: boolean, content?: JSX.Element): InitModal => {
+  return {
+    type: ActionType.INIT_MODAL,
+    payload: {
+      content,
+      open,
     },
   };
 };

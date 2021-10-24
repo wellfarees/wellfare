@@ -158,6 +158,12 @@ const Custom404: React.FC = () => {
             Seems like the page you’re looking for doesn’t exist.
           </p>
 
+          {/* TODO: If user is logged in then show different endpoints such as: 
+            1) Feed
+            2) Affirmations
+            3) Theme Config
+          */}
+
           <div className="redirection">
             <h3>You might find these quite useful:</h3>
             <ul>
@@ -173,6 +179,7 @@ const Custom404: React.FC = () => {
             </ul>
           </div>
           <Link href="/">
+            {/* TODO: Replace with *back to feed* if user is logged in */}
             <button>Back home</button>
           </Link>
         </div>

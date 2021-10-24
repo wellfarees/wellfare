@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import Link from "next/link";
-import { useActions } from "../../hooks/useActions";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,18 +26,13 @@ const Wrapper = styled.div`
 `;
 
 const GoBack: React.FC = () => {
-  const { indicatePoint } = useActions();
   const size = useScreenSize();
   return (
     <>
       {size ? (
         size < 1024 ? null : (
           <Link href="/app">
-            <Wrapper
-              onClick={() => {
-                indicatePoint("Home");
-              }}
-            >
+            <Wrapper>
               <p>Go back</p>
               <span></span>
             </Wrapper>

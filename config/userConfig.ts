@@ -7,7 +7,7 @@ export const userConfig: {
 } = {
   baseFontSize: 14,
   reducedMotion: false,
-  theme: "light",
+  theme: "dark",
 };
 
 // all dynamic font sizes, that derive from the base fontSize in userConfig
