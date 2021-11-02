@@ -2,7 +2,7 @@ import server from "../server";
 
 export default {
   Query: {
-    getUser: async (_: any, args: { email: string }) => {
+    getUser: async (_: unknown, args: { email: string }) => {
       return await server.db.user.findFirst({
         where: {
           information: {

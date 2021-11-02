@@ -5,6 +5,7 @@ export default gql`
     createUser(
       name: String!
       email: String!
+      password: String
       darkMode: Boolean
       reducedMotion: Boolean
       fontSize: Int

@@ -1,13 +1,15 @@
 import UserExistsError from "../errors/UserExists";
 import server from "../server";
+import { hash } from "bcrypt";
 
 export default {
   Mutation: {
     createUser: async (
-      _: any,
+      _: unknown,
       args: {
         name: string;
         email: string;
+        password?: string;
         darkMode?: boolean;
         reducedMotion?: boolean;
         fontSize?: number;
@@ -23,7 +25,7 @@ export default {
 
       if (data) throw new UserExistsError("Email already exists in database.");
       else {
-        return await server.db.user.create({
+        const userData = await server.db.user.create({
           data: {
             config: {
               create: {
@@ -46,6 +48,27 @@ export default {
             records: true,
           },
         });
+        if (!args.password) return userData;
+        else {
+          const password = await hash(args.password, 10);
+          return server.db.user.update({
+            where: {
+              id: userData.id,
+            },
+            data: {
+              information: {
+                update: {
+                  password,
+                },
+              },
+            },
+            include: {
+              information: true,
+              config: true,
+              records: true,
+            },
+          });
+        }
       }
     },
   },
