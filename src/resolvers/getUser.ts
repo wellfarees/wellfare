@@ -1,9 +1,10 @@
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 
 export default {
   Query: {
     getUser: async (_: unknown, args: { id: number }) => {
-      return await server.db.user.findFirst({
+      const data = await server.db.user.findFirst({
         where: {
           id: args.id,
         },
@@ -13,6 +14,11 @@ export default {
           records: true,
         },
       });
+      if (!data)
+        throw new UserDoesNotExistsError(
+          "User does not exist in the database."
+        );
+      else return data;
     },
   },
 };
