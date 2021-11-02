@@ -10,6 +10,27 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Subscription {
+  id    String @id @default(cuid())
+  email String
+}
+
+model User {
+  id              Int           @id @unique @default(autoincrement())
+  config          Configuration @relation(fields: [configurationId], references: [id])
+  configurationId String
+  records         Record[]
+  information     Information   @relation(fields: [informationId], references: [dbid])
+  informationId   String
+}
+
+model Information {
+  dbid  String @id @default(cuid())
+  name  String
+  email String
+  User  User[]
+}
+
 model Configuration {
   id            String  @id @default(cuid())
   darkMode      Boolean @default(false)
@@ -18,74 +39,25 @@ model Configuration {
   User          User[]
 }
 
-model Account {
-  id                 String    @id @default(cuid())
-  userId             String
-  providerType       String
-  providerId         String
-  providerAccountId  String
-  refreshToken       String?
-  accessToken        String?
-  accessTokenExpires DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  user               User      @relation(fields: [userId], references: [id])
-
-  @@unique([providerId, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  userId       String
-  expires      DateTime
-  sessionToken String   @unique
-  accessToken  String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
-}
-
-model User {
-  id              String        @id @default(cuid())
-  name            String?
-  email           String?       @unique
-  emailVerified   DateTime?
-  image           String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  accounts        Account[]
-  sessions        Session[]
-  configurations  Configuration @relation(fields: [configurationId], references: [id])
-  configurationId String
-  affirmations    String[]
-  record          Record[]      @relation(fields: [recordId], references: [id])
-  recordId        String
-}
-
-model VerificationRequest {
-  id         String   @id @default(cuid())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@unique([identifier, token])
-}
-
 model Record {
   id          String   @id @default(cuid())
   date        DateTime
-  description String
+  description Mood
   contents    String
   emoji       Emoji    @relation(fields: [emojiId], references: [id])
   emojiId     String
-  User        User[]
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
 }
 
 model Emoji {
   id          String   @id @default(cuid())
   emoji       String
-  description String
+  description String?
   Record      Record[]
+}
+
+enum Mood {
+  UNEASE
+  GRATEFULNESS
 }
