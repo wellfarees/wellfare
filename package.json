@@ -1,7 +1,7 @@
 {
-  "name": "apollo-server-template",
-  "version": "0.0.1",
-  "description": "A template for a typescript apollo server with mongodb",
+  "name": "wellfare-backend",
+  "version": "0.1.0",
+  "description": "Backend for Wellfare.",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,7 +10,7 @@
     "lint": "eslint src/.",
     "lint:fix": "eslint src/. --fix"
   },
-  "author": "Stéphane Souron",
+  "author": "geneva",
   "license": "MIT",
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
