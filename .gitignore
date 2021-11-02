@@ -11,5 +11,3 @@ coverage
 /yarn-error.log
 node_modules
 yarn.lock
-
-prisma/migrations
