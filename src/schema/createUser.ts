@@ -9,6 +9,6 @@ export default gql`
       darkMode: Boolean
       reducedMotion: Boolean
       fontSize: Int
-    ): User
+    ): JWTUser
   }
 `;
