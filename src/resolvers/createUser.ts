@@ -1,6 +1,7 @@
 import UserExistsError from "../errors/UserExists";
 import server from "../server";
 import { hash } from "bcrypt";
+import { sign } from "jsonwebtoken";
 
 export default {
   Mutation: {
@@ -48,10 +49,12 @@ export default {
             records: true,
           },
         });
-        if (!args.password) return userData;
+
+        const jwt = sign({ id: userData.id }, process.env.JWT_SECRET_KEY!);
+        if (!args.password) return { jwt, user: userData };
         else {
           const password = await hash(args.password, 10);
-          return server.db.user.update({
+          const updatedData = await server.db.user.update({
             where: {
               id: userData.id,
             },
@@ -68,6 +71,8 @@ export default {
               records: true,
             },
           });
+
+          return { jwt, user: updatedData };
         }
       }
     },

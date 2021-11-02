@@ -13,6 +13,11 @@ const root = gql`
     root: String
   }
 
+  type JWTUser {
+    user: User!
+    jwt: String!
+  }
+
   type User {
     id: Int!
     config: Configuration!
