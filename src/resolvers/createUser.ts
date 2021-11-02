@@ -1,7 +1,7 @@
 import UserExistsError from "../errors/UserExists";
 import server from "../server";
 import { hash } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import generateJWT from "../utils/generateJWT";
 
 export default {
   Mutation: {
@@ -50,7 +50,7 @@ export default {
           },
         });
 
-        const jwt = sign({ id: userData.id }, process.env.JWT_SECRET_KEY!);
+        const jwt = generateJWT({ id: userData.id });
         if (!args.password) return { jwt, user: userData };
         else {
           const password = await hash(args.password, 10);
