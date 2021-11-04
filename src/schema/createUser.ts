@@ -9,6 +9,7 @@ export default gql`
       darkMode: Boolean
       reducedMotion: Boolean
       fontSize: Int
+      affirmations: [String]!
     ): JWTUser
   }
 `;
