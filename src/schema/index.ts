@@ -5,6 +5,7 @@ import company from "./company";
 import createUser from "./createUser";
 import getUser from "./getUser";
 import ping from "./ping";
+import addAffirmations from "./addAffirmations";
 
 const root = gql`
   type Query {
@@ -69,4 +70,13 @@ const root = gql`
   }
 `;
 
-export default [root, ping, company, getUser, createUser, login, addRecord];
+export default [
+  root,
+  ping,
+  company,
+  getUser,
+  createUser,
+  login,
+  addRecord,
+  addAffirmations,
+];
