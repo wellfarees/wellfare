@@ -3,10 +3,11 @@ import { gql } from "apollo-server";
 export default gql`
   extend type Mutation {
     addRecord(
-      id: String!
-      description: String!
+      token: String!
+      description: Mood!
       contents: String!
-      emoji: Emoji!
-    ): Record
+      emoji: String!
+      emojiDescription: String
+    ): [Record]
   }
 `;
