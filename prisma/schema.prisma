@@ -26,11 +26,13 @@ model User {
 }
 
 model Information {
-  dbid     String @id @default(cuid())
-  name     String
-  email    String
-  password String
-  User     User[]
+  dbid      String  @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  password  String
+  verified  Boolean @default(false)
+  User      User[]
 }
 
 model Configuration {
