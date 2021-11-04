@@ -1,5 +1,6 @@
-import { hash } from "bcrypt";
+import { compare } from "bcrypt";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
+import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
 import generateJWT from "../utils/generateJWT";
 
@@ -10,8 +11,12 @@ export default {
         where: {
           information: {
             email: args.email,
-            password: await hash(args.password, 10),
           },
+        },
+        include: {
+          config: true,
+          information: true,
+          records: true,
         },
       });
 
@@ -19,10 +24,16 @@ export default {
         throw new UserDoesNotExistsError(
           "User does not exist in the database."
         );
-      else
-        return generateJWT({
-          id: userData.id,
-        });
+      else {
+        if (!(await compare(args.password, userData.information.password)))
+          throw new WrongPasswordError("Wrong password.");
+        return {
+          jwt: generateJWT({
+            id: userData.id,
+          }),
+          user: userData,
+        };
+      }
     },
   },
 };

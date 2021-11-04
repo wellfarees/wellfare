@@ -34,7 +34,7 @@ const root = gql`
     dbid: String!
     name: String!
     email: String!
-    password: String
+    password: String!
   }
 
   type Configuration {
