@@ -5,11 +5,10 @@ export default gql`
     createUser(
       name: String!
       email: String!
-      password: String
+      password: String!
       darkMode: Boolean
       reducedMotion: Boolean
       fontSize: Int
-      affirmations: [String]!
     ): JWTUser
   }
 `;
