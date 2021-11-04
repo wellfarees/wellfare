@@ -14,7 +14,6 @@ export default {
         darkMode?: boolean;
         reducedMotion?: boolean;
         fontSize?: number;
-        affirmations: string[];
       }
     ) => {
       const data = await server.db.user.findFirst({
@@ -45,7 +44,7 @@ export default {
                 password,
               },
             },
-            affirmations: args.affirmations,
+            affirmations: [],
           },
 
           include: {
