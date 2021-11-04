@@ -27,6 +27,7 @@ const root = gql`
     records: [Record]!
     information: Information!
     informationId: String!
+    affirmations: [String]!
   }
 
   type Information {

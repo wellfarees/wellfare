@@ -14,6 +14,7 @@ export default {
         darkMode?: boolean;
         reducedMotion?: boolean;
         fontSize?: number;
+        affirmations: string[];
       }
     ) => {
       const data = await server.db.user.findFirst({
@@ -41,6 +42,7 @@ export default {
                 email: args.email,
               },
             },
+            affirmations: args.affirmations,
           },
 
           include: {
