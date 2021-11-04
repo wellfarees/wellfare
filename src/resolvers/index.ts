@@ -3,6 +3,7 @@ import company from "./company";
 import ping from "./ping";
 import createUser from "./createUser";
 import login from "./login";
+import addRecord from "./addRecord";
 
 const Query = {
   ...ping.Query,
@@ -13,6 +14,7 @@ const Query = {
 
 const Mutation = {
   ...createUser.Mutation,
+  ...addRecord.Mutation,
 };
 
 export default { Query, Mutation };

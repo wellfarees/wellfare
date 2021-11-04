@@ -1,4 +1,6 @@
 import { gql } from "apollo-server";
+import addRecord from "./addRecord";
+import login from "./login";
 import company from "./company";
 import createUser from "./createUser";
 import getUser from "./getUser";
@@ -48,6 +50,8 @@ const root = gql`
     contents: String!
     emoji: Emoji!
     emojiId: String!
+    User: User!
+    userId: Int!
   }
 
   type Emoji {
@@ -63,4 +67,4 @@ const root = gql`
   }
 `;
 
-export default [root, ping, company, getUser, createUser];
+export default [root, ping, company, getUser, createUser, login, addRecord];

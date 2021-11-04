@@ -41,18 +41,18 @@ model Configuration {
 }
 
 model Record {
-  id          String   @id @default(cuid())
-  date        DateTime
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
   description Mood
   contents    String
   emoji       Emoji    @relation(fields: [emojiId], references: [id])
-  emojiId     String
   User        User?    @relation(fields: [userId], references: [id])
   userId      Int?
+  emojiId     Int
 }
 
 model Emoji {
-  id          String   @id @default(cuid())
+  id          Int      @id @default(autoincrement())
   emoji       String
   description String?
   Record      Record[]

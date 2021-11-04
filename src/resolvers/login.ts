@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import generateJWT from "../utils/generateJWT";
@@ -9,6 +10,7 @@ export default {
         where: {
           information: {
             email: args.email,
+            password: await hash(args.password, 10),
           },
         },
       });
