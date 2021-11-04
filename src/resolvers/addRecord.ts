@@ -51,6 +51,7 @@ export default {
         select: {
           records: {
             include: {
+              emoji: true,
               User: {
                 include: {
                   config: true,

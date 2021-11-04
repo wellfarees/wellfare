@@ -26,10 +26,10 @@ model User {
 }
 
 model Information {
-  dbid     String  @id @default(cuid())
+  dbid     String @id @default(cuid())
   name     String
   email    String
-  password String?
+  password String
   User     User[]
 }
 

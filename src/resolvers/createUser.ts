@@ -10,7 +10,7 @@ export default {
       args: {
         name: string;
         email: string;
-        password?: string;
+        password: string;
         darkMode?: boolean;
         reducedMotion?: boolean;
         fontSize?: number;
@@ -27,6 +27,8 @@ export default {
 
       if (data) throw new UserExistsError("Email already exists in database.");
       else {
+        const password = await hash(args.password, 10);
+
         const userData = await server.db.user.create({
           data: {
             config: {
@@ -40,6 +42,7 @@ export default {
               create: {
                 name: args.name,
                 email: args.email,
+                password,
               },
             },
             affirmations: args.affirmations,
@@ -53,29 +56,7 @@ export default {
         });
 
         const jwt = generateJWT({ id: userData.id });
-        if (!args.password) return { jwt, user: userData };
-        else {
-          const password = await hash(args.password, 10);
-          const updatedData = await server.db.user.update({
-            where: {
-              id: userData.id,
-            },
-            data: {
-              information: {
-                update: {
-                  password,
-                },
-              },
-            },
-            include: {
-              information: true,
-              config: true,
-              records: true,
-            },
-          });
-
-          return { jwt, user: updatedData };
-        }
+        return { jwt, user: userData };
       }
     },
   },
