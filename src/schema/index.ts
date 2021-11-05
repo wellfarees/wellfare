@@ -8,6 +8,7 @@ import ping from "./ping";
 import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
 import editInformation from "./editInformation";
+import verifyUser from "./verifyUser";
 
 const root = gql`
   # Base types
@@ -92,4 +93,5 @@ export default [
   addAffirmations,
   editAppearance,
   editInformation,
+  verifyUser,
 ];

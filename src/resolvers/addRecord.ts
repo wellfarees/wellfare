@@ -21,7 +21,7 @@ export default {
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 
       const id = Number((dToken as decodedToken).id);
-      let emoji = args.emoji;
+      const emoji = args.emoji;
       if (emoji && !isEmoji(emoji)) {
         throw new InvalidEmojiError(
           "Emoji argument response does not contain pure emojis."
