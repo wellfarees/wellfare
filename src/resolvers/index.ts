@@ -6,6 +6,7 @@ import login from "./login";
 import addRecord from "./addRecord";
 import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
+import editInformation from "./editInformation";
 
 const Query = {
   ...ping.Query,
@@ -19,6 +20,7 @@ const Mutation = {
   ...addRecord.Mutation,
   ...addAffirmations.Mutation,
   ...editAppearance.Mutation,
+  ...editInformation.Mutation,
 };
 
 export default { Query, Mutation };

@@ -12,9 +12,6 @@ export default {
         name: string;
         email: string;
         password: string;
-        darkMode?: boolean;
-        reducedMotion?: boolean;
-        fontSize?: number;
       }
     ) => {
       const data = await server.db.user.findFirst({
@@ -36,13 +33,6 @@ export default {
 
         const userData = await server.db.user.create({
           data: {
-            config: {
-              create: {
-                darkMode: args.darkMode,
-                reducedMotion: args.reducedMotion,
-                fontSize: args.fontSize,
-              },
-            },
             information: {
               create: {
                 lastName,
@@ -51,6 +41,7 @@ export default {
                 password,
               },
             },
+            config: {},
           },
 
           include: {
