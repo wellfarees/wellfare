@@ -11,6 +11,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-non-null-assetation": false
+    "no-non-null-assetation": 0,
+    "no-console": 1
   }
 }
