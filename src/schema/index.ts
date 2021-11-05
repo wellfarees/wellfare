@@ -6,6 +6,7 @@ import createUser from "./createUser";
 import getUser from "./getUser";
 import ping from "./ping";
 import addAffirmations from "./addAffirmations";
+import editAppearance from "./editAppearance";
 
 const root = gql`
   type Query {
@@ -79,4 +80,5 @@ export default [
   login,
   addRecord,
   addAffirmations,
+  editAppearance,
 ];
