@@ -39,7 +39,7 @@ model Configuration {
   id            String  @id @default(cuid())
   darkMode      Boolean @default(false)
   reducedMotion Boolean @default(false)
-  fontSize      Int     @default(16)
+  fontSize      Int     @default(14)
   User          User[]
 }
 
