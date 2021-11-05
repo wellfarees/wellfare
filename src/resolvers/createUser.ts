@@ -3,6 +3,7 @@ import server from "../server";
 import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
+import generateVerificationJWT from "../utils/generateVerificationJWT";
 
 export default {
   Mutation: {
@@ -41,7 +42,9 @@ export default {
                 password,
               },
             },
-            config: {},
+            config: {
+              create: {},
+            },
           },
 
           include: {
@@ -52,6 +55,19 @@ export default {
         });
 
         const jwt = generateJWT({ id: userData.id });
+        const verificationJWT = generateVerificationJWT({ id: userData.id });
+        server.mail.send({
+          from: process.env.EMAIL_ADDRESS!,
+          to: args.email,
+          subject: "Verify your email",
+          html: `Hi ${firstName}, thanks for signing up for Wellfare! Click here to start using Wellfare.
+          <br /> <br />
+          If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/verify?token=${verificationJWT}.
+          <br /> <br />
+          Thanks,
+          <br />
+          Wellfare`,
+        });
         return { jwt, user: userData };
       }
     },

@@ -18,11 +18,11 @@ model Subscription {
 model User {
   id              Int           @id @unique @default(autoincrement())
   config          Configuration @relation(fields: [configurationId], references: [id])
-  configurationId String
   records         Record[]
   information     Information   @relation(fields: [informationId], references: [dbid])
   informationId   String
   affirmations    String[]
+  configurationId String
 }
 
 model Information {
