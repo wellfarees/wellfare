@@ -7,8 +7,10 @@ import getUser from "./getUser";
 import ping from "./ping";
 import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
+import editInformation from "./editInformation";
 
 const root = gql`
+  # Base types
   type Query {
     root: String
   }
@@ -17,6 +19,7 @@ const root = gql`
     root: String
   }
 
+  # Database types
   type JWTUser {
     user: User!
     jwt: String!
@@ -38,6 +41,7 @@ const root = gql`
     lastName: String!
     email: String!
     password: String!
+    User: [User]!
   }
 
   type Configuration {
@@ -69,6 +73,12 @@ const root = gql`
     UNEASE
     GRATEFULNESS
   }
+
+  # Input fields
+  input ChangePassword {
+    current: String!
+    new: String!
+  }
 `;
 
 export default [
@@ -81,4 +91,5 @@ export default [
   addRecord,
   addAffirmations,
   editAppearance,
+  editInformation,
 ];
