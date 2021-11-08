@@ -30,7 +30,7 @@ export default {
       if (args.changePassword)
         updateData.password = await hash(args.changePassword.new, 10);
 
-      const dToken = verifyJWT(args.token);
+      const dToken = verifyJWT(args.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
       const id = Number((dToken as decodedToken).id);
 
