@@ -8,6 +8,8 @@ import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
 import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
+import resendVerificationEmail from "./resendVerificationEmail";
+import forgetPassword from "./resetPassword";
 
 const Query = {
   ...ping.Query,
@@ -23,6 +25,8 @@ const Mutation = {
   ...editAppearance.Mutation,
   ...editInformation.Mutation,
   ...verifyUser.Mutation,
+  ...resendVerificationEmail.Mutation,
+  ...forgetPassword.Mutation,
 };
 
 export default { Query, Mutation };

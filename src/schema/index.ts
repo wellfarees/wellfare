@@ -9,6 +9,8 @@ import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
 import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
+import resendVerificationEmail from "./resendVerificationEmail";
+import resetPassword from "./resetPassword";
 
 const root = gql`
   # Base types
@@ -80,6 +82,11 @@ const root = gql`
     current: String!
     new: String!
   }
+
+  # Response types
+  type Success {
+    success: Boolean!
+  }
 `;
 
 export default [
@@ -94,4 +101,6 @@ export default [
   editAppearance,
   editInformation,
   verifyUser,
+  resendVerificationEmail,
+  resetPassword,
 ];

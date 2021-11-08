@@ -28,9 +28,12 @@ export default {
         if (!(await compare(args.password, userData.information.password)))
           throw new WrongPasswordError("Wrong password.");
         return {
-          jwt: generateJWT({
-            id: userData.id,
-          }),
+          jwt: generateJWT(
+            {
+              id: userData.id,
+            },
+            "client"
+          ),
           user: userData,
         };
       }
