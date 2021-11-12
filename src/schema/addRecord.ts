@@ -8,7 +8,7 @@ export default gql`
       gratefulness: String!
       contents: String!
       emoji: String!
-      emojiDescription: String
+      feelings: String!
     ): [Record]
   }
 `;

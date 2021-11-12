@@ -15,7 +15,7 @@ export default {
         gratefulness: string;
         contents: string;
         emoji: string;
-        emojiDescription?: string;
+        feelings: string;
       }
     ) => {
       const dToken = verifyJWT(args.token, "client");
@@ -37,12 +37,8 @@ export default {
           records: {
             create: [
               {
-                emoji: {
-                  create: {
-                    emoji,
-                    description: args.emojiDescription,
-                  },
-                },
+                feelings: args.feelings,
+                emoji: args.emoji,
                 unease: args.unease,
                 gratefulness: args.gratefulness,
                 contents: args.contents,
@@ -53,7 +49,6 @@ export default {
         select: {
           records: {
             include: {
-              emoji: true,
               User: {
                 include: {
                   config: true,
