@@ -16,6 +16,7 @@ export default {
         lastName?: string;
         email?: string;
         changePassword?: { current: string; new: string };
+        pfp?: string;
       }
     ) => {
       const updateData: {
@@ -23,12 +24,14 @@ export default {
         lastName?: string;
         email?: string;
         password?: string;
+        pfp?: string;
       } = {};
       if (args.firstName) updateData.firstName = args.firstName;
       if (args.lastName) updateData.lastName = args.lastName;
       if (args.email) updateData.email = args.email;
       if (args.changePassword)
         updateData.password = await hash(args.changePassword.new, 10);
+      if (args.pfp) updateData.email = args.pfp;
 
       const dToken = verifyJWT(args.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
