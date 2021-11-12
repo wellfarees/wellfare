@@ -57,7 +57,8 @@ const root = gql`
   type Record {
     id: String!
     date: Float!
-    description: Mood!
+    unease: String!
+    gratefulness: String!
     contents: String!
     emoji: Emoji!
     emojiId: String!
@@ -70,11 +71,6 @@ const root = gql`
     emoji: String!
     description: String
     Record: [Record]!
-  }
-
-  enum Mood {
-    UNEASE
-    GRATEFULNESS
   }
 
   # Input fields
