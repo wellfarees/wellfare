@@ -7,7 +7,7 @@ export default {
   Mutation: {
     addAffirmations: async (
       _: unknown,
-      args: { token: string; affirmations: string[] }
+      args: { token: string; affirmations: string }
     ) => {
       const dToken = verifyJWT(args.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
@@ -19,9 +19,7 @@ export default {
           id,
         },
         data: {
-          affirmations: {
-            push: args.affirmations,
-          },
+          affirmations: args.affirmations,
         },
         include: {
           config: true,
