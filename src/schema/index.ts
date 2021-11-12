@@ -60,8 +60,8 @@ const root = gql`
     unease: String!
     gratefulness: String!
     contents: String!
-    emoji: Emoji!
-    emojiId: String!
+    emoji: String!
+    feelings: String!
     User: User!
     userId: Int!
   }

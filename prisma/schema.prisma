@@ -49,15 +49,7 @@ model Record {
   unease       String
   gratefulness String
   contents     String
-  emoji        Emoji    @relation(fields: [emojiId], references: [id])
+  feelings     String
   User         User?    @relation(fields: [userId], references: [id])
   userId       Int?
-  emojiId      Int
-}
-
-model Emoji {
-  id          Int      @id @default(autoincrement())
-  emoji       String
-  description String?
-  Record      Record[]
 }
