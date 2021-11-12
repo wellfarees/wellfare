@@ -21,7 +21,7 @@ model User {
   records         Record[]
   information     Information   @relation(fields: [informationId], references: [dbid])
   informationId   String
-  affirmations    String[]
+  affirmations    String?
   configurationId String
 }
 
