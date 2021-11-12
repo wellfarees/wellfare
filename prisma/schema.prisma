@@ -32,6 +32,7 @@ model Information {
   email     String
   password  String
   verified  Boolean @default(false)
+  pfp       String?
   User      User[]
 }
 

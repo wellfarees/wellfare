@@ -8,6 +8,7 @@ export default gql`
       lastName: String
       email: String
       changePassword: ChangePassword
+      pfp: String
     ): Information
   }
 `;

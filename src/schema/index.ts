@@ -44,6 +44,8 @@ const root = gql`
     lastName: String!
     email: String!
     password: String!
+    verified: Boolean!
+    pfp: String
     User: [User]!
   }
 
