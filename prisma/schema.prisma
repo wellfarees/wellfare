@@ -44,14 +44,15 @@ model Configuration {
 }
 
 model Record {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
-  description Mood
-  contents    String
-  emoji       Emoji    @relation(fields: [emojiId], references: [id])
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      Int?
-  emojiId     Int
+  id           Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  unease       String
+  gratefulness String
+  contents     String
+  emoji        Emoji    @relation(fields: [emojiId], references: [id])
+  User         User?    @relation(fields: [userId], references: [id])
+  userId       Int?
+  emojiId      Int
 }
 
 model Emoji {
@@ -59,9 +60,4 @@ model Emoji {
   emoji       String
   description String?
   Record      Record[]
-}
-
-enum Mood {
-  UNEASE
-  GRATEFULNESS
 }

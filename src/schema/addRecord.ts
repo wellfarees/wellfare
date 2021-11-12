@@ -4,7 +4,8 @@ export default gql`
   extend type Mutation {
     addRecord(
       token: String!
-      description: Mood!
+      unease: String!
+      gratefulness: String!
       contents: String!
       emoji: String!
       emojiDescription: String

@@ -11,7 +11,8 @@ export default {
       _: unknown,
       args: {
         token: string;
-        description: "UNEASE" | "GRATEFULNESS";
+        unease: string;
+        gratefulness: string;
         contents: string;
         emoji: string;
         emojiDescription?: string;
@@ -42,7 +43,8 @@ export default {
                     description: args.emojiDescription,
                   },
                 },
-                description: args.description,
+                unease: args.unease,
+                gratefulness: args.gratefulness,
                 contents: args.contents,
               },
             ],
