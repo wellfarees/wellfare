@@ -21,8 +21,9 @@ export default {
         reducedMotion?: boolean;
         fontSize?: number;
       } = {};
-      if (args.darkMode) updateData.darkMode = args.darkMode;
-      if (args.reducedMotion) updateData.reducedMotion = args.reducedMotion;
+      if (args.darkMode !== undefined) updateData.darkMode = args.darkMode;
+      if (args.reducedMotion !== undefined)
+        updateData.reducedMotion = args.reducedMotion;
       if (args.fontSize) updateData.fontSize = args.fontSize;
 
       const id = Number((dToken as decodedToken).id);
