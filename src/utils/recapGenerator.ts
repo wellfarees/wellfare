@@ -252,5 +252,4 @@ export const generateRecapFromEmojis = (
 };
 
 // example call
-const recap = generateRecapFromEmojis(["😟", "😞", "😨", "😨"], 0); // will return one of the written texts and the index that was used
-console.log(recap);
+const recap = generateRecapFromEmojis(["😟", "😞", "😖", "😨"], 0); // will return one of the written texts and the index that was used
