@@ -13,7 +13,7 @@ export default {
         token: string;
       }
     ) => {
-      const dToken = verifyJWT(args.token, "client");
+      const dToken = verifyJWT(args.token, "verification");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
       const id = Number((dToken as decodedToken).id);
 
@@ -32,7 +32,8 @@ export default {
 
       if (!data)
         throw new UserDoesNotExistsError("User does not exist in database.");
-      if (!data.information.verified)
+
+      if (data.information.verified)
         throw new UserAlreadyVerifiedError("User is already verified.");
 
       return (
