@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
@@ -7,8 +7,15 @@ import styled from "styled-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
-import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
 import { useRouter } from "next/router";
+import Button from "../components/Button/Button";
+
+// GraphQL
+import { useMutation } from "react-apollo";
+import { CREATE_USER } from "../graphql/mutations";
+
+// Redux
+import { useActions } from "../hooks/useActions";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -292,10 +299,31 @@ const ErrorWrapper = styled.p`
 const SignUp = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string | null>(null);
-  const [buttonState, setButtonState] = useState("Sign up");
-  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
   const router = useRouter();
   const handleErrors = useHandleFormErrors();
+  const [signedUp, setSignedUp] = useState(false);
+  const [createUser, mutationProps] = useMutation(CREATE_USER);
+  const { storeUser } = useActions();
+
+  useEffect(() => {
+    const { error, data } = mutationProps;
+    if (error) {
+      setError(error.graphQLErrors[0].message);
+      setSignedUp(false);
+      return;
+    }
+
+    if (data) {
+      setError(null);
+
+      const { jwt, user } = data.createUser;
+      storeUser(jwt, user);
+      setSignedUp(false);
+
+      // redirect after successful registration
+      router.push("/app/entry");
+    }
+  }, [mutationProps.loading]);
 
   return (
     <Wrapper>
@@ -331,23 +359,15 @@ const SignUp = () => {
                 setError(null);
 
                 // activating the loading indicator animation
-                startSpinner();
+                setSignedUp(true);
 
-                setButtonState("Registering");
+                const { email, name, password } = credentials.values!;
 
                 try {
-                  // TODO: Authorize user (send an http request or something)
-
-                  setError(null);
-                  // redirect after successful registration
-                  router.push("/app/entry");
-                } catch (err) {
-                  // Handling server-side errors
-                  stopSpinner();
-
-                  setError("Couldn't reach our database, pease, try again!");
-                  setButtonState("Sign Up");
-                }
+                  await createUser({
+                    variables: { email, name, password },
+                  });
+                } catch (err) {}
               }
             }}
             className="signUp-form"
@@ -357,10 +377,18 @@ const SignUp = () => {
               <LabeledInput {...register("email")} />
               <LabeledInput {...register("password")} />
             </div>
-            <button>
-              {Spinner}
-              {buttonState}
-            </button>
+            <Button
+              withLoading={{
+                toBeLoading: signedUp,
+                toModifyOnStateChange: {
+                  endingToReplace: "n",
+                  word: "Sign",
+                  keepEnding: true,
+                },
+              }}
+            >
+              Sign up
+            </Button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
           <div className="divider">

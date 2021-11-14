@@ -31,6 +31,7 @@ const Wrapper = styled.div`
       border: none;
       font-size: 1.5rem;
       transition: 0.6s background;
+      max-width: 300px;
 
       &::placeholder {
         color: #bfbfbf;
@@ -125,7 +126,7 @@ const LabeledInput: React.FC<InputProps> = ({
     if (!defaultValue) return;
 
     showLabel();
-  }, []);
+  }, [defaultValue]);
 
   return (
     <Wrapper>

@@ -3,8 +3,13 @@ import {
   SetLocalStorage,
   ToggleSidebar,
   InitModal,
+  StoreUser,
+  SaveToken,
+  SaveConfig,
 } from ".";
+import { UserSchema } from "../../graphql/schemas";
 import { ActionType } from "./actionTypes";
+import { UserConfig } from "../../config/userConfig";
 
 export const retrieveLocalStorage = (key: string): RetrieveLocalStorage => {
   return {
@@ -44,5 +49,36 @@ export const initModal = (open: boolean, content?: JSX.Element): InitModal => {
       content,
       open,
     },
+  };
+};
+
+export const storeUser = (jwt: string, user: UserSchema): StoreUser => {
+  return {
+    type: ActionType.STORE_USER,
+    payload: {
+      jwt,
+      user,
+    },
+  };
+};
+
+export const saveToken = (jwt: string | null): SaveToken => {
+  return {
+    type: ActionType.SAVE_TOKEN,
+    payload: jwt,
+  };
+};
+
+export const logout = () => {
+  return {
+    type: ActionType.LOGOUT,
+    payload: null,
+  };
+};
+
+export const saveConfig = (config: UserConfig): SaveConfig => {
+  return {
+    type: ActionType.SAVE_CONFIG,
+    payload: config,
   };
 };

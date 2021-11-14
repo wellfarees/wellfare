@@ -7,6 +7,9 @@ import Record from "../../components/Records/Record";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
+import { useQuery } from "react-apollo";
+import { gql } from "graphql-tag";
+import { useEffect } from "react";
 
 const Wrapper = styled.main`
   color: ${(props: any) => props.theme.mainColor};
@@ -179,14 +182,35 @@ const Wrapper = styled.main`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const name = "Roland"; // TODO: Replace with graphql data
+  const USER_INFORMATION_QUERY = gql`
+    query GetUser($token: String!) {
+      getUser(token: $token) {
+        id
+        information {
+          firstName
+        }
+        records {
+          date
+          emoji
+        }
+      }
+    }
+  `;
+
+  const { data, loading, error } = useQuery(USER_INFORMATION_QUERY, {
+    variables: {
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImlhdCI6MTYzNjU3NzMwM30.4bNSnf2oPC-tdTfdZDdJ5wGbKjhwvHN9i6i_u691CXQ",
+    },
+  });
 
   return (
     <Wrapper>
       <header>
         <ShrankContainer>
           <h2>
-            Here&apos;s your moodboard, <b>{name}</b>
+            Here&apos;s your moodboard,{" "}
+            <b>{data && data.getUser.information.firstName}</b>
           </h2>
 
           <div className="search-input">

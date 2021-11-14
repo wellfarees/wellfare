@@ -1,4 +1,6 @@
 import { ActionType } from "./actionTypes";
+import { UserSchema } from "../../graphql/schemas";
+import { UserConfig } from "../../config/userConfig";
 
 export interface RetrieveLocalStorage {
   type: ActionType.RETRIEVE_LOCAL_STORAGE;
@@ -30,8 +32,42 @@ export interface InitModal {
   };
 }
 
+export interface StoreUser {
+  type: ActionType.STORE_USER;
+  payload: {
+    jwt: string;
+    user: {
+      config: {
+        darkMode: boolean;
+        reducedMotion: boolean;
+        fontSize: number;
+      };
+      id: number;
+    };
+  };
+}
+
+export interface Logout {
+  type: ActionType.LOGOUT;
+  payload: null;
+}
+
+export interface SaveToken {
+  type: ActionType.SAVE_TOKEN;
+  payload: string | null;
+}
+
+export interface SaveConfig {
+  type: ActionType.SAVE_CONFIG;
+  payload: UserConfig;
+}
+
 export type Action =
   | RetrieveLocalStorage
   | SetLocalStorage
   | ToggleSidebar
-  | InitModal;
+  | InitModal
+  | StoreUser
+  | Logout
+  | SaveToken
+  | SaveConfig;

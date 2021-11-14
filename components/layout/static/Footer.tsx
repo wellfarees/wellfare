@@ -101,7 +101,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="copyright">
-            Copyright ©Wellfaree {year}. All rights reserved.
+            Copyright ©Wellfare™ {year}. All rights reserved.
           </p>
         </div>
       </Container>

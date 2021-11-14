@@ -158,8 +158,6 @@ const WatermarkInput: React.FC<InputProps> = ({
             return;
           }
 
-          console.log("ez");
-
           if (value.length) {
             labelApi.start({
               to: async (animate) => {
