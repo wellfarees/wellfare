@@ -38,7 +38,7 @@ export default {
             create: [
               {
                 feelings: args.feelings,
-                emoji: args.emoji,
+                emoji,
                 unease: args.unease,
                 gratefulness: args.gratefulness,
                 contents: args.contents,
