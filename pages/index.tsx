@@ -1,20 +1,22 @@
-import { useState, useRef } from "react";
+import { useState, useRef, memo } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { Button } from "../styled/reusable";
-import { Showcase, Card } from "../components";
+import { Showcase as ShowcaseComp, Card } from "../components";
 import Fade from "react-reveal/Fade";
 import { emailRegExp } from "../utils/emailRegExp";
-import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
 import { useSpring, animated, config } from "react-spring";
 import Scroller from "../components/Scroller/Scroller";
+import LoadingButton from "../components/Button/Button";
+
+const Showcase = memo(ShowcaseComp);
 
 const Hero = styled.section`
   width: 100%;
-  height: 75vh;
+  height: 100vh;
   background-image: url("img/blob-scene-haikei.svg");
   background-size: cover;
   background-repeat: none;
@@ -67,14 +69,14 @@ const Hero = styled.section`
       text-align: start;
 
       h1 {
-        font-size: 3rem;
+        font-size: 3.5rem;
       }
     }
 
     .scroller {
       display: block;
       margin-top: 4em;
-      margin-left: -30em;
+      margin-left: -67vw;
     }
   }
 
@@ -85,6 +87,12 @@ const Hero = styled.section`
     h1 {
       font-size: 2.5rem !important;
       width: 300px;
+    }
+  }
+
+  @media only screen and (max-width: 320px) {
+    h1 {
+      font-size: 3rem !important;
     }
   }
 `;
@@ -148,7 +156,7 @@ const MailSection = styled.section`
       }
     }
 
-    button {
+    .email-btn {
       color: #fafafa;
       padding: 0.4em 2em;
       font-size: 1.4rem;
@@ -163,17 +171,27 @@ const MailSection = styled.section`
       margin-top: 0;
       justify-content: center;
       align-items: center;
+      transition: 0.3s all;
 
       &:hover {
         cursor: pointer;
         background: #2b95f8;
       }
     }
+
+    .maillisted {
+      box-shadow: 0px 0px 7px 1px rgba(58, 240, 91, 0.6) !important;
+      background-color: #23db45 !important;
+    }
   }
 
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 550px) {
     button {
       padding: 0.4em 1em !important;
+    }
+
+    .email-btn {
+      padding: 0.4em 2.1em !important;
     }
   }
 `;
@@ -196,14 +214,18 @@ const UIFeaturing = styled.section`
     display: inline-block;
     line-height: 1.4;
   }
+
+  @media only screen and (max-width: 550px) {
+    padding: 5em 0;
+  }
 `;
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
   const emailRef = useRef<HTMLInputElement | null>(null);
   const successfullyMailListed = useRef(false);
+  const mailContainer = useRef<HTMLDivElement | null>(null);
 
   const [buttonStyles, buttonSpringApi] = useSpring(() => {
     return {
@@ -215,7 +237,11 @@ const Home: NextPage = () => {
     };
   });
 
-  const [buttonState, setButtonState] = useState("Subscribe");
+  // const [buttonState, setButtonState] = useState("Subscribe");
+  const [emailProgress, setEmailProgress] = useState({
+    state: false,
+    status: "Subscribe",
+  });
 
   return (
     <>
@@ -295,7 +321,6 @@ const Home: NextPage = () => {
                 updates
               </p>
             </Fade>
-
             <Fade bottom>
               <div className="mail-input">
                 <input
@@ -307,57 +332,67 @@ const Home: NextPage = () => {
                     setEmail(e.target.value);
                   }}
                 />
-                <animated.button
-                  style={buttonStyles}
-                  onClick={() => {
-                    if (successfullyMailListed.current) return;
-                    setEmailError("");
 
-                    if (!email.length) {
-                      setEmailError("Please, enter your email address.");
-                      return;
-                    }
+                <div ref={mailContainer}>
+                  <LoadingButton
+                    customClassName="email-btn"
+                    withLoading={{
+                      toBeLoading: emailProgress.state,
+                    }}
+                    blockOnce={true}
+                    onClick={() => {
+                      if (successfullyMailListed.current) return;
+                      setEmailError("");
 
-                    if (!emailRegExp.test(email)) {
-                      setEmailError("Please, enter a valid email address.");
-                      return;
-                    }
-
-                    setEmailError("");
-                    // start loading indicator and register an email
-                    startSpinner();
-
-                    // registration completion -> SIMULATION
-                    // TODO: To be replaced with an actual implementation
-                    let successful = true;
-
-                    setTimeout(() => {
-                      // gotta stop the spinner in any way
-                      stopSpinner();
-
-                      if (!successful) {
-                        setEmailError(
-                          "We couldn't add you to our mailing list. Please, try once again later,"
-                        );
+                      if (!email.length) {
+                        setEmailError("Please, enter your email address.");
+                        return;
                       }
 
-                      // if successful
-                      setButtonState("Subscribed!");
-                      if (emailRef.current) emailRef.current.disabled = true;
+                      if (!emailRegExp.test(email)) {
+                        setEmailError("Please, enter a valid email address.");
+                        return;
+                      }
 
-                      buttonSpringApi.start({
-                        to: {
-                          backgroundColor: "#23db45",
-                          boxShadow: "0px 0px 7px 1px rgba(58, 240, 91, 0.6)",
-                        },
-                      });
-                      successfullyMailListed.current = true;
-                    }, 1000);
-                  }}
-                >
-                  {Spinner}
-                  {buttonState}
-                </animated.button>
+                      setEmailProgress({ state: true, status: "Requesting" });
+                      setEmailError("");
+                      // start loading indicator and register an email
+
+                      // registration completion -> SIMULATION
+                      // TODO: To be replaced with an actual implementation
+                      let successful = true;
+
+                      setTimeout(() => {
+                        setEmailProgress({
+                          state: false,
+                          status: "Subscribed!",
+                        });
+
+                        console.log(mailContainer.current);
+                        if (!successful) {
+                          setEmailError(
+                            "We couldn't add you to our mailing list. Please, try once again later,"
+                          );
+                        }
+
+                        // if successful
+                        if (emailRef.current) {
+                          emailRef.current.disabled = true;
+                        }
+
+                        if (mailContainer.current) {
+                          const btn =
+                            mailContainer.current.querySelector(".email-btn")!;
+                          btn.classList.add("maillisted");
+                        }
+
+                        successfullyMailListed.current = true;
+                      }, 2000);
+                    }}
+                  >
+                    {emailProgress.status}
+                  </LoadingButton>
+                </div>
               </div>
               <p className="email-error">{emailError}</p>
             </Fade>

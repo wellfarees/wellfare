@@ -3,7 +3,7 @@ import { fontSizes } from "../config/userConfig";
 
 const ContainerStyles = css`
   padding-right: 15px;
-  padding-left: 15px;
+  padding-left: 0px;
   margin-right: auto;
   margin-left: auto;
   width: 80%;
@@ -16,6 +16,10 @@ const ContainerStyles = css`
   }
   @media (min-width: 1200px) {
     width: 1170px;
+  }
+
+  @media only screen and (max-width: 1024px) and (max-height: 1400px) and (min-height: 1024px) {
+    width: 85%;
   }
 `;
 

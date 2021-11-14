@@ -147,7 +147,7 @@ const Navigation: React.FC = () => {
       <Container>
         <Nav>
           <Link href="/">
-            <span className="logo">Wellfare</span>
+            <span className="logo">Wellfare™</span>
           </Link>
 
           <animated.div style={navStyles} className="nav-points-wrapper">

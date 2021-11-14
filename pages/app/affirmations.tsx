@@ -7,11 +7,25 @@ import { WatermarkInput } from "../../components";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { GlowingBLue } from "../../styled/reusable";
 import { useState, useRef, MutableRefObject } from "react";
-import { useLoadingIndicator } from "../../hooks/useLoadingIndicator";
-
-const InfoWrapper = styled.div`
+import Button from "../../components/Button/Button";
+const Wrapper = styled.div`
   .subtitle {
     margin-top: 0.5em;
+  }
+
+  .subinfo {
+    max-width: 380px;
+    margin-top: 0.5em;
+
+    p {
+      margin-top: 1em;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: underline;
+      color: #117ee3;
+    }
   }
 
   .affirmations {
@@ -25,92 +39,31 @@ const InfoWrapper = styled.div`
     color: ${(props) => props.theme.shadedColor};
   }
 
-  button.makeChanges {
-    background: ${(props) => props.theme.secondaryButton};
-    padding: 0.7em 4em;
-    border-radius: 5px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    margin-top: 3em;
-    transition: 0.3s;
-    color: ${(props) => props.theme.mainColor};
-
-    &:hover {
-      background: ${(props) => props.theme.lighterHover};
-    }
-
-    @media only screen and (max-width: 425px) {
-      width: 100%;
-    }
-  }
-
   .save-btn {
     ${GlowingBLue}
   }
+
+  .button-container {
+    margin-top: 4em;
+  }
 `;
-const NoInfoWrapper = styled.div`
-  header {
-    max-width: 500px;
 
-    h2 {
-      font-weight: 500;
-      line-height: 1.5;
-    }
+const ChangeButton = styled.button`
+  background: ${(props) => props.theme.secondaryButton};
+  padding: 0.7em 4em;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  color: ${(props) => props.theme.mainColor};
 
-    .subinfo {
-      max-width: 380px;
-      margin-top: 0.5em;
-
-      p {
-        margin-top: 1em;
-        line-height: 1.5;
-      }
-
-      a {
-        text-decoration: underline;
-        color: #117ee3;
-      }
-    }
+  &:hover {
+    background: ${(props) => props.theme.lighterHover};
   }
 
-  .affirmations {
-    margin-top: 6em;
-
-    .active-textarea {
-      margin-top: 1.8em;
-    }
-
-    .save-btn {
-      ${GlowingBLue}
-      margin-top: 4em;
-      width: auto;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-      transition: 0.3s;
-    }
-
-    .edit-btn {
-      background: ${(props) => props.theme.secondaryButton};
-      padding: 0.7em 4em;
-      border-radius: 5px;
-      outline: none;
-      border: none;
-      cursor: pointer;
-      margin-top: 4em;
-      transition: 0.3s;
-      color: ${(props) => props.theme.mainColor};
-
-      &:hover {
-        background: ${(props) => props.theme.lighterHover};
-      }
-
-      @media only screen and (max-width: 425px) {
-        width: 100%;
-        padding: 1em 4em;
-      }
-    }
+  @media only screen and (max-width: 425px) {
+    width: 100%;
   }
 `;
 
@@ -121,86 +74,63 @@ const Affirmations: NextPage<{
 }> = ({ affirmations, name, lastUpdated }) => {
   const [isLocked, setIsLocked] = useState(true);
   const { handleTextareaSubmit, register } = useTextareaValidator();
-  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
-  const noInfoBtn = useRef<HTMLButtonElement | null>(null);
   const infoBtn = useRef<HTMLButtonElement | null>(null);
+  const [state, setState] = useState(Boolean(!affirmations));
+  const [buttonsSwitched, switchButtons] = useState(Boolean(!affirmations));
 
-  const submitAffirmations = (
-    btn: MutableRefObject<HTMLButtonElement | null>,
-    hasInitialValue: boolean
-  ) => {
-    if (!hasInitialValue) {
+  const submitAffirmations = () => {
+    const changeButtonState = () => {
+      if (infoBtn.current) {
+        infoBtn.current.style.pointerEvents = "none";
+        infoBtn.current.style.cursor = "not-allowed";
+      }
+
+      const res = handleTextareaSubmit().refs[0]?.current.value;
+      setState(!state);
+
+      // TODO: Send new affirmations to the server! (res constant contains the affirmations themselves)
+      setTimeout(() => {
+        setIsLocked(!isLocked);
+        if (infoBtn.current) {
+          infoBtn.current.style.pointerEvents = "auto";
+          infoBtn.current.style.cursor = "pointer";
+          setIsLocked(!isLocked);
+        }
+
+        switchButtons(false);
+
+        setState(false);
+      }, 2000);
+    };
+
+    if (!affirmations) {
       if (!isLocked) {
         setIsLocked(!isLocked);
-        return;
+      } else {
+        changeButtonState();
       }
     } else {
-      if (isLocked) {
+      if (!isLocked) {
+        changeButtonState();
+      } else {
         setIsLocked(!isLocked);
-        return;
       }
     }
-
-    if (btn.current) {
-      btn.current.style.pointerEvents = "none";
-      btn.current.style.cursor = "not-allowed";
-    }
-
-    const res = handleTextareaSubmit().refs[0]?.current.value;
-    console.log(res);
-
-    startSpinner();
-
-    // Send new affirmations to the server! (res constant contains the affirmations themselves)
-    setTimeout(() => {
-      stopSpinner();
-      setIsLocked(!isLocked);
-      if (btn.current) {
-        btn.current.style.pointerEvents = "auto";
-        btn.current.style.cursor = "pointer";
-      }
-    }, 2000);
   };
 
   return (
     <ShrankContainer>
-      {affirmations ? (
-        <InfoWrapper>
-          <AdaptiveAnimation>
-            <h2>Your affirmations</h2>
-            <p className="subtitle">
-              Read them <b>carefully &amp; consciously</b>.
-            </p>
-          </AdaptiveAnimation>
-
-          <div className="affirmations">
-            <WatermarkInput
-              main={false}
-              placeholder="I have an expensive car. I live a happy..."
-              label="My affirmations"
-              toFocus={true}
-              {...register()}
-              isLocked={isLocked}
-              defaultValue={affirmations}
-            ></WatermarkInput>
-          </div>
-          <p className="author">
-            Affirmations by <b>{name}</b>
-          </p>
-          <p className="lastUpdated">{formatDate(new Date(lastUpdated))}</p>
-          <button
-            className={`makeChanges ${!isLocked ? "save-btn" : ""}`}
-            ref={infoBtn}
-            onClick={() => {
-              submitAffirmations(infoBtn, true);
-            }}
-          >
-            {Spinner}
-            {!isLocked ? "Save" : "Make"} changes
-          </button>
-        </InfoWrapper>
-      ) : (
-        <NoInfoWrapper>
+      <Wrapper>
+        {affirmations ? (
+          <header>
+            <AdaptiveAnimation>
+              <h2>Your affirmations</h2>
+              <p className="subtitle">
+                Read them <b>carefully &amp; consciously</b>.
+              </p>
+            </AdaptiveAnimation>
+          </header>
+        ) : (
           <header>
             <AdaptiveAnimation>
               <h2>
@@ -219,30 +149,55 @@ const Affirmations: NextPage<{
               </p>
             </div>
           </header>
+        )}
 
-          <div className="affirmations">
-            <h3>Your affirmations</h3>
-            <WatermarkInput
-              main={false}
-              placeholder="I have an expensive car. I live a happy..."
-              label="My affirmations"
-              toFocus={true}
-              isLocked={!isLocked}
-              {...register()}
-            ></WatermarkInput>
-            <button
-              ref={noInfoBtn}
+        <div className="affirmations">
+          <WatermarkInput
+            main={false}
+            placeholder="I have an expensive car. I live a happy..."
+            label="My affirmations"
+            toFocus={true}
+            {...register()}
+            isLocked={affirmations ? isLocked : !isLocked}
+            defaultValue={affirmations}
+          ></WatermarkInput>
+        </div>
+        <p className="author">
+          Affirmations by <b>{name}</b>
+        </p>
+        <p className="lastUpdated">
+          {affirmations
+            ? formatDate(new Date(lastUpdated))
+            : formatDate(new Date())}
+        </p>
+        <div className="button-container">
+          {buttonsSwitched ? (
+            <Button
               onClick={() => {
-                submitAffirmations(noInfoBtn, false);
+                submitAffirmations();
               }}
-              className={isLocked ? "save-btn" : "edit-btn"}
+              withLoading={{
+                toBeLoading: state,
+                toModifyOnStateChange: {
+                  endingToReplace: "e",
+                  word: "Save",
+                },
+              }}
             >
-              {Spinner}
-              {isLocked ? "Save" : "Make"} changes
-            </button>
-          </div>
-        </NoInfoWrapper>
-      )}
+              Save changes
+            </Button>
+          ) : (
+            <ChangeButton
+              onClick={() => {
+                switchButtons(!buttonsSwitched);
+                setIsLocked(!isLocked);
+              }}
+            >
+              Make changes
+            </ChangeButton>
+          )}
+        </div>
+      </Wrapper>
     </ShrankContainer>
   );
 };
@@ -252,12 +207,12 @@ export default Affirmations;
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
-      //   affirmations: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      affirmations: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-      //   Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-      //   Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-      affirmations: null,
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+      // affirmations: null,
       lastUpdated: Date.now(),
       name: "Rolands",
     },

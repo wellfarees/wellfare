@@ -95,7 +95,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1200px) {
     .recaps {
       grid-template-columns: 1fr 1fr;
     }
@@ -208,26 +208,26 @@ const getStaticProps: GetStaticProps<ArchiveProps> = async () => {
   return {
     props: {
       recaps: [
-        // {
-        //   period: [Date.now(), Date.now() * 1.5],
-        //   entries: 5,
-        //   emojis: ["😍", "🤠", "😭"],
-        // },
-        // {
-        //   period: [Date.now(), Date.now() * 1.5],
-        //   entries: 5,
-        //   emojis: ["😍", "🤠", "😭"],
-        // },
-        // {
-        //   period: [Date.now(), Date.now() * 1.5],
-        //   entries: 5,
-        //   emojis: ["😍", "🤠", "😭"],
-        // },
-        // {
-        //   period: [Date.now(), Date.now() * 1.5],
-        //   entries: 5,
-        //   emojis: ["😍", "🤠", "😭"],
-        // },
+        {
+          period: [Date.now(), Date.now() * 1.5],
+          entries: 5,
+          emojis: ["😍", "🤠", "😭"],
+        },
+        {
+          period: [Date.now(), Date.now() * 1.5],
+          entries: 5,
+          emojis: ["😍", "🤠", "😭"],
+        },
+        {
+          period: [Date.now(), Date.now() * 1.5],
+          entries: 5,
+          emojis: ["😍", "🤠", "😭"],
+        },
+        {
+          period: [Date.now(), Date.now() * 1.5],
+          entries: 5,
+          emojis: ["😍", "🤠", "😭"],
+        },
       ],
     },
     revalidate: 10,

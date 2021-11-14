@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
+import Button from "../../components/Button/Button";
+
 const Wrapper = styled.main`
   min-height: 100vh;
   /* width: 100vw; */
@@ -19,6 +21,10 @@ const Wrapper = styled.main`
   align-items: center;
   justify-content: center;
 
+  ${Error} {
+    margin-bottom: -2em;
+  }
+
   ${Container} {
     display: flex;
     flex-direction: column;
@@ -26,6 +32,10 @@ const Wrapper = styled.main`
     align-items: flex-start;
     min-height: 80vh;
     margin: 8em 0;
+
+    @media only screen and (min-width: 1024px) {
+      justify-content: center;
+    }
   }
 
   .upper {
@@ -33,7 +43,7 @@ const Wrapper = styled.main`
   }
 
   .top-bar {
-    margin-bottom: 4em;
+    margin-bottom: 2em;
     width: 100% !important;
     display: flex;
     justify-content: space-between;
@@ -256,23 +266,22 @@ const EmojiWrapper = styled.div`
 
 const emojisList = [
   {
-    name: "Like usual",
-    emojis: ["😍", "😎", "😣", "🤑"],
+    name: "At piece",
+    emojis: ["🥰", "😌", "🤪", "😊"],
   },
   {
-    name: "Quirky",
-    emojis: ["😈", "🤖", "😇", "😡"],
+    name: "Hard to move on",
+    emojis: ["😰", "😟", "😭", "😞"],
   },
   {
-    name: "Crazy",
-    emojis: ["😭", "😙", "🤕", "🤠"],
+    name: "Unstable",
+    emojis: ["😈", "😡", "😖", "😨"],
   },
 ];
 
 const Entry: NextPage = () => {
   // TODO: To be replaced with graphql fetched username
   const [username, setUsername] = useState("Roland");
-  const ref = useRef<HTMLTextAreaElement | null>(null);
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
@@ -282,6 +291,7 @@ const Entry: NextPage = () => {
   const modalRef = useRef<null | HTMLDivElement>(null);
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
+  const [submitInProgress, setSubmitInProgress] = useState(false);
 
   // Variables for mobile popup window
   let touchStart = 0;
@@ -550,7 +560,14 @@ const Entry: NextPage = () => {
         <footer>
           {error && <Error>{error}</Error>}
           <div className="btns">
-            <button
+            <Button
+              withLoading={{
+                toBeLoading: submitInProgress,
+                toModifyOnStateChange: {
+                  word: "Save",
+                  endingToReplace: "e",
+                },
+              }}
               onClick={() => {
                 // custom check if an emoji has been selected
                 if (!currentEmoji) {
@@ -567,12 +584,16 @@ const Entry: NextPage = () => {
                 }
 
                 if (!res) {
-                  router.push("/app");
+                  setSubmitInProgress(true);
+                  // Simulating the request delay
+                  setTimeout(() => {
+                    router.push("/app");
+                  }, 1000);
                 }
               }}
             >
               Save the record
-            </button>
+            </Button>
             <Link href="/app">Skip, I’ll do this later.</Link>
           </div>
         </footer>

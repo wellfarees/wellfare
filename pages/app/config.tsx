@@ -6,6 +6,13 @@ import ReactSlider from "react-slider";
 import { userConfig, fontSizes } from "../../config/userConfig";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { GetStaticProps, NextPage } from "next";
+import { useEffect } from "react";
+
+import { useActions } from "../../hooks/useActions";
+import { useMutation } from "react-apollo";
+import { EDIT_USER_CONFIG } from "../../graphql/mutations";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { transformFetchedConfig } from "../../utils/transformFetchedConfig";
 
 const StyledSlider = styled(ReactSlider)`
   width: 82%;
@@ -185,11 +192,30 @@ const Wrapper = styled.div`
 
 type ConfigProps = typeof userConfig;
 
-const Conf: NextPage<ConfigProps> = ({
-  baseFontSize,
-  reducedMotion,
-  theme,
-}) => {
+const Conf: NextPage<ConfigProps> = () => {
+  const { saveConfig } = useActions();
+  const { user } = useTypedSelector((state) => state);
+  const {
+    user: { jwt },
+  } = useTypedSelector((state) => state);
+  const [mutateAppearance, { data, loading, error }] =
+    useMutation(EDIT_USER_CONFIG);
+
+  const mutateSpecificValue = (mutation: { [key: string]: any }) => {
+    mutateAppearance({
+      variables: { token: jwt, ...mutation },
+      refetchQueries: ["getUser", "login"],
+    });
+  };
+
+  // TODO: Solve the reactive reduced motion problem by calling the mutation on component's unmounting lifecycle (useEffect cleanup function)
+
+  useEffect(() => {
+    if (data) {
+      saveConfig(transformFetchedConfig(data.editAppearance.config));
+    }
+  }, [data, loading]);
+
   return (
     <Wrapper>
       <ShrankContainer>
@@ -206,8 +232,11 @@ const Conf: NextPage<ConfigProps> = ({
               <Toggle
                 icons={false}
                 className="toggler"
+                defaultChecked={
+                  user.info?.config.theme === "dark" ? true : false
+                }
                 onChange={(e) => {
-                  // TODO: update config value with e.target.checked
+                  mutateSpecificValue({ darkMode: e.target.checked });
                 }}
               />
             </div>
@@ -216,8 +245,9 @@ const Conf: NextPage<ConfigProps> = ({
               <Toggle
                 icons={false}
                 className="toggler"
+                defaultChecked={Boolean(user.info?.config.reducedMotion)}
                 onChange={(e) => {
-                  // TODO: update config value with e.target.checked
+                  mutateSpecificValue({ reducedMotion: e.target.checked });
                 }}
               />
             </div>
@@ -233,10 +263,10 @@ const Conf: NextPage<ConfigProps> = ({
                 max={19}
                 renderTrack={Track}
                 className="slider"
-                defaultValue={userConfig.baseFontSize}
+                defaultValue={user.info?.config.fontSize}
                 marks={[14, 15, 16, 17, 18, 19]}
                 onChange={(val) => {
-                  // TODO: update config value with val
+                  mutateSpecificValue({ fontSize: val });
                 }}
               />
               <i className="fas fa-font fa-2x"></i>

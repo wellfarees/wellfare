@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const useScreenSize = (): null | number => {
   const [size, setSize] = useState<null | number>(null);
-
-  const updateSize = (e: UIEvent) => {
-    setSize(document.body.offsetWidth);
-  };
+  // const initialSize =
 
   useEffect(() => {
+    const updateSize = (e: UIEvent) => {
+      setSize(document.body.offsetWidth);
+    };
     setSize(document.body.offsetWidth);
 
     window.addEventListener("resize", updateSize);

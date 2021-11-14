@@ -9,22 +9,53 @@ import {
   useEffect,
 } from "react";
 import type { AppProps } from "next/app";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider, useLazyQuery } from "react-apollo";
 import client from "../graphql/client";
 import Layout from "../components/layout/Layout";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 
+import { useActions } from "../hooks/useActions";
+import { APPEARANCE_QUERY } from "../graphql/queries";
+
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
 >(undefined!);
+
+const ReduxMiddleComponent: React.FC = ({ children }) => {
+  const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
+  const { saveToken, saveConfig } = useActions();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      setReady(true);
+      return;
+    }
+    getConfig({ variables: { token: jwt } });
+  }, []);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (data) {
+      saveToken(jwt);
+      saveConfig({
+        fontSize: data.getUser.config.fontSize,
+        reducedMotion: data.getUser.config.reducedMotion,
+        theme: data.getUser.config.darkMode ? "dark" : "light",
+      });
+      setReady(true);
+    }
+  }, [loading, data, error]);
+  return ready ? <>{children}</> : <></>;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -46,11 +77,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        <navStateContext.Provider value={[isOpen, setIsOpen]}>
-          <Layout loggedIn={loggedIn} isLoaded={isLoaded}>
-            <Component {...pageProps} />
-          </Layout>
-        </navStateContext.Provider>
+        <ReduxMiddleComponent>
+          <navStateContext.Provider value={[isOpen, setIsOpen]}>
+            <Layout loggedIn={loggedIn} isLoaded={isLoaded}>
+              <Component {...pageProps} />
+            </Layout>
+          </navStateContext.Provider>
+        </ReduxMiddleComponent>
       </ApolloProvider>
     </Provider>
   );

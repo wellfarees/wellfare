@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
@@ -7,8 +7,13 @@ import styled from "styled-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
-import { useLoadingIndicator } from "../hooks/useLoadingIndicator";
 import { useRouter } from "next/router";
+import Button from "../components/Button/Button";
+import { useTypedSelector } from "../hooks/useTypedSelector";
+import { useActions } from "../hooks/useActions";
+
+import { useLazyQuery } from "@apollo/react-hooks";
+import { LOGIN } from "../graphql/queries";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -215,10 +220,32 @@ const ErrorWrapper = styled.p`
 const SignIn = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<null | string>(null);
-  const [buttonState, setButtonState] = useState("Sign in");
-  const { Spinner, startSpinner, stopSpinner } = useLoadingIndicator();
+  // const [buttonState, setButtonState] = useState("Sign in");
+  const [signedIn, setSignedIn] = useState(false);
   const router = useRouter();
   const handleErrors = useHandleFormErrors();
+  const [login, queryProps] = useLazyQuery(LOGIN, {
+    fetchPolicy: "network-only",
+  });
+  const { storeUser } = useActions();
+
+  useEffect(() => {
+    const { error, data } = queryProps;
+
+    if (error) {
+      setError(error.graphQLErrors[0].message);
+      setSignedIn(false);
+      return;
+    }
+
+    if (data) {
+      setError(null);
+      const { jwt, user } = data.login;
+      storeUser(jwt, user);
+      setSignedIn(false);
+      router.push("/app/");
+    }
+  }, [queryProps.data, queryProps.loading]);
 
   return (
     <Wrapper>
@@ -249,25 +276,13 @@ const SignIn = () => {
                 setError(message);
               } else {
                 setError(null);
-
                 // activating the loading indicator animation
-                startSpinner();
-
-                setButtonState("Signing in");
+                setSignedIn(true);
 
                 try {
-                  // TODO: Authorize user (send an http request or something)
-
-                  setError(null);
-                  // redirect after successful registration
-                  router.push("/app");
-                } catch (err) {
-                  // Handling server-side errors
-                  stopSpinner();
-
-                  setError("Couldn't reach our database, pease, try again!");
-                  setButtonState("Sign Up");
-                }
+                  const { email, password } = credentials.values!;
+                  login({ variables: { email, password } });
+                } catch (err) {}
               }
             }}
             className="signUp-form"
@@ -276,10 +291,18 @@ const SignIn = () => {
               <LabeledInput {...register("email")} />
               <LabeledInput {...register("password")} />
             </div>
-            <button>
-              {Spinner}
-              {buttonState}
-            </button>
+            <Button
+              withLoading={{
+                toBeLoading: signedIn,
+                toModifyOnStateChange: {
+                  endingToReplace: "n",
+                  word: "Sign",
+                  keepEnding: true,
+                },
+              }}
+            >
+              Sign in
+            </Button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
           <p className="form-cta">

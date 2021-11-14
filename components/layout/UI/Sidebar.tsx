@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { useSpring, animated, config } from "react-spring";
 import { useEffect, useRef, MutableRefObject } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { useActions } from "../../../hooks/useActions";
 import { userConfig } from "../../../config/userConfig";
 import { themes } from "../../../styled/themes";
+import { useActions } from "../../../hooks/useActions";
 
 const Wrapper = styled.div`
   .overlay {
@@ -93,6 +93,8 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
 }) => {
   const itemRef = useRef<HTMLLIElement | null>(null);
   const router = useRouter();
+  const { user } = useTypedSelector((state) => state);
+  const userInfo = user.info!;
 
   const retrieveTextFromSpan = (span: HTMLSpanElement): string => {
     let children = span.childNodes[1]!;
@@ -123,7 +125,6 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
     if (!itemRef.current) return;
 
     if (!point || point === "null") {
-      console.log(point);
       itemRef.current.querySelectorAll("span").forEach((el) => {
         el.style.backgroundColor = "rgba(0, 0, 0, 0)";
       });
@@ -135,7 +136,7 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
     const pointText = retrievePointText(itemRef);
 
     if (pointText === point) {
-      span.style.backgroundColor = themes[userConfig.theme].maximum;
+      span.style.backgroundColor = themes[userInfo.config.theme].maximum;
     }
   };
 
@@ -156,7 +157,7 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
     if (getLastPathPiece(router.pathname) === endPoint) {
       indicatePointWithCss(retrievePointText(itemRef));
     }
-  }, [router.pathname]);
+  }, [router.pathname, userInfo.config.theme]);
 
   return (
     <li ref={itemRef} className={active ? "active" : ""}>
@@ -181,7 +182,7 @@ const Sidebar: React.FC = () => {
     };
   });
 
-  const { toggleSidebar } = useActions();
+  const { toggleSidebar, logout } = useActions();
 
   const asideToggled = useTypedSelector(
     (state) => state.unitStates
@@ -284,12 +285,10 @@ const Sidebar: React.FC = () => {
           <NavPoint>
             <a
               className="signOut"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-
-                //TODO: Do some auth signing out logic
-
-                router.push("/");
+                await router.push("/");
+                logout();
               }}
             >
               <span>

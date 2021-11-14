@@ -1,8 +1,10 @@
 import Fade from "react-reveal/Fade";
-import { userConfig } from "../../config/userConfig";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const AdaptiveAnimation: React.FC = ({ children }) => {
-  return userConfig.reducedMotion ? (
+  const { user } = useTypedSelector((state) => state);
+
+  return user.info?.config.reducedMotion ? (
     <>{children}</>
   ) : (
     <Fade bottom>{children}</Fade>

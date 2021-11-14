@@ -7,30 +7,28 @@ import { Pfp } from "../../components";
 import { useForm } from "../../hooks/useForm";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
-import { useLoadingIndicator } from "../../hooks/useLoadingIndicator";
 import { useState, useEffect } from "react";
 import GoBack from "../../components/Routing/GoBack";
 import { scrollToBottom } from "../../utils/scrollToBottom";
+import Button from "../../components/Button/Button";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import {
+  mapRefsIntoValues,
+  ResultingObject,
+} from "../../utils/mapRefsIntoValues";
 
-interface UserDataProps {
-  name: string;
-  surname: string;
-  email: string;
-  currentPassword: string;
-}
+import { useMutation, useQuery, useLazyQuery } from "react-apollo";
+import { EDIT_USER_INFORMATION } from "../../graphql/mutations";
+import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
+
   header {
     max-width: 300px;
 
     h2 {
       font-weight: 500;
-    }
-
-    p.subtitle {
-      line-height: 1.5;
-      margin-top: 0.5em;
     }
   }
 
@@ -58,7 +56,7 @@ const Wrapper = styled.div`
   }
 
   .user-info-block {
-    margin-top: 3em;
+    margin-top: 0.5em;
   }
 
   .input-block {
@@ -80,7 +78,7 @@ const Wrapper = styled.div`
     margin-bottom: -1em;
   }
 
-  .save-btn {
+  .saveBtn {
     ${GlowingBLue}
     margin-top: 3em;
     display: flex;
@@ -101,7 +99,7 @@ const Wrapper = styled.div`
   .error {
     color: ${(props) => props.theme.error};
     margin-top: 2em;
-    margin-bottom: -0.5em;
+    margin-bottom: 2em;
     line-height: 1.5;
   }
 
@@ -121,25 +119,57 @@ const Wrapper = styled.div`
   }
 `;
 
-const User: NextPage<UserDataProps> = ({
-  name,
-  surname,
-  currentPassword,
-  email,
-}) => {
+const Warning = styled.div`
+  margin-top: 3em;
+  margin-bottom: 1em;
+  background: #fff4e5;
+  color: #663c33;
+  border-radius: 7px;
+  padding: 2em;
+  max-width: 650px;
+
+  b {
+    padding-bottom: 0.4em;
+    display: inline-block;
+
+    i {
+      color: #ffa117;
+      margin-right: 0.6em;
+    }
+  }
+
+  p {
+    line-height: 1.5;
+  }
+`;
+
+const User = () => {
   const { register, handleSubmit } = useForm();
   const handleErrors = useHandleFormErrors();
   const [error, setError] = useState("");
-  const { Spinner, stopSpinner, startSpinner } = useLoadingIndicator();
   const [isSaved, setIsSaved] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
+
+  const { user } = useTypedSelector((state) => state);
+  const [userInformationQuery, { data, loading }] = useLazyQuery(
+    USER_INFORMATION_QUERY,
+    {
+      variables: { token: user.jwt },
+      fetchPolicy: "network-only",
+    }
+  );
+
+  const [editUserInformation, mutationProps] = useMutation(
+    EDIT_USER_INFORMATION
+  );
 
   useEffect(() => {
-    if (isSaved) {
-      startSpinner();
-    } else {
-      stopSpinner();
-    }
+    setInProgress(!inProgress);
   }, [isSaved]);
+
+  useEffect(() => {
+    userInformationQuery();
+  }, []);
 
   const isImage = (type: string): boolean => {
     var ext = type.split("/")[1];
@@ -155,6 +185,50 @@ const User: NextPage<UserDataProps> = ({
     return false;
   };
 
+  interface UserData {
+    ["Name"]: string;
+    ["Surname"]: string;
+    ["Current password"]: string;
+    ["New password"]: string;
+    ["Email"]: string;
+  }
+
+  const sendData = async (
+    data: UserData | ResultingObject,
+    withPassword?: boolean
+  ) => {
+    const baseVariables = {
+      firstName: data.Name,
+      lastName: data.Surname,
+      email: data.Email,
+      token: user.jwt as string,
+    };
+
+    const passwordReset = {
+      changePassword: {
+        new: data["New password"],
+        current: data["Current password"],
+      },
+    };
+
+    const variables = withPassword
+      ? { ...baseVariables, ...passwordReset }
+      : baseVariables;
+
+    try {
+      await editUserInformation({ variables });
+    } catch (e) {
+      setError(mutationProps.error?.graphQLErrors[0].message as string);
+    }
+  };
+
+  useEffect(() => {
+    console.log(mutationProps.data);
+    if (mutationProps.error) {
+      setError(mutationProps.error.graphQLErrors[0].message as string);
+    }
+  }, [mutationProps.loading]);
+
   return (
     <Wrapper>
       <ShrankContainer>
@@ -165,11 +239,21 @@ const User: NextPage<UserDataProps> = ({
               <b>Account</b> settings
             </h2>
           </AdaptiveAnimation>
-          <p className="subtitle">
-            Want to reset your password? Misspelled your name? That’s the right
-            place to seek for solutions to these problems.
-          </p>
         </header>
+        {loading ? null : data && !data.getUser.information.verified ? (
+          // TODO: Support styling for dark mode
+          <Warning>
+            <p>
+              <b>
+                <i className="fa fa-exclamation-triangle"></i>Action required
+              </b>
+            </p>
+            <p>
+              Please, verify your identity by following instructions we sent to
+              your email. Your account will get locked in 1 week otherwise.
+            </p>
+          </Warning>
+        ) : null}
 
         <form
           onSubmit={(e) => {
@@ -179,10 +263,11 @@ const User: NextPage<UserDataProps> = ({
             const res = handleErrors(submitted);
             let isSuccessful = true;
 
-            res.target.forEach((input) => {
-              if (input.type === "password") return;
-              if (input.value.length === 0) isSuccessful = false;
-            });
+            res.target
+              .filter((input) => input.type !== "password")
+              .forEach((input) => {
+                if (input.value.length === 0) isSuccessful = false;
+              });
 
             if (isSuccessful) {
               setError("");
@@ -197,10 +282,9 @@ const User: NextPage<UserDataProps> = ({
                   (input) => input.id === "Current password"
                 )!;
 
-                if (currentPasswordInput.value !== currentPassword) {
-                  setError(
-                    "Your current password does not match with the one you have previously set. "
-                  );
+                // TODO: Implement this
+                if (currentPasswordInput.value === "") {
+                  setError("Please, enter your current password");
                   return;
                 }
 
@@ -211,17 +295,24 @@ const User: NextPage<UserDataProps> = ({
                   return;
                 }
 
+                const values = mapRefsIntoValues<HTMLInputElement>(
+                  submitted.refs
+                );
+
+                sendData(values, true);
                 setIsSaved(true);
                 setTimeout(() => {
                   // TODO: Do http calling work
-                  stopSpinner();
                   setIsSaved(false);
                 }, 1000);
               } else {
+                const values = mapRefsIntoValues<HTMLInputElement>(
+                  submitted.refs
+                );
+                sendData(values);
                 setIsSaved(true);
                 setTimeout(() => {
                   // TODO: Do http calling work
-                  stopSpinner();
                   setIsSaved(false);
                 }, 1000);
               }
@@ -272,15 +363,26 @@ const User: NextPage<UserDataProps> = ({
               </div>
               <div className="name-section">
                 <p className="name">Name</p>
-                <LabeledInput defaultValue={name} {...register("Name")} />
-                <LabeledInput defaultValue={surname} {...register("Surname")} />
+                <LabeledInput
+                  defaultValue={
+                    data ? data.getUser.information.firstName : null
+                  }
+                  {...register("Name")}
+                />
+                <LabeledInput
+                  defaultValue={data ? data.getUser.information.lastName : null}
+                  {...register("Surname")}
+                />
               </div>
             </div>
 
             <div className="col">
               <div className="email-section">
                 <p className="name">Email</p>
-                <LabeledInput defaultValue={email} {...register("Email")} />
+                <LabeledInput
+                  defaultValue={data ? data.getUser.information.email : null}
+                  {...register("Email")}
+                />
               </div>
 
               <div className="password-section">
@@ -297,9 +399,17 @@ const User: NextPage<UserDataProps> = ({
               className={`btw-wrapper ${!isSaved ? "" : "saving"}
               `}
             >
-              <button className="save-btn">
-                {Spinner}Sav{!isSaved ? "e" : "ing"} changes
-              </button>
+              <Button
+                withLoading={{
+                  toBeLoading: !inProgress,
+                  toModifyOnStateChange: {
+                    endingToReplace: "e",
+                    word: "Save",
+                  },
+                }}
+              >
+                Save changes
+              </Button>
             </div>
           </footer>
         </form>
@@ -309,16 +419,3 @@ const User: NextPage<UserDataProps> = ({
 };
 
 export default User;
-
-export const getStaticProps: GetStaticProps<UserDataProps> = async () => {
-  // TODO: fetch actual current data of user
-  return {
-    props: {
-      name: "Rolands",
-      surname: "Fridemanis",
-      email: "rolands.affaires@gmail.com",
-      currentPassword: "test123",
-    },
-    revalidate: 10,
-  };
-};

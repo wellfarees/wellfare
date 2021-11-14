@@ -3,8 +3,12 @@ import styled from "styled-components";
 
 interface useLoadingIndicatorReturns {
   Spinner: JSX.Element;
-  startSpinner: () => void;
-  stopSpinner: () => void;
+  spinnerApi: {
+    start: () => void;
+    stop: () => void;
+    pause: () => void;
+    resume: () => void;
+  };
 }
 
 const useLoadingIndicator = (): useLoadingIndicatorReturns => {
@@ -18,10 +22,47 @@ const useLoadingIndicator = (): useLoadingIndicatorReturns => {
     margin-right: 0.7em;
   `;
 
+  class ApiCreator {
+    constructor() {}
+
+    start(): void {
+      indicatorApi.start({
+        to: async (animate) => {
+          await animate({
+            to: { opacity: 1 },
+          });
+          await animate({
+            to: { rotateZ: 720 },
+            loop: true,
+            delay: 0,
+            config: config.molasses,
+          });
+        },
+      });
+    }
+
+    stop(): void {
+      indicatorApi.start({
+        to: async (animate) => {
+          await animate({
+            to: { opacity: 0 },
+          });
+        },
+      });
+    }
+
+    pause(): void {
+      indicatorApi.pause();
+    }
+
+    resume(): void {
+      indicatorApi.resume();
+    }
+  }
+
   const [indicatorStyles, indicatorApi] = useSpring(() => {
     return {
       from: {
-        display: "none",
         opacity: 0,
         rotateZ: 0,
       },
@@ -36,44 +77,7 @@ const useLoadingIndicator = (): useLoadingIndicatorReturns => {
     ></SpinnerSpan>
   );
 
-  const startSpinner = (): void => {
-    indicatorApi.start({
-      to: async (animate) => {
-        await animate({
-          to: { display: "inline-block" },
-        });
-        await animate({
-          to: { opacity: 1 },
-        });
-        await animate({
-          to: { rotateZ: 360 },
-          loop: true,
-          delay: 0,
-          config: config.molasses,
-        });
-      },
-    });
-  };
-
-  const stopSpinner = (): void => {
-    indicatorApi.start({
-      to: async (animate) => {
-        await animate({
-          to: { opacity: 0 },
-        });
-        await animate({
-          to: { display: "none" },
-        });
-        await animate({
-          to: { rotateZ: 0 },
-          loop: false,
-          delay: 0,
-        });
-      },
-    });
-  };
-
-  return { Spinner, startSpinner, stopSpinner };
+  return { Spinner, spinnerApi: new ApiCreator() };
 };
 
 export { useLoadingIndicator };

@@ -41,7 +41,7 @@ const DetailedRecord: React.FC<RecordProps> = ({
   return (
     <Wrapper>
       <p className="date">{formatDate(new Date(date))}</p>
-      <h3>Feeling {feelings}</h3>
+      <h3>{feelings}</h3>
       <div className="info">
         <div className="info-block">
           <p className="name">Unease</p>

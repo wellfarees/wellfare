@@ -7,7 +7,7 @@ interface CardProps {
 }
 
 const CardContainer = styled.div`
-  padding: 2em;
+  padding: 2.9em 3em;
   filter: drop-shadow(0px 0px 22px rgba(0, 0, 0, 0.05));
   background-color: #fff;
   max-width: 250px;
