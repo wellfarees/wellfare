@@ -11,6 +11,7 @@ import { emailRegExp } from "../utils/emailRegExp";
 import { useSpring, animated, config } from "react-spring";
 import Scroller from "../components/Scroller/Scroller";
 import LoadingButton from "../components/Button/Button";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 
 const Showcase = memo(ShowcaseComp);
 
@@ -226,6 +227,7 @@ const Home: NextPage = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const successfullyMailListed = useRef(false);
   const mailContainer = useRef<HTMLDivElement | null>(null);
+  const { jwt } = useTypedSelector((state) => state).user;
 
   const [buttonStyles, buttonSpringApi] = useSpring(() => {
     return {
@@ -261,11 +263,11 @@ const Home: NextPage = () => {
               <Fade bottom>
                 <p className="subtitle">
                   Ever felt lost and emotionally burnt out? Cut it! Organize
-                  yourself and ur mental state using <b>Wellfaree</b>.
+                  yourself and your mental state using <b>Wellfare</b>.
                 </p>
               </Fade>
               <Fade bottom>
-                <Link href="/signup">
+                <Link href={jwt ? "/app" : "/signup"}>
                   <Button>Get Started</Button>
                 </Link>
               </Fade>

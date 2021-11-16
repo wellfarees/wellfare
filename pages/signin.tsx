@@ -306,16 +306,10 @@ const SignIn = () => {
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
           <p className="form-cta">
-            <Link href="/signup">
-              <a href="#"> Forgot your password?</a>
-            </Link>
+            <Link href="/auth/reset">Forgot your password?</Link>
           </p>
           <p className="form-cta">
-            New out here?
-            <Link href="/signup">
-              <a href="#"> Sign up</a>
-            </Link>
-            !
+            New out here? <Link href="/signup">Sign up</Link>!
           </p>
         </div>
       </Container>

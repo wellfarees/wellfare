@@ -64,7 +64,6 @@ export const EDIT_USER_INFORMATION = gql`
       changePassword: $changePassword
     ) {
       dbid
-      firstName
     }
   }
 `;
@@ -81,6 +80,35 @@ export const VERIFY_USER = gql`
   mutation VerifyUser($token: String!) {
     verifyUser(token: $token) {
       verified
+    }
+  }
+`;
+
+// TODO: remove contents argument
+export const ADD_RECORD = gql`
+  mutation AddRecord(
+    $token: String!
+    $unease: String!
+    $gratefulness: String!
+    $emoji: String!
+    $feelings: String!
+  ) {
+    addRecord(
+      token: $token
+      unease: $unease
+      gratefulness: $gratefulness
+      emoji: $emoji
+      feelings: $feelings
+    ) {
+      id
+    }
+  }
+`;
+
+export const SEND_RESET_PASSWORD = gql`
+  mutation ResetPassword($email: String!) {
+    resetPassword(email: $email) {
+      success
     }
   }
 `;

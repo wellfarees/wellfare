@@ -245,7 +245,7 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
           {data ? (
             <>
               <Fade bottom>
-                <h1>Wellfaree Developers</h1>
+                <h1>Wellfare Developers</h1>
               </Fade>
               <div className="developers">
                 {data &&

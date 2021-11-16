@@ -96,3 +96,26 @@ export const AFFIRMATIONS_QUERY = gql`
     }
   }
 `;
+
+export const GET_FIRST_NAME = gql`
+  query GetUserInfo($token: String!) {
+    getUser(token: $token) {
+      id
+      information {
+        firstName
+      }
+    }
+  }
+`;
+
+export const GET_BASE_INFORMATION = gql`
+  query GetUser($token: String!) {
+    getUser(token: $token) {
+      information {
+        firstName
+        email
+      }
+      id
+    }
+  }
+`;

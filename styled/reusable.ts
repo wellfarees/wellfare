@@ -3,7 +3,7 @@ import { fontSizes } from "../config/userConfig";
 
 const ContainerStyles = css`
   padding-right: 15px;
-  padding-left: 0px;
+  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
   width: 80%;
