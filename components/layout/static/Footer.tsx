@@ -32,6 +32,12 @@ const FooterEl = styled.footer`
         font-size: 1.4rem;
         line-height: 2;
 
+        a {
+          i {
+            margin-right: 0.6em;
+          }
+        }
+
         a:hover {
           text-decoration: underline;
         }
@@ -46,7 +52,7 @@ const FooterEl = styled.footer`
     line-height: 1.7;
   }
 
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: 768px) {
     .sections {
       flex-direction: column;
 
@@ -96,6 +102,27 @@ const Footer = () => {
                   <Link href="/tos">
                     <a href="#">Terms of Service</a>
                   </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="nav-section">
+              <h3>Other platforms</h3>
+              <ul>
+                <li>
+                  <a href="https://github.com/wellfaree/">
+                    <i className="fab fa-github"></i>Source code
+                  </a>
+                </li>
+                {/* TODO: Create and link Wellfare twitter and discord */}
+                <li>
+                  <a href="#">
+                    <i className="fab fa-twitter"></i>Twitter
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i className="fab fa-discord"></i>Discord
+                  </a>
                 </li>
               </ul>
             </div>

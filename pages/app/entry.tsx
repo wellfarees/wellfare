@@ -10,6 +10,11 @@ import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
 import Button from "../../components/Button/Button";
 
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { ADD_RECORD } from "../../graphql/mutations";
+import { GET_FIRST_NAME } from "../../graphql/queries";
+import { useMutation, useLazyQuery } from "react-apollo";
+
 const Wrapper = styled.main`
   min-height: 100vh;
   /* width: 100vw; */
@@ -282,6 +287,7 @@ const emojisList = [
 const Entry: NextPage = () => {
   // TODO: To be replaced with graphql fetched username
   const [username, setUsername] = useState("Roland");
+  const { jwt } = useTypedSelector((state) => state).user;
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
@@ -292,6 +298,14 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
+  const [addRecord, mutationProps] = useMutation(ADD_RECORD);
+  const [getFirstName, userQueryProps] = useLazyQuery(GET_FIRST_NAME, {
+    variables: { token: jwt },
+  });
+
+  useEffect(() => {
+    getFirstName();
+  }, []);
 
   // Variables for mobile popup window
   let touchStart = 0;
@@ -518,7 +532,11 @@ const Entry: NextPage = () => {
             <Pfp url="/img/sample_pfp.jpg"></Pfp>
           </div>
           <h3 className="greetings">
-            Welcome back, <b className="name">{username}</b>
+            Welcome back,{" "}
+            <b className="name">
+              {userQueryProps.data &&
+                userQueryProps.data.getUser.information.firstName}
+            </b>
           </h3>
           <div className="questions">
             <form>
@@ -585,10 +603,24 @@ const Entry: NextPage = () => {
 
                 if (!res) {
                   setSubmitInProgress(true);
+                  const values = raw_data.values!;
+                  const keys = Object.keys(values);
+
+                  // TODO: Remove contents field
+                  addRecord({
+                    variables: {
+                      token: jwt,
+                      emoji: currentEmoji,
+                      feelings: values[keys[0]],
+                      gratefulness: values[keys[1]],
+                      unease: values[keys[2]],
+                    },
+                  });
+                  debugger;
                   // Simulating the request delay
-                  setTimeout(() => {
-                    router.push("/app");
-                  }, 1000);
+                  // setTimeout(() => {
+                  //   router.push("/app");
+                  // }, 1000);
                 }
               }}
             >
