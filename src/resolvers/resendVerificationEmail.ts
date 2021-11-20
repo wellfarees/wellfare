@@ -30,9 +30,9 @@ export default {
           from: process.env.EMAIL_ADDRESS!,
           to: data.information.email,
           subject: "Verify your email",
-          html: `Hi ${data.information.firstName}, here's your verification email! <a href="https://wellfare.vercel.app/verify?token=${verificationJWT}">Click here</a> to reset it..
+          html: `Hi ${data.information.firstName}, here's your verification email! <a href="https://wellfare.vercel.app/auth/verify?token=${verificationJWT}">Click here</a> to reset it..
           <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/verify?token=${verificationJWT}.
+          If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/auth/verify?token=${verificationJWT}.
           <br /> <br />
           Thanks,
           <br />

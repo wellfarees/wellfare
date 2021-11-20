@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import WrongPasswordError from "../errors/WrongPasswordError";
@@ -54,7 +54,12 @@ export default {
         throw new UserDoesNotExistsError("User does not exist in database.");
 
       if (args.changePassword) {
-        if (data.information.password !== args.changePassword.current)
+        const passwordsMatch = await compare(
+          args.changePassword.current,
+          data.information.password
+        );
+
+        if (!passwordsMatch)
           throw new WrongPasswordError("Current password is incorrect.");
       }
 

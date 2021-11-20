@@ -166,7 +166,7 @@ const parseRecapTextToHTML = (initialRecap: string): string => {
 const generateRecapFromGivenType = (
   type: RecapTypes,
   usedDefaultIndex: number | null
-): string => {
+): { index: number | null; recap: string } => {
   const defaults = [
     "Your mood varies throughout the week, and you are unable to be placed under a direct category. You may have been anxious, frustrated, ecstatic, and/or stressed.\nContinue journalizing on **Wellfare™** to express your emotions thoroughly, as we are here to help you track your mood.\nIt is highly recommended to create a schedule to maintain your daily life, starting from when you wake up to when you go to sleep.\nRemember to drink water daily, get fresh air, and have a good sleep, your body will thank you in the future, and exercise at a moderate level to keep both your mentality and physicality healthy.",
 
@@ -198,23 +198,37 @@ const generateRecapFromGivenType = (
     }
   };
 
-  const randomIndex = generateDifferentRandomIndex(usedDefaultIndex);
+  let indexUsed = usedDefaultIndex;
+  let recap = "";
 
   switch (type) {
     case RecapTypes.MANIA:
-      return `This week must have been really emotionally exhausting. You've been experiencing ups and downs, mostly the latter though\n
+      recap = `This week must have been really emotionally exhausting. You've been experiencing ups and downs, mostly the latter though\n
 Your thoughts might have been entering and leaving your mind more rapidly than usual. You've been more sleep deprived and possibly been having more desire for sex in any shape or form.\nIf this is true about you, you might be going through **period of mania**. If not, there's just a whole lot that is going on in your life and that's completely normal.`;
+      break;
     case RecapTypes.LOST:
-      return "Lately throughout the week, you've been feeling quite overwhelmed and frustrated, causing you to feel quite lost and hopeless.\nYou haven't been acting like yourself and you're scared of what you can do, so you have been emotionally distancing yourself slightly from people, anxious of people's thoughts and opinions.\nIf your emotions relate to this, you may be experiencing **loneliness and fatigue of society**. Try to take a step back and assess the situation, to which you should then slowly connect with society once more.";
+      recap =
+        "Lately throughout the week, you've been feeling quite overwhelmed and frustrated, causing you to feel quite lost and hopeless.\nYou haven't been acting like yourself and you're scared of what you can do, so you have been emotionally distancing yourself slightly from people, anxious of people's thoughts and opinions.\nIf your emotions relate to this, you may be experiencing **loneliness and fatigue of society**. Try to take a step back and assess the situation, to which you should then slowly connect with society once more.";
+      break;
     case RecapTypes.DEPRESSED:
-      return "Your thoughts throughout the week has been abnormal as you and others around you are wary of what you can do.\nYou have been experiencing more low points than highs this week, and although you are **overwhelmed and full of anxiety**, you are too fatigued to try to make an effort of change.\nTake a moment to surround yourself with the good things and people in your life, and focus on creating new hobbies. Express your interest in new things.";
+      recap =
+        "Your thoughts throughout the week has been abnormal as you and others around you are wary of what you can do.\nYou have been experiencing more low points than highs this week, and although you are **overwhelmed and full of anxiety**, you are too fatigued to try to make an effort of change.\nTake a moment to surround yourself with the good things and people in your life, and focus on creating new hobbies. Express your interest in new things.";
+      break;
     case RecapTypes.DELIGHTED:
-      return "It's great! Throughout the week you've been quite happy, which is spectacular to see! Your mood has constantly been joyful as you have experienced pleasurable moments this week.\nYou've been feeling **loved, special, and quite crazy** in the best way possible. Watch yourself, however, not to overwork yourself while feeling too motivated in the moment.\nIf your emotions relate to this, this week you have been quite joyful but do not overestimate your ability to cope.\nTo maintain this, create new hobbies and challenges that you'll enjoy and find pleasure in.";
+      recap =
+        "It's great! Throughout the week you've been quite happy, which is spectacular to see! Your mood has constantly been joyful as you have experienced pleasurable moments this week.\nYou've been feeling **loved, special, and quite crazy** in the best way possible. Watch yourself, however, not to overwork yourself while feeling too motivated in the moment.\nIf your emotions relate to this, this week you have been quite joyful but do not overestimate your ability to cope.\nTo maintain this, create new hobbies and challenges that you'll enjoy and find pleasure in.";
+      break;
     case RecapTypes.STRESSED:
-      return "Unfortunately, throughout the week you have been both emotionally and physically overwhelmed. With the obsession of not knowing how other's think about you, you have been **feeling quite lonely** as it seems you have been trying to overcome your challenges by yourself.\nYou have been happy a few times, which is good, however your mood has dropped drastically afterward.\nUnable to handle all the emotions and challenges that have been thrown at you, you often say or do things that you would not normally do.\nIf you are related to this, you have been yielding to the pressure of psychological stress. Often take a break and don't overwork yourself. Slowly pace yourself to manage each task individually.";
+      recap =
+        "Unfortunately, throughout the week you have been both emotionally and physically overwhelmed. With the obsession of not knowing how other's think about you, you have been **feeling quite lonely** as it seems you have been trying to overcome your challenges by yourself.\nYou have been happy a few times, which is good, however your mood has dropped drastically afterward.\nUnable to handle all the emotions and challenges that have been thrown at you, you often say or do things that you would not normally do.\nIf you are related to this, you have been yielding to the pressure of psychological stress. Often take a break and don't overwork yourself. Slowly pace yourself to manage each task individually.";
+      break;
     default:
-      return defaults[randomIndex];
+      const randomIndex = generateDifferentRandomIndex(usedDefaultIndex || 0);
+      indexUsed = randomIndex;
+      recap = defaults[randomIndex];
+      break;
   }
+  return { index: indexUsed, recap };
 };
 
 // End function that you can use to get a recap description!
@@ -222,16 +236,20 @@ Your thoughts might have been entering and leaving your mind more rapidly than u
 export const generateRecapFromEmojis = (
   emojisArr: string[],
   lastDefaultRecapIndex: number | null
-): string | null => {
-  if (emojisArr.length < 4) return null;
+): { indexUsed: number | null; recap: string | null } => {
+  if (emojisArr.length < 4) return { indexUsed: null, recap: null };
 
   const sets = retrieveEmojiSetsFromRecap(emojisArr);
   const enumeratedSets = processDuplicates(sets);
   const recapType = calculateRecapType(enumeratedSets);
-  return parseRecapTextToHTML(
-    generateRecapFromGivenType(recapType, lastDefaultRecapIndex)
+  const { index, recap } = generateRecapFromGivenType(
+    recapType,
+    lastDefaultRecapIndex
   );
+  const parsedRecap = parseRecapTextToHTML(recap);
+
+  return { indexUsed: index, recap: parsedRecap };
 };
 
 // example call
-generateRecapFromEmojis(["😟", "😞", "😖", "😨"], 1); // will return one of the written texts
+const recap = generateRecapFromEmojis(["😟", "😞", "😖", "😨"], 0); // will return one of the written texts and the index that was used
