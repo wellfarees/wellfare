@@ -11,7 +11,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-non-null-assertion": 0,
-    "no-console": 1
+    "no-console": 1,
+    "@typescript-eslint/no-non-null-assertion": 0
   }
 }
