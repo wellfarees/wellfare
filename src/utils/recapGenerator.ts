@@ -223,9 +223,8 @@ Your thoughts might have been entering and leaving your mind more rapidly than u
         "Unfortunately, throughout the week you have been both emotionally and physically overwhelmed. With the obsession of not knowing how other's think about you, you have been **feeling quite lonely** as it seems you have been trying to overcome your challenges by yourself.\nYou have been happy a few times, which is good, however your mood has dropped drastically afterward.\nUnable to handle all the emotions and challenges that have been thrown at you, you often say or do things that you would not normally do.\nIf you are related to this, you have been yielding to the pressure of psychological stress. Often take a break and don't overwork yourself. Slowly pace yourself to manage each task individually.";
       break;
     default:
-      const randomIndex = generateDifferentRandomIndex(usedDefaultIndex || 0);
-      indexUsed = randomIndex;
-      recap = defaults[randomIndex];
+      indexUsed = generateDifferentRandomIndex(usedDefaultIndex || 0);
+      recap = defaults[generateDifferentRandomIndex(usedDefaultIndex || 0)];
       break;
   }
   return { index: indexUsed, recap };
@@ -250,6 +249,3 @@ export const generateRecapFromEmojis = (
 
   return { indexUsed: index, recap: parsedRecap };
 };
-
-// example call
-const recap = generateRecapFromEmojis(["😟", "😞", "😖", "😨"], 0); // will return one of the written texts and the index that was used
