@@ -2,6 +2,7 @@ import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
+import msToHours from "../utils/msToHours";
 import verifyJWT from "../utils/verifyJWT";
 
 export default {
@@ -19,14 +20,26 @@ export default {
         include: {
           information: true,
           config: true,
-          records: true,
+          records: {
+            orderBy: {
+              date: "desc",
+            },
+          },
         },
       });
       if (!data)
         throw new UserDoesNotExistsError(
           "User does not exist in the database."
         );
-      else return data;
+
+      if (!data.records[0]) return { lastSubmitted: null, user: data };
+      else
+        return {
+          lastSubmitted: Math.abs(
+            msToHours(new Date().getTime() - data.records[0].date.getTime())
+          ),
+          user: data,
+        };
     },
   },
 };
