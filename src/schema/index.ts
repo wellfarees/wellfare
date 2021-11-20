@@ -22,12 +22,18 @@ const root = gql`
     root: String
   }
 
-  # Database types
+  # User types
   type JWTUser {
     user: User!
     jwt: String!
   }
 
+  type lastSubmittedUser {
+    lastSubmitted: Float
+    user: User!
+  }
+
+  # Database types
   type User {
     id: Int!
     config: Configuration!
