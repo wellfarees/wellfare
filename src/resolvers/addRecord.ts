@@ -1,5 +1,6 @@
 import InvalidEmojiError from "../errors/InvalidEmojiError";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import isEmoji from "../utils/isEmoji";
@@ -13,7 +14,6 @@ export default {
         token: string;
         unease: string;
         gratefulness: string;
-        contents: string;
         emoji: string;
         feelings: string;
       }
@@ -41,7 +41,6 @@ export default {
                 emoji,
                 unease: args.unease,
                 gratefulness: args.gratefulness,
-                contents: args.contents,
               },
             ],
           },
@@ -60,6 +59,11 @@ export default {
           },
         },
       });
+
+      if (!data)
+        throw new UserDoesNotExistsError(
+          "User does not exist in the database."
+        );
 
       return data.records;
     },

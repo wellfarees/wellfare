@@ -49,7 +49,6 @@ model Record {
   date         DateTime @default(now())
   unease       String
   gratefulness String
-  contents     String
   emoji        String
   feelings     String
   User         User?    @relation(fields: [userId], references: [id])

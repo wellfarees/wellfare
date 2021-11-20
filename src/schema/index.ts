@@ -61,7 +61,6 @@ const root = gql`
     date: Float!
     unease: String!
     gratefulness: String!
-    contents: String!
     emoji: String!
     feelings: String!
     User: User!
