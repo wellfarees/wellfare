@@ -13,11 +13,24 @@ export default function verifyJWT(
 
   switch (type) {
     case "client":
-      return verify(token, process.env.JWT_ID_SECRET_KEY);
+      try {
+        return verify(token, process.env.JWT_ID_SECRET_KEY);
+      } catch {
+        return null;
+      }
     case "verification":
-      return verify(token, process.env.JWT_VERIFICATION_SECRET_KEY);
+      try {
+        return verify(token, process.env.JWT_VERIFICATION_SECRET_KEY);
+      } catch {
+        return null;
+      }
+
     case "password":
-      return verify(token, process.env.JWT_PASSWORD_SECRET_KEY);
+      try {
+        return verify(token, process.env.JWT_PASSWORD_SECRET_KEY);
+      } catch {
+        return null;
+      }
     default:
       return null;
   }

@@ -6,7 +6,6 @@ export default gql`
       token: String!
       unease: String!
       gratefulness: String!
-      contents: String!
       emoji: String!
       feelings: String!
     ): [Record]
