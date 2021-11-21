@@ -23,6 +23,7 @@ model User {
   informationId   String
   affirmations    String?
   configurationId String
+  recaps          Recap[]
 }
 
 model Information {
@@ -53,4 +54,16 @@ model Record {
   feelings     String
   User         User?    @relation(fields: [userId], references: [id])
   userId       Int?
+  Recap        Recap?   @relation(fields: [recapId], references: [id])
+  recapId      Int?
+}
+
+model Recap {
+  id          Int      @id @unique @default(autoincrement())
+  startDate   DateTime
+  endDate     DateTime
+  description String // the one you generated with my function
+  records     Record[] // contains array of id's of the appropriate records
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
 }

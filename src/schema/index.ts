@@ -42,6 +42,7 @@ const root = gql`
     information: Information!
     informationId: String!
     affirmations: String
+    recaps: Recap!
   }
 
   type Information {
@@ -78,6 +79,16 @@ const root = gql`
     emoji: String!
     description: String
     Record: [Record]!
+  }
+
+  type Recap {
+    id: Int!
+    startDate: Float!
+    endDate: Float!
+    description: String!
+    records: [Record]!
+    User: User
+    userId: Int
   }
 
   # Input fields
