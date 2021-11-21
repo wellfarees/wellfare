@@ -37,6 +37,7 @@
     "apollo-datasource": "^3.0.3",
     "apollo-server": "^3.3.0",
     "bcrypt": "^5.0.1",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "graphql": "^15.5.0",
     "jsonwebtoken": "^8.5.1"
