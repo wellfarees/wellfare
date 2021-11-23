@@ -43,6 +43,7 @@ const root = gql`
     informationId: String!
     affirmations: String
     recaps: Recap!
+    lastIndex: Int
   }
 
   type Information {
