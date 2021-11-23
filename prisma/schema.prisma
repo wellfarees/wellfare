@@ -24,6 +24,7 @@ model User {
   affirmations    String?
   configurationId String
   recaps          Recap[]
+  lastIndex       Int?
 }
 
 model Information {
@@ -62,8 +63,8 @@ model Recap {
   id          Int      @id @unique @default(autoincrement())
   startDate   DateTime
   endDate     DateTime
-  description String // the one you generated with my function
-  records     Record[] // contains array of id's of the appropriate records
+  description String
+  records     Record[]
   User        User?    @relation(fields: [userId], references: [id])
   userId      Int?
 }
