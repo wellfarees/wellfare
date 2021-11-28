@@ -21,6 +21,9 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
+      context: ({ req }) => ({
+        token: req.headers.authorization,
+      }),
     });
 
     dotenv.config();
