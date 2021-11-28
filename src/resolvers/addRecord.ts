@@ -5,20 +5,25 @@ import server from "../server";
 import { decodedToken } from "../types/jwt";
 import isEmoji from "../utils/isEmoji";
 import verifyJWT from "../utils/verifyJWT";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 
 export default {
   Mutation: {
     addRecord: async (
       _: unknown,
       args: {
-        token: string;
         unease: string;
         gratefulness: string;
         emoji: string;
         feelings: string;
-      }
+      },
+      headers: { token?: string }
     ) => {
-      const dToken = verifyJWT(args.token, "client");
+      if (!headers.token)
+        return new NoTokenInHeaderError(
+          "No token was found in the header. Please provide in Authorization header."
+        );
+      const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 
       const id = Number((dToken as decodedToken).id);

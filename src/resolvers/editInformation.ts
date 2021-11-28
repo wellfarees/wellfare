@@ -1,5 +1,6 @@
 import { hash, compare } from "bcrypt";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
@@ -11,14 +12,18 @@ export default {
     editInformation: async (
       _: unknown,
       args: {
-        token: string;
         firstName?: string;
         lastName?: string;
         email?: string;
         changePassword?: { current: string; new: string };
         pfp?: string;
-      }
+      },
+      headers: { token?: string }
     ) => {
+      if (!headers.token)
+        return new NoTokenInHeaderError(
+          "No token was found in the header. Please provide in Authorization header."
+        );
       const updateData: {
         firstName?: string;
         lastName?: string;
@@ -33,7 +38,7 @@ export default {
         updateData.password = await hash(args.changePassword.new, 10);
       if (args.pfp) updateData.email = args.pfp;
 
-      const dToken = verifyJWT(args.token, "client");
+      const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
       const id = Number((dToken as decodedToken).id);
 

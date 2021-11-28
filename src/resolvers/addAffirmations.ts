@@ -1,4 +1,5 @@
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
@@ -7,9 +8,14 @@ export default {
   Mutation: {
     addAffirmations: async (
       _: unknown,
-      args: { token: string; affirmations: string }
+      args: { affirmations: string },
+      headers: { token?: string }
     ) => {
-      const dToken = verifyJWT(args.token, "client");
+      if (!headers.token)
+        return new NoTokenInHeaderError(
+          "No token was found in the header. Please provide in Authorization header."
+        );
+      const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 
       const id = Number((dToken as decodedToken).id);
