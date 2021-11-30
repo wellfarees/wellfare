@@ -10,6 +10,7 @@ import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import forgetPassword from "./resetPassword";
+import addEmailToNewsletter from "./addEmailToNewsletter";
 
 const Query = {
   ...ping.Query,
@@ -27,6 +28,7 @@ const Mutation = {
   ...verifyUser.Mutation,
   ...resendVerificationEmail.Mutation,
   ...forgetPassword.Mutation,
+  ...addEmailToNewsletter.Mutation,
 };
 
 export default { Query, Mutation };
