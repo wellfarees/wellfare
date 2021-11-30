@@ -11,6 +11,7 @@ import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import resetPassword from "./resetPassword";
+import addEmailToNewsletter from "./addEmailToNewsletter";
 
 const root = gql`
   # Base types
@@ -118,4 +119,5 @@ export default [
   verifyUser,
   resendVerificationEmail,
   resetPassword,
+  addEmailToNewsletter,
 ];

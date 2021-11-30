@@ -68,3 +68,7 @@ model Recap {
   User        User?    @relation(fields: [userId], references: [id])
   userId      Int?
 }
+
+model Newsletter {
+  email String @id @unique
+}
