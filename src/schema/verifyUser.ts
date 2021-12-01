@@ -2,6 +2,6 @@ import { gql } from "apollo-server";
 
 export default gql`
   extend type Mutation {
-    verifyUser: Information
+    verifyUser(token: String!): Information
   }
 `;
