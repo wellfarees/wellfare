@@ -12,6 +12,7 @@ import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import resetPassword from "./resetPassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
+import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
 const root = gql`
   # Base types
@@ -120,4 +121,5 @@ export default [
   resendVerificationEmail,
   resetPassword,
   addEmailToNewsletter,
+  getUserInformationFromEmailToken,
 ];

@@ -11,12 +11,14 @@ import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import forgetPassword from "./resetPassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
+import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
 const Query = {
   ...ping.Query,
   ...company.Query,
   ...getUser.Query,
   ...login.Query,
+  ...getUserInformationFromEmailToken.Query,
 };
 
 const Mutation = {
