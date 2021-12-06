@@ -195,15 +195,12 @@ type ConfigProps = typeof userConfig;
 const Conf: NextPage<ConfigProps> = () => {
   const { saveConfig } = useActions();
   const { user } = useTypedSelector((state) => state);
-  const {
-    user: { jwt },
-  } = useTypedSelector((state) => state);
   const [mutateAppearance, { data, loading, error }] =
     useMutation(EDIT_USER_CONFIG);
 
   const mutateSpecificValue = (mutation: { [key: string]: any }) => {
     mutateAppearance({
-      variables: { token: jwt, ...mutation },
+      variables: mutation,
       refetchQueries: ["getUser", "login"],
     });
   };

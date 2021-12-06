@@ -52,7 +52,18 @@ export const initModal = (open: boolean, content?: JSX.Element): InitModal => {
   };
 };
 
-export const storeUser = (jwt: string, user: UserSchema): StoreUser => {
+// FIXME: figure out what to do with the id: string and reducedMotion | theme interferences
+export const storeUser = (
+  jwt: string,
+  user: {
+    id: number;
+    config: {
+      darkMode: boolean;
+      fontSize: number;
+      reducedMotion: boolean;
+    };
+  }
+): StoreUser => {
   return {
     type: ActionType.STORE_USER,
     payload: {

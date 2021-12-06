@@ -34,7 +34,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       setReady(true);
       return;
     }
-    getConfig({ variables: { token: jwt } });
+    getConfig();
   }, []);
 
   useEffect(() => {

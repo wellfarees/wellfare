@@ -150,11 +150,9 @@ const User = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [inProgress, setInProgress] = useState(false);
 
-  const { user } = useTypedSelector((state) => state);
   const [userInformationQuery, { data, loading }] = useLazyQuery(
     USER_INFORMATION_QUERY,
     {
-      variables: { token: user.jwt },
       fetchPolicy: "network-only",
     }
   );
@@ -201,7 +199,6 @@ const User = () => {
       firstName: data.Name,
       lastName: data.Surname,
       email: data.Email,
-      token: user.jwt as string,
     };
 
     const passwordReset = {
@@ -223,7 +220,6 @@ const User = () => {
   };
 
   useEffect(() => {
-    console.log(mutationProps.data);
     if (mutationProps.error) {
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
@@ -282,7 +278,6 @@ const User = () => {
                   (input) => input.id === "Current password"
                 )!;
 
-                // TODO: Implement this
                 if (currentPasswordInput.value === "") {
                   setError("Please, enter your current password");
                   return;
@@ -302,7 +297,6 @@ const User = () => {
                 sendData(values, true);
                 setIsSaved(true);
                 setTimeout(() => {
-                  // TODO: Do http calling work
                   setIsSaved(false);
                 }, 1000);
               } else {
@@ -312,7 +306,6 @@ const User = () => {
                 sendData(values);
                 setIsSaved(true);
                 setTimeout(() => {
-                  // TODO: Do http calling work
                   setIsSaved(false);
                 }, 1000);
               }

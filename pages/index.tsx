@@ -33,11 +33,14 @@ const Hero = styled.section`
     align-items: center;
 
     h1 {
-      font-size: 4rem;
+      font-size: 4.5rem;
       max-width: 550px;
       display: inline-block;
       font-weight: 900;
-      line-height: 1.3;
+      line-height: 1.1;
+      background-image: -webkit-linear-gradient(45deg, #117ee3, #00f0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     p.subtitle {
@@ -46,6 +49,7 @@ const Hero = styled.section`
       font-size: 1.6rem;
       line-height: 1.3;
       margin-top: 1em;
+      color: #444;
     }
 
     ${Button} {
@@ -228,16 +232,6 @@ const Home: NextPage = () => {
   const successfullyMailListed = useRef(false);
   const mailContainer = useRef<HTMLDivElement | null>(null);
   const { jwt } = useTypedSelector((state) => state).user;
-
-  const [buttonStyles, buttonSpringApi] = useSpring(() => {
-    return {
-      from: {
-        backgroundColor: "#117ee3",
-        boxShadow: "0px 0px 7px 1px rgba(48, 89, 232, 0.65)",
-      },
-      config: config.molasses,
-    };
-  });
 
   // const [buttonState, setButtonState] = useState("Subscribe");
   const [emailProgress, setEmailProgress] = useState({
