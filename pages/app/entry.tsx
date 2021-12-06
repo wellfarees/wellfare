@@ -287,7 +287,6 @@ const emojisList = [
 const Entry: NextPage = () => {
   // TODO: To be replaced with graphql fetched username
   const [username, setUsername] = useState("Roland");
-  const { jwt } = useTypedSelector((state) => state).user;
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
@@ -299,9 +298,7 @@ const Entry: NextPage = () => {
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
   const [addRecord, mutationProps] = useMutation(ADD_RECORD);
-  const [getFirstName, userQueryProps] = useLazyQuery(GET_FIRST_NAME, {
-    variables: { token: jwt },
-  });
+  const [getFirstName, userQueryProps] = useLazyQuery(GET_FIRST_NAME);
 
   useEffect(() => {
     getFirstName();
@@ -609,7 +606,6 @@ const Entry: NextPage = () => {
                   // TODO: Remove contents field
                   addRecord({
                     variables: {
-                      token: jwt,
                       emoji: currentEmoji,
                       feelings: values[keys[0]],
                       gratefulness: values[keys[1]],

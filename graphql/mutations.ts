@@ -27,13 +27,11 @@ export const CREATE_USER = gql`
 
 export const EDIT_USER_CONFIG = gql`
   mutation EditUserConfig(
-    $token: String!
     $darkMode: Boolean
     $reducedMotion: Boolean
     $fontSize: Int
   ) {
     editAppearance(
-      token: $token
       darkMode: $darkMode
       reducedMotion: $reducedMotion
       fontSize: $fontSize
@@ -50,14 +48,12 @@ export const EDIT_USER_CONFIG = gql`
 // TODO: Implement passwords
 export const EDIT_USER_INFORMATION = gql`
   mutation EditInformation(
-    $token: String!
     $firstName: String
     $lastName: String
     $email: String
     $changePassword: ChangePassword
   ) {
     editInformation(
-      token: $token
       firstName: $firstName
       lastName: $lastName
       email: $email
@@ -69,8 +65,8 @@ export const EDIT_USER_INFORMATION = gql`
 `;
 
 export const EDIT_AFFIRMATIONS = gql`
-  mutation AddAffirmations($token: String!, $affirmations: String!) {
-    addAffirmations(token: $token, affirmations: $affirmations) {
+  mutation AddAffirmations($affirmations: String!) {
+    addAffirmations(affirmations: $affirmations) {
       id
     }
   }
@@ -87,14 +83,12 @@ export const VERIFY_USER = gql`
 // TODO: remove contents argument
 export const ADD_RECORD = gql`
   mutation AddRecord(
-    $token: String!
     $unease: String!
     $gratefulness: String!
     $emoji: String!
     $feelings: String!
   ) {
     addRecord(
-      token: $token
       unease: $unease
       gratefulness: $gratefulness
       emoji: $emoji

@@ -40,8 +40,8 @@ export const LOGIN = gql`
 `;
 
 export const GET_USER = gql`
-  query GetUser($token: String!) {
-    getUser(token: $token) {
+  query GetUser {
+    getUser {
       id
       config {
         darkMode
@@ -63,8 +63,8 @@ export const GET_USER = gql`
 `;
 
 export const APPEARANCE_QUERY = gql`
-  query GetUser($token: String!) {
-    getUser(token: $token) {
+  query GetUser {
+    getUser {
       id
       config {
         darkMode
@@ -76,8 +76,8 @@ export const APPEARANCE_QUERY = gql`
 `;
 
 export const USER_INFORMATION_QUERY = gql`
-  query GetUserInfo($token: String!) {
-    getUser(token: $token) {
+  query GetUserInfo {
+    getUser {
       id
       information {
         firstName
@@ -90,27 +90,25 @@ export const USER_INFORMATION_QUERY = gql`
 `;
 
 export const AFFIRMATIONS_QUERY = gql`
-  query GetUserInfo($token: String!) {
-    getUser(token: $token) {
+  query GetUserInfo {
+    getUser {
       id
     }
   }
 `;
 
 export const GET_FIRST_NAME = gql`
-  query GetUserInfo($token: String!) {
-    getUser(token: $token) {
-      id
-      information {
-        firstName
-      }
+  query getUser {
+    id
+    information {
+      firstName
     }
   }
 `;
 
 export const GET_BASE_INFORMATION = gql`
-  query GetUser($token: String!) {
-    getUser(token: $token) {
+  query GetUser {
+    getUser {
       information {
         firstName
         email

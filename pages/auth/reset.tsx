@@ -140,6 +140,9 @@ const Reset: NextPage = () => {
 
                 try {
                   await sendResetEmail({ variables: { email: values.Email } });
+                  res.refs.forEach((input) => {
+                    input.style.background = "#f6f6f6";
+                  });
                 } catch (e) {
                 } finally {
                 }

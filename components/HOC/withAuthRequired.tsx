@@ -4,8 +4,8 @@ import { useLazyQuery } from "react-apollo";
 import { gql } from "graphql-tag";
 
 const GET_USER_OBJECT = gql`
-  query GetUser($token: String!) {
-    getUser(token: $token) {
+  query GetUser {
+    getUser {
       id
     }
   }
@@ -21,13 +21,7 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
       useLazyQuery(GET_USER_OBJECT);
 
     useEffect(() => {
-      const jwt = localStorage.getItem("jwt");
-
-      if (!jwt) {
-        setVerified(false);
-        router.push("/signin");
-      }
-      validateJwt({ variables: { token: jwt } });
+      validateJwt();
     }, []);
 
     useEffect(() => {

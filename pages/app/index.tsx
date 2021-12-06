@@ -183,8 +183,8 @@ const Wrapper = styled.main`
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const USER_INFORMATION_QUERY = gql`
-    query GetUser($token: String!) {
-      getUser(token: $token) {
+    query GetUser {
+      getUser {
         id
         information {
           firstName
@@ -197,12 +197,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
     }
   `;
 
-  const { data, loading, error } = useQuery(USER_INFORMATION_QUERY, {
-    variables: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImlhdCI6MTYzNjU3NzMwM30.4bNSnf2oPC-tdTfdZDdJ5wGbKjhwvHN9i6i_u691CXQ",
-    },
-  });
+  const { data, loading, error } = useQuery(USER_INFORMATION_QUERY);
 
   return (
     <Wrapper>
