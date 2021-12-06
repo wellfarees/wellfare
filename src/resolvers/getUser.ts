@@ -37,13 +37,13 @@ export default {
           "User does not exist in the database."
         );
 
-      if (!data.records[0]) return { lastSubmitted: null, user: data };
+      if (!data.records[0]) return { ...data, lastSubmitted: null };
       else
         return {
+          ...data,
           lastSubmitted: Math.abs(
             msToHours(new Date().getTime() - data.records[0].date.getTime())
           ),
-          user: data,
         };
     },
   },

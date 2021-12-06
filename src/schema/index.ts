@@ -32,7 +32,15 @@ const root = gql`
 
   type lastSubmittedUser {
     lastSubmitted: Float
-    user: User!
+    id: Int!
+    config: Configuration!
+    configurationId: String!
+    records: [Record]!
+    information: Information!
+    informationId: String!
+    affirmations: String
+    recaps: Recap!
+    lastIndex: Int
   }
 
   # Database types
