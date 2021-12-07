@@ -301,6 +301,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     });
   } catch (e) {
     res = { data: null };
+    console.log(e);
   }
 
   return {

@@ -8,7 +8,6 @@ import { GlowingBLue } from "../../styled/reusable";
 
 import { useMutation, useLazyQuery } from "react-apollo";
 import { VERIFY_USER } from "../../graphql/mutations";
-import { GET_BASE_INFORMATION } from "../../graphql/queries";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -83,9 +82,7 @@ const Wrapper = styled.div`
 const Verify: NextPage = () => {
   const router = useRouter();
   const { token } = router.query;
-  const [verifyUser, { loading, data }] = useMutation(VERIFY_USER);
-  const [getUserBaseInformation, queryProps] =
-    useLazyQuery(GET_BASE_INFORMATION);
+  const [verifyUser, { loading, data, error }] = useMutation(VERIFY_USER);
 
   useEffect(() => {
     (async () => {
@@ -93,7 +90,6 @@ const Verify: NextPage = () => {
         try {
           await verifyUser({ variables: { token } });
           // TODO: Implement additional user information when support for decoding these type of tokens is added to the backend
-          // getUserBaseInformation({ variables: { token } });
         } catch (e) {}
       }
     })();
@@ -110,8 +106,9 @@ const Verify: NextPage = () => {
               </h1>
               <div className="descr">
                 <p>
-                  Great things coming, Roland! Your identity for the{" "}
-                  <b>rolands.affaires@gmail.com</b> has been proved.
+                  Great things coming, <b>{data.verifyUser.firstName}</b>! Your
+                  identity for the <b>{data.verifyUser.email}</b> email has been
+                  proved.
                 </p>
                 <p>
                   You may now close this tab and head back over to{" "}
@@ -122,7 +119,7 @@ const Verify: NextPage = () => {
                 </p>
               </div>
             </div>
-          ) : (
+          ) : !loading && error ? (
             <div className="failure">
               <h1>
                 This verification link is <b>invalid</b>
@@ -138,6 +135,8 @@ const Verify: NextPage = () => {
                 <span>Return home</span>
               </Link>
             </div>
+          ) : (
+            <></>
           )}
         </div>
       </Container>
