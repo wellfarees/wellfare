@@ -1,6 +1,7 @@
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import generateJWT from "../utils/generateJWT";
+import { CLIENT_URL } from "../endpoints";
 
 export default {
   Mutation: {
@@ -20,14 +21,15 @@ export default {
         );
 
       const verificationJWT = generateJWT({ id: data.id }, "password");
+      const verificationURL = `${CLIENT_URL}passwordreset?token=${verificationJWT}`;
       try {
         await server.mail.send({
           from: process.env.EMAIL_ADDRESS!,
           to: data.information.email,
           subject: "Verify your email",
-          html: `Hi ${data.information.firstName}, here's your password reset link! <a href="https://wellfare.vercel.app/resetpassword?token=${verificationJWT}">Click here</a> to start using Wellfare.
+          html: `Hi ${data.information.firstName}, here's your password reset link! <a href='${verificationURL}'>Click here</a> to reset your password.
             <br /> <br />
-            If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/resetpassword?token=${verificationJWT}.
+            If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}.
             <br /> <br />
             Thanks,
             <br />
