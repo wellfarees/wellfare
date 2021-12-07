@@ -4,11 +4,12 @@ import server from "../server";
 import { decodedToken } from "../types/jwt";
 import generateJWT from "../utils/generateJWT";
 import verifyJWT from "../utils/verifyJWT";
+import { CLIENT_URL } from "../endpoints";
 
 export default {
   Mutation: {
     resendVerificationEmail: async (_: unknown, args: { token: string }) => {
-      const dToken = verifyJWT(args.token, "verification");
+      const dToken = verifyJWT(args.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
       const id = Number((dToken as decodedToken).id);
 
@@ -25,14 +26,16 @@ export default {
         );
 
       const verificationJWT = generateJWT({ id }, "verification");
+      const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;
+
       try {
         await server.mail.send({
           from: process.env.EMAIL_ADDRESS!,
           to: data.information.email,
           subject: "Verify your email",
-          html: `Hi ${data.information.firstName}, here's your verification email! <a href="https://wellfare.vercel.app/auth/verify?token=${verificationJWT}">Click here</a> to reset it..
+          html: `Hi ${data.information.firstName}, here's your verification email! <a href="${verificationURL}">Click here</a> to verify your account.
           <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/auth/verify?token=${verificationJWT}.
+          If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}.
           <br /> <br />
           Thanks,
           <br />
