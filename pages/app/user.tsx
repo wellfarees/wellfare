@@ -18,7 +18,10 @@ import {
 } from "../../utils/mapRefsIntoValues";
 
 import { useMutation, useQuery, useLazyQuery } from "react-apollo";
-import { EDIT_USER_INFORMATION } from "../../graphql/mutations";
+import {
+  EDIT_USER_INFORMATION,
+  RESEND_VERIFICATION,
+} from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 
 const Wrapper = styled.div`
@@ -141,6 +144,16 @@ const Warning = styled.div`
   p {
     line-height: 1.5;
   }
+
+  .resend-verification {
+    margin-top: 0.5em;
+
+    span {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
 `;
 
 const User = () => {
@@ -149,12 +162,18 @@ const User = () => {
   const [error, setError] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const [inProgress, setInProgress] = useState(false);
+  const { jwt } = useTypedSelector((state) => state.user);
 
   const [userInformationQuery, { data, loading }] = useLazyQuery(
     USER_INFORMATION_QUERY,
     {
       fetchPolicy: "network-only",
     }
+  );
+
+  const [resendVerificationLink, verificationResult] = useMutation(
+    RESEND_VERIFICATION,
+    { variables: { token: jwt } }
   );
 
   const [editUserInformation, mutationProps] = useMutation(
@@ -247,6 +266,19 @@ const User = () => {
             <p>
               Please, verify your identity by following instructions we sent to
               your email. Your account will get locked in 1 week otherwise.
+            </p>
+            <p className="resend-verification">
+              Click{" "}
+              <span
+                onClick={() => {
+                  try {
+                    resendVerificationLink();
+                  } catch (e) {}
+                }}
+              >
+                here
+              </span>{" "}
+              to resend the verification link.
             </p>
           </Warning>
         ) : null}

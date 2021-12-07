@@ -105,15 +105,3 @@ export const GET_FIRST_NAME = gql`
     }
   }
 `;
-
-export const GET_BASE_INFORMATION = gql`
-  query GetUser {
-    getUser {
-      information {
-        firstName
-        email
-      }
-      id
-    }
-  }
-`;

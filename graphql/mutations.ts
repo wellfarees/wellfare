@@ -75,6 +75,8 @@ export const EDIT_AFFIRMATIONS = gql`
 export const VERIFY_USER = gql`
   mutation VerifyUser($token: String!) {
     verifyUser(token: $token) {
+      firstName
+      email
       verified
     }
   }
@@ -102,6 +104,14 @@ export const ADD_RECORD = gql`
 export const SEND_RESET_PASSWORD = gql`
   mutation ResetPassword($email: String!) {
     resetPassword(email: $email) {
+      success
+    }
+  }
+`;
+
+export const RESEND_VERIFICATION = gql`
+  mutation ResendVerification($token: String!) {
+    resendVerificationEmail(token: $token) {
       success
     }
   }

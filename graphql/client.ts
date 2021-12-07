@@ -1,10 +1,15 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
+import { SERVER_URL } from "../endpoints";
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  uri: `${SERVER_URL}/graphql`,
   cache: new InMemoryCache(),
   request: (operation) => {
-    const token = localStorage.getItem("jwt");
+    let token: null | string = null;
+    try {
+      token = localStorage.getItem("jwt");
+    } catch (e) {}
+
     operation.setContext({
       headers: {
         authorization: token,
