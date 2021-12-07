@@ -3,6 +3,7 @@ import server from "../server";
 import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
+import { CLIENT_URL } from "../endpoints";
 
 export default {
   Mutation: {
@@ -59,13 +60,15 @@ export default {
           { id: userData.id },
           "verification"
         );
+        const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;
+
         server.mail.send({
           from: process.env.EMAIL_ADDRESS!,
           to: args.email,
           subject: "Verify your email",
-          html: `Hi ${firstName}, thanks for signing up for Wellfare! <a href="https://wellfare.vercel.app/auth/verify?token=${verificationJWT}">Click here</a> to start using Wellfare.
+          html: `Hi ${firstName}, thanks for signing up for Wellfare! <a href="${verificationURL}">Click here</a> to start using Wellfare.
           <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: https://wellfare.vercel.app/auth/verify?token=${verificationJWT}.
+          If you cannot click on the URL, please manually paste this into your browser: ${verificationJWT}.
           <br /> <br />
           Thanks,
           <br />
