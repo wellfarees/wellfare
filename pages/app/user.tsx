@@ -125,8 +125,8 @@ const Wrapper = styled.div`
 const Warning = styled.div`
   margin-top: 3em;
   margin-bottom: 1em;
-  background: #fff4e5;
-  color: #663c33;
+  background: ${(props) => props.theme.warningBackground};
+  color: ${(props) => props.theme.warningColor};
   border-radius: 7px;
   padding: 2em;
   max-width: 650px;

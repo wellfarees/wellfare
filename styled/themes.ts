@@ -14,6 +14,8 @@ interface Themes {
     lighterHover: string;
     minimum: string;
     recapHover: string;
+    warningBackground: string;
+    warningColor: string;
   };
 }
 
@@ -33,6 +35,8 @@ const themes: Themes = {
     secondaryButton: "F0F0F0",
     lighterHover: "#E1E1E1",
     recapHover: "#F9F9F9",
+    warningBackground: "#fff4e5",
+    warningColor: "#663c33",
   },
   dark: {
     backgroundColor: "#202020",
@@ -49,6 +53,8 @@ const themes: Themes = {
     secondaryButton: "#333333",
     lighterHover: "#4F4F4F",
     recapHover: "#1C1C1C",
+    warningBackground: "#1a1a1a",
+    warningColor: "#b79e67",
   },
 }; // ... TODO: Add more and more properties to each theme (so that css heavily depends on these properties depending on the current theme)
 
