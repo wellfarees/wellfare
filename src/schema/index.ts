@@ -41,6 +41,7 @@ const root = gql`
     affirmations: String
     recaps: Recap!
     lastIndex: Int
+    emailLastUpdated: Float!
   }
 
   # Database types
@@ -54,6 +55,7 @@ const root = gql`
     affirmations: String
     recaps: Recap!
     lastIndex: Int
+    emailLastUpdated: Float!
   }
 
   type Information {
