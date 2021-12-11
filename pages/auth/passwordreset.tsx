@@ -182,13 +182,6 @@ const PasswordReset: NextPage = () => {
                       res.refs.forEach((input) => {
                         input.style.background = "#f6f6f6";
                       });
-                      //   try {
-                      //     await sendResetEmail({
-                      //       variables: { email: values.Email },
-                      //     });
-                      //   } catch (e) {
-                      //   } finally {
-                      //   }
                       setResult("");
                       setSuccess(
                         "Your password has been successfully reset. You may now close this tab."
@@ -196,8 +189,6 @@ const PasswordReset: NextPage = () => {
                     }
                   }
                 }
-
-                // setResult(message);
               }}
             >
               <Input {...register("password")} />

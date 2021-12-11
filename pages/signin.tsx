@@ -240,9 +240,10 @@ const SignIn = () => {
 
     if (data) {
       setError(null);
-      const { jwt, user } = data.login;
+      const { jwt, user, publicAlgoliaKey } = data.login;
       storeUser(jwt, user);
       setSignedIn(false);
+      localStorage.setItem("algolia-search", publicAlgoliaKey);
       router.push("/app/");
     }
   }, [queryProps.data, queryProps.loading]);

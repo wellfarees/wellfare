@@ -35,6 +35,7 @@ export const LOGIN = gql`
           date
         }
       }
+      publicAlgoliaKey
     }
   }
 `;
@@ -93,6 +94,10 @@ export const AFFIRMATIONS_QUERY = gql`
   query GetUserInfo {
     getUser {
       id
+      affirmations
+      information {
+        firstName
+      }
     }
   }
 `;
@@ -102,6 +107,25 @@ export const GET_FIRST_NAME = gql`
     id
     information {
       firstName
+    }
+  }
+`;
+
+export const USER_FEED_QUERY = gql`
+  query GetUserFeed {
+    getUser {
+      id
+      information {
+        firstName
+      }
+      records {
+        date
+        emoji
+        id
+        unease
+        gratefulness
+        feelings
+      }
     }
   }
 `;
