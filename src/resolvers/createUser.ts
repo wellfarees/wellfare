@@ -4,6 +4,7 @@ import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
 import { CLIENT_URL } from "../endpoints";
+import { client } from "../algolia";
 
 export default {
   Mutation: {
@@ -55,6 +56,13 @@ export default {
           },
         });
 
+        const publicAlgoliaKey = client.generateSecuredApiKey(
+          process.env.ALGOLIA_SEARCH!,
+          {
+            filters: `visible_by=${userData.id}`,
+          }
+        );
+
         const jwt = generateJWT({ id: userData.id }, "client");
         const verificationJWT = generateJWT(
           { id: userData.id },
@@ -74,7 +82,7 @@ export default {
           <br />
           Wellfare`,
         });
-        return { jwt, user: userData };
+        return { jwt, user: userData, publicAlgoliaKey };
       }
     },
   },
