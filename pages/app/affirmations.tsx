@@ -6,8 +6,13 @@ import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { WatermarkInput } from "../../components";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { GlowingBLue } from "../../styled/reusable";
-import { useState, useRef, MutableRefObject } from "react";
+import { useState, useRef } from "react";
 import Button from "../../components/Button/Button";
+import { EDIT_AFFIRMATIONS } from "../../graphql/mutations";
+import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
+import { useMutation, useQuery } from "react-apollo";
+import { useEffect } from "react";
+
 const Wrapper = styled.div`
   .subtitle {
     margin-top: 0.5em;
@@ -67,16 +72,22 @@ const ChangeButton = styled.button`
   }
 `;
 
-const Affirmations: NextPage<{
-  affirmations: string;
-  lastUpdated: number;
-  name: string;
-}> = ({ affirmations, name, lastUpdated }) => {
+const Affirmations: NextPage = () => {
   const [isLocked, setIsLocked] = useState(true);
   const { handleTextareaSubmit, register } = useTextareaValidator();
   const infoBtn = useRef<HTMLButtonElement | null>(null);
-  const [state, setState] = useState(Boolean(!affirmations));
-  const [buttonsSwitched, switchButtons] = useState(Boolean(!affirmations));
+  const [state, setState] = useState(false);
+  const [buttonsSwitched, switchButtons] = useState(false);
+  const [setAffirmations] = useMutation(EDIT_AFFIRMATIONS);
+  const { loading, data, error } = useQuery(AFFIRMATIONS_QUERY, {
+    fetchPolicy: "network-only",
+  });
+
+  const registerInput = register();
+
+  useEffect(() => {
+    if (!loading && data && !data.getUser.affirmations) switchButtons(true);
+  }, [loading, data]);
 
   const submitAffirmations = () => {
     const changeButtonState = () => {
@@ -86,9 +97,10 @@ const Affirmations: NextPage<{
       }
 
       const res = handleTextareaSubmit().refs[0]?.current.value;
+      if (!res) return;
       setState(!state);
 
-      // TODO: Send new affirmations to the server! (res constant contains the affirmations themselves)
+      setAffirmations({ variables: { affirmations: res } });
       setTimeout(() => {
         setIsLocked(!isLocked);
         if (infoBtn.current) {
@@ -97,13 +109,14 @@ const Affirmations: NextPage<{
           setIsLocked(!isLocked);
         }
 
-        switchButtons(false);
-
+        switchButtons(!buttonsSwitched);
         setState(false);
       }, 2000);
     };
 
-    if (!affirmations) {
+    if (loading || !data) return;
+
+    if (!data.getUser.affirmations) {
       if (!isLocked) {
         setIsLocked(!isLocked);
       } else {
@@ -118,10 +131,12 @@ const Affirmations: NextPage<{
     }
   };
 
+  if (loading && !data) return <Wrapper></Wrapper>;
+
   return (
     <ShrankContainer>
       <Wrapper>
-        {affirmations ? (
+        {data.getUser.affirmations ? (
           <header>
             <AdaptiveAnimation>
               <h2>Your affirmations</h2>
@@ -150,24 +165,23 @@ const Affirmations: NextPage<{
             </div>
           </header>
         )}
-
         <div className="affirmations">
           <WatermarkInput
             main={false}
             placeholder="I have an expensive car. I live a happy..."
             label="My affirmations"
             toFocus={true}
-            {...register()}
-            isLocked={affirmations ? isLocked : !isLocked}
-            defaultValue={affirmations}
+            isLocked={data && data.getUser.affirmations ? isLocked : !isLocked}
+            defaultValue={data && data.getUser.affirmations}
+            {...(data && registerInput)}
           ></WatermarkInput>
         </div>
         <p className="author">
-          Affirmations by <b>{name}</b>
+          Affirmations by <b>{data.getUser.information.firstName}</b>
         </p>
         <p className="lastUpdated">
-          {affirmations
-            ? formatDate(new Date(lastUpdated))
+          {data.getUser.affirmations
+            ? formatDate(new Date())
             : formatDate(new Date())}
         </p>
         <div className="button-container">

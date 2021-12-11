@@ -3,13 +3,18 @@ import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
-import Record from "../../components/Records/Record";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
+import { differenceInWeeks, isSameWeek } from "date-fns";
+import { MasonryGrid } from "@egjs/react-grid";
+import { useScreenSize } from "../../hooks/useScreenSize";
+import { useState } from "react";
+import { useAlgolia } from "../../hooks/useAlgolia";
+import { SearchResponse } from "@algolia/client-search";
+
+import { USER_FEED_QUERY } from "../../graphql/queries";
 import { useQuery } from "react-apollo";
-import { gql } from "graphql-tag";
-import { useEffect } from "react";
 
 const Wrapper = styled.main`
   color: ${(props: any) => props.theme.mainColor};
@@ -116,27 +121,28 @@ const Wrapper = styled.main`
   }
 
   .records-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-
     .records {
-      margin-top: 3em;
-      display: flex;
-      gap: 4em;
-    }
+      margin-top: 4em;
 
-    .current,
-    .last-week {
-      display: flex;
-      flex-direction: column;
-      gap: 4em;
-    }
+      & > div {
+        & > div > div {
+          margin-top: 4em !important;
 
-    .last-week {
+          &:first-of-type {
+            margin-top: 2em !important;
+          }
+        }
+      }
+
       p.time {
         font-weight: bold;
-        margin-bottom: -1em;
+        margin-top: 0 !important;
+      }
+    }
+
+    @media only screen and (max-width: 426px) {
+      div {
+        width: 100% !important;
       }
     }
   }
@@ -182,22 +188,48 @@ const Wrapper = styled.main`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const USER_INFORMATION_QUERY = gql`
-    query GetUser {
-      getUser {
-        id
-        information {
-          firstName
+  const { data, loading, error } = useQuery(USER_FEED_QUERY);
+  const screenSize = useScreenSize();
+  const searchClient = useAlgolia();
+  const [hits, setHits] = useState<SearchResponse<unknown>>();
+
+  interface DateInterface {
+    date: number | Date;
+  }
+
+  // FIXME: Create appropriate return type
+  const splitIntoWeeks = (arr: DateInterface[]): any => {
+    let weeks: DateInterface[][] = [];
+    let start = 0;
+    for (let i = 0; i < arr.length; i++) {
+      const currentDate = arr[i].date;
+
+      if (i >= arr.length - 1) {
+        // Checking the last date in the array
+        const previousWeek = weeks[weeks.length - 1];
+        const previousWeeksLastDate =
+          previousWeek[previousWeek.length - 1].date;
+        const appendNewWeek = Boolean(
+          differenceInWeeks(currentDate, previousWeeksLastDate)
+        );
+        if (appendNewWeek) {
+          weeks.push([arr[i]]);
+        } else {
+          weeks[weeks.length - 1] = [...weeks[weeks.length - 1], arr[i]];
         }
-        records {
-          date
-          emoji
-        }
+        break;
+      }
+
+      const nextDate = arr[i + 1].date;
+      const difference = differenceInWeeks(currentDate, nextDate);
+
+      if (difference) {
+        weeks.push(arr.slice(start, i + 1));
+        start = i;
       }
     }
-  `;
-
-  const { data, loading, error } = useQuery(USER_INFORMATION_QUERY);
+    return weeks.length ? weeks : [arr];
+  };
 
   return (
     <Wrapper>
@@ -210,7 +242,16 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
 
           <div className="search-input">
             <i className="fas fa-search"></i>
-            <input placeholder="Search a record" type="text" />
+            <input
+              onChange={async (e) => {
+                if (!searchClient) return;
+                const index = searchClient.initIndex("records");
+                const hits = await index.search(e.target.value);
+                setHits(hits);
+              }}
+              placeholder="Search a record"
+              type="text"
+            />
           </div>
         </ShrankContainer>
       </header>
@@ -237,28 +278,49 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             </div>
           </div>
 
-          <div className="records-container">
-            <AdaptiveAnimation>
-              <RecapCard records={7} />
-            </AdaptiveAnimation>
-            <div className="records">
-              <div className="current">
-                {mapRecordsToJsx(records).map((record, index) => (
-                  <div key={index}>
-                    <AdaptiveAnimation>{record}</AdaptiveAnimation>
-                  </div>
-                ))}
-              </div>
-              <div className="last-week">
-                <p className="time">Last week</p>
-                {mapRecordsToJsx(records).map((record, index) => (
-                  <div key={index}>
-                    <AdaptiveAnimation>{record}</AdaptiveAnimation>
-                  </div>
-                ))}
+          {!loading && data ? (
+            <div className="records-container">
+              <AdaptiveAnimation>
+                <RecapCard records={7} />
+              </AdaptiveAnimation>
+              <div className="records">
+                <MasonryGrid
+                  column={(screenSize as number) > 1200 ? 2 : 1}
+                  align="start"
+                  gap={40}
+                  columnSize={(screenSize as number) > 425 ? 320 : undefined}
+                >
+                  {splitIntoWeeks(data.getUser.records).map(
+                    (week: RecordsData, index: number) => {
+                      return (
+                        <div
+                          className={
+                            isSameWeek(Date.now(), week[0].date)
+                              ? "current"
+                              : undefined
+                          }
+                          key={index}
+                        >
+                          {isSameWeek(Date.now(), week[0].date) ? null : (
+                            <p className="time">
+                              {differenceInWeeks(Date.now(), week[0].date)}{" "}
+                              weeks ago
+                            </p>
+                          )}
+
+                          {mapRecordsToJsx(week).map((record, index) => (
+                            <div key={index}>
+                              <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    }
+                  )}
+                </MasonryGrid>
               </div>
             </div>
-          </div>
+          ) : null}
         </ShrankContainer>
       </main>
     </Wrapper>

@@ -21,6 +21,7 @@ export const CREATE_USER = gql`
           date
         }
       }
+      publicAlgoliaKey
     }
   }
 `;

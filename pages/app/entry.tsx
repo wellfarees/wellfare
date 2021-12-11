@@ -10,7 +10,6 @@ import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
 import Button from "../../components/Button/Button";
 
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { ADD_RECORD } from "../../graphql/mutations";
 import { GET_FIRST_NAME } from "../../graphql/queries";
 import { useMutation, useLazyQuery } from "react-apollo";
@@ -286,7 +285,6 @@ const emojisList = [
 
 const Entry: NextPage = () => {
   // TODO: To be replaced with graphql fetched username
-  const [username, setUsername] = useState("Roland");
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
@@ -297,7 +295,9 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
-  const [addRecord, mutationProps] = useMutation(ADD_RECORD);
+  const [addRecord, mutationProps] = useMutation(ADD_RECORD, {
+    refetchQueries: ["GetUserFeed"],
+  });
   const [getFirstName, userQueryProps] = useLazyQuery(GET_FIRST_NAME);
 
   useEffect(() => {
@@ -603,20 +603,18 @@ const Entry: NextPage = () => {
                   const values = raw_data.values!;
                   const keys = Object.keys(values);
 
-                  // TODO: Remove contents field
                   addRecord({
                     variables: {
                       emoji: currentEmoji,
                       feelings: values[keys[0]],
-                      gratefulness: values[keys[1]],
-                      unease: values[keys[2]],
+                      unease: values[keys[1]],
+                      gratefulness: values[keys[2]],
                     },
                   });
-                  debugger;
-                  // Simulating the request delay
-                  // setTimeout(() => {
-                  //   router.push("/app");
-                  // }, 1000);
+                  setTimeout(async () => {
+                    await router.replace("/app");
+                    setSubmitInProgress(false);
+                  }, 1000);
                 }
               }}
             >

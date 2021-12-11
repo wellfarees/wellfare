@@ -31,7 +31,7 @@ const ModalWindow = styled.div`
   background-color: ${(props) => props.theme.backgroundColor} !important;
   position: relative;
   z-index: 100000000000;
-  max-width: 450px;
+  width: 450px;
 
   .close-modal {
     position: absolute;
