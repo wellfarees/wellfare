@@ -16,15 +16,16 @@ model Subscription {
 }
 
 model User {
-  id              Int           @id @unique @default(autoincrement())
-  config          Configuration @relation(fields: [configurationId], references: [id])
-  records         Record[]
-  information     Information   @relation(fields: [informationId], references: [dbid])
-  informationId   String
-  affirmations    String?
-  configurationId String
-  recaps          Recap[]
-  lastIndex       Int?
+  id               Int           @id @unique @default(autoincrement())
+  config           Configuration @relation(fields: [configurationId], references: [id])
+  records          Record[]
+  information      Information   @relation(fields: [informationId], references: [dbid])
+  informationId    String
+  affirmations     String?
+  configurationId  String
+  recaps           Recap[]
+  lastIndex        Int?
+  emailLastUpdated DateTime      @default(now())
 }
 
 model Information {

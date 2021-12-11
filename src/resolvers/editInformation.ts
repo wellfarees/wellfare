@@ -30,10 +30,14 @@ export default {
         email?: string;
         password?: string;
         pfp?: string;
+        emailLastUpdated?: Date;
       } = {};
       if (args.firstName) updateData.firstName = args.firstName;
       if (args.lastName) updateData.lastName = args.lastName;
-      if (args.email) updateData.email = args.email;
+      if (args.email) {
+        updateData.email = args.email;
+        updateData.emailLastUpdated = new Date();
+      }
       if (args.changePassword)
         updateData.password = await hash(args.changePassword.new, 10);
       if (args.pfp) updateData.email = args.pfp;
