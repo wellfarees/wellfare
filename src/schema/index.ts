@@ -28,6 +28,7 @@ const root = gql`
   type JWTUser {
     user: User!
     jwt: String!
+    publicAlgoliaKey: String!
   }
 
   type lastSubmittedUser {
