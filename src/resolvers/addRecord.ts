@@ -6,6 +6,7 @@ import { decodedToken } from "../types/jwt";
 import isEmoji from "../utils/isEmoji";
 import verifyJWT from "../utils/verifyJWT";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
+import { client } from "../algolia";
 
 export default {
   Mutation: {
@@ -34,20 +35,20 @@ export default {
         );
       }
 
+      const newRecord = {
+        feelings: args.feelings,
+        emoji,
+        unease: args.unease,
+        gratefulness: args.gratefulness,
+      };
+
       const data = await server.db.user.update({
         where: {
           id,
         },
         data: {
           records: {
-            create: [
-              {
-                feelings: args.feelings,
-                emoji,
-                unease: args.unease,
-                gratefulness: args.gratefulness,
-              },
-            ],
+            create: [newRecord],
           },
         },
         select: {
@@ -69,6 +70,22 @@ export default {
         throw new UserDoesNotExistsError(
           "User does not exist in the database."
         );
+
+      const index = client.initIndex("records");
+
+      const algoliaRecord = {
+        record: newRecord,
+        visible_by: id,
+      };
+
+      index.setSettings({
+        attributesForFaceting: ["filterOnly(visible_by)"],
+        unretrievableAttributes: ["visible_by"],
+      });
+
+      index.saveObject(algoliaRecord, {
+        autoGenerateObjectIDIfNotExist: true,
+      });
 
       return data.records;
     },
