@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Subscription {
+  id    String @id @default(cuid())
+  email String
+}
+
+model User {
+  id               Int           @id @unique @default(autoincrement())
+  config           Configuration @relation(fields: [configurationId], references: [id])
+  records          Record[]
+  information      Information   @relation(fields: [informationId], references: [dbid])
+  informationId    String
+  affirmations     String?
+  configurationId  String
+  recaps           Recap[]
+  lastIndex        Int?
+  emailLastUpdated DateTime      @default(now())
+}
+
+model Information {
+  dbid      String  @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  password  String
+  verified  Boolean @default(false)
+  pfp       String?
+  User      User[]
+}
+
+model Configuration {
+  id            String  @id @default(cuid())
+  darkMode      Boolean @default(false)
+  reducedMotion Boolean @default(false)
+  fontSize      Int     @default(14)
+  User          User[]
+}
+
+model Record {
+  id           Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  unease       String
+  gratefulness String
+  emoji        String
+  feelings     String
+  User         User?    @relation(fields: [userId], references: [id])
+  userId       Int?
+  Recap        Recap?   @relation(fields: [recapId], references: [id])
+  recapId      Int?
+}
+
+model Recap {
+  id          Int      @id @unique @default(autoincrement())
+  startDate   DateTime
+  endDate     DateTime
+  description String
+  records     Record[]
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Newsletter {
+  email String @id @unique
+}
