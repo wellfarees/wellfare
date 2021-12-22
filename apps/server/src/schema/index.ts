@@ -40,7 +40,7 @@ const root = gql`
     information: Information!
     informationId: String!
     affirmations: String
-    recaps: Recap!
+    recaps: [Recap]!
     lastIndex: Int
     emailLastUpdated: Float!
   }
