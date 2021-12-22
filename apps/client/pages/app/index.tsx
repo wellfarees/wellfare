@@ -121,6 +121,8 @@ const Wrapper = styled.main`
   }
 
   .records-container {
+    margin-top: -4em;
+
     .records {
       margin-top: 4em;
 
@@ -188,14 +190,38 @@ const Wrapper = styled.main`
 `;
 
 const NoRecordsFound = styled.div`
-  margin-top: 5em;
+  margin-top: 3em;
+  color: ${(props) => props.theme.shadedColor};
+  width: 100%;
+  padding: 3em;
+  background: ${(props) => props.theme.banner};
+  border-radius: 14px;
 
-  h2 {
+  h1 {
+    text-transform: uppercase;
+    font-weight: 900;
+
+    i {
+      margin-right: 0.4em;
+    }
+  }
+
+  h3 {
     font-weight: 800;
+    line-height: 1.2;
+    margin-top: 0.3em;
   }
 
   p {
-    margin-top: 1em;
+    margin-top: 0.5em;
+    line-height: 1.5;
+    max-width: 16em;
+  }
+
+  @media only screen and (max-width: 320px) {
+    i {
+      display: none;
+    }
   }
 `;
 
@@ -211,6 +237,8 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
 
   // FIXME: Create appropriate return type
   const splitIntoWeeks = (arr: DateInterface[]): any => {
+    if (arr.length === 1) return [arr];
+
     let weeks: DateInterface[][] = [];
     let start = 0;
     for (let i = 0; i < arr.length; i++) {
@@ -290,12 +318,18 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             </div>
           </div>
 
-          {/* <AdaptiveAnimation>
-            <RecapCard records={7} />
-          </AdaptiveAnimation> */}
+          <div
+            style={{
+              marginBottom: "7em",
+            }}
+          >
+            <AdaptiveAnimation>
+              <RecapCard records={7} />
+            </AdaptiveAnimation>
+          </div>
 
           {!loading && data ? (
-            data.length ? (
+            data.getUser.records.length ? (
               <div className="records-container">
                 <div className="records">
                   <MasonryGrid
@@ -336,8 +370,11 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               </div>
             ) : (
               <NoRecordsFound>
-                <h2>You do not have any records</h2>
-                <p>Try logging on and journalizing more often</p>
+                <h1>
+                  <i className="far fa-frown-open"></i>Hmm...
+                </h1>
+                <h3>We couldn't find any records</h3>
+                <p>Try logging on and journaling more often</p>
               </NoRecordsFound>
             )
           ) : null}
