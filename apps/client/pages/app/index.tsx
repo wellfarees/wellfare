@@ -187,6 +187,18 @@ const Wrapper = styled.main`
   }
 `;
 
+const NoRecordsFound = styled.div`
+  margin-top: 5em;
+
+  h2 {
+    font-weight: 800;
+  }
+
+  p {
+    margin-top: 1em;
+  }
+`;
+
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const { data, loading, error } = useQuery(USER_FEED_QUERY);
   const screenSize = useScreenSize();
@@ -278,48 +290,56 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             </div>
           </div>
 
-          {!loading && data ? (
-            <div className="records-container">
-              <AdaptiveAnimation>
-                <RecapCard records={7} />
-              </AdaptiveAnimation>
-              <div className="records">
-                <MasonryGrid
-                  column={(screenSize as number) > 1200 ? 2 : 1}
-                  align="start"
-                  gap={40}
-                  columnSize={(screenSize as number) > 425 ? 320 : undefined}
-                >
-                  {splitIntoWeeks(data.getUser.records).map(
-                    (week: RecordsData, index: number) => {
-                      return (
-                        <div
-                          className={
-                            isSameWeek(Date.now(), week[0].date)
-                              ? "current"
-                              : undefined
-                          }
-                          key={index}
-                        >
-                          {isSameWeek(Date.now(), week[0].date) ? null : (
-                            <p className="time">
-                              {differenceInWeeks(Date.now(), week[0].date)}{" "}
-                              weeks ago
-                            </p>
-                          )}
+          {/* <AdaptiveAnimation>
+            <RecapCard records={7} />
+          </AdaptiveAnimation> */}
 
-                          {mapRecordsToJsx(week).map((record, index) => (
-                            <div key={index}>
-                              <AdaptiveAnimation>{record}</AdaptiveAnimation>
-                            </div>
-                          ))}
-                        </div>
-                      );
-                    }
-                  )}
-                </MasonryGrid>
+          {!loading && data ? (
+            data.length ? (
+              <div className="records-container">
+                <div className="records">
+                  <MasonryGrid
+                    column={(screenSize as number) > 1200 ? 2 : 1}
+                    align="start"
+                    gap={40}
+                    columnSize={(screenSize as number) > 425 ? 320 : undefined}
+                  >
+                    {splitIntoWeeks(data.getUser.records).map(
+                      (week: RecordsData, index: number) => {
+                        return (
+                          <div
+                            className={
+                              isSameWeek(Date.now(), week[0].date)
+                                ? "current"
+                                : undefined
+                            }
+                            key={index}
+                          >
+                            {isSameWeek(Date.now(), week[0].date) ? null : (
+                              <p className="time">
+                                {differenceInWeeks(Date.now(), week[0].date)}{" "}
+                                weeks ago
+                              </p>
+                            )}
+
+                            {mapRecordsToJsx(week).map((record, index) => (
+                              <div key={index}>
+                                <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
+                    )}
+                  </MasonryGrid>
+                </div>
               </div>
-            </div>
+            ) : (
+              <NoRecordsFound>
+                <h2>You do not have any records</h2>
+                <p>Try logging on and journalizing more often</p>
+              </NoRecordsFound>
+            )
           ) : null}
         </ShrankContainer>
       </main>
@@ -329,36 +349,34 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
 
 export default App;
 
-export const getServerSideProps: GetServerSideProps<{ records: RecordsData }> =
-  async () => {
-    return {
-      props: {
-        records: [
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "Being able to breathe fresh air, because air >>",
-            emoji: "😍",
-            feelings: "adventurous",
-          },
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "Being able to breathe fresh air, because air >>",
-            emoji: "😍",
-            feelings: "adventurous",
-          },
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "Being able to breathe fresh air, because air >>",
-            emoji: "😍",
-            feelings: "adventurous",
-          },
-        ],
-      },
-    };
+export const getServerSideProps: GetServerSideProps<{
+  records: RecordsData;
+}> = async () => {
+  return {
+    props: {
+      records: [
+        {
+          date: Date.now(),
+          unease: "Nothing, really, ive just been craving for tacos lately ://",
+          gratefulness: "Being able to breathe fresh air, because air >>",
+          emoji: "😍",
+          feelings: "adventurous",
+        },
+        {
+          date: Date.now(),
+          unease: "Nothing, really, ive just been craving for tacos lately ://",
+          gratefulness: "Being able to breathe fresh air, because air >>",
+          emoji: "😍",
+          feelings: "adventurous",
+        },
+        {
+          date: Date.now(),
+          unease: "Nothing, really, ive just been craving for tacos lately ://",
+          gratefulness: "Being able to breathe fresh air, because air >>",
+          emoji: "😍",
+          feelings: "adventurous",
+        },
+      ],
+    },
   };
+};
