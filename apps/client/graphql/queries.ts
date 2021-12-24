@@ -126,6 +126,11 @@ export const USER_FEED_QUERY = gql`
         gratefulness
         feelings
       }
+      recaps {
+        records {
+          date
+        }
+      }
     }
   }
 `;
