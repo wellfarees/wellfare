@@ -248,6 +248,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       weeksArr: any = [],
       weekIndex: number = 0
     ): [][] => {
+      console.log(dates);
       if (dates.length == 0) {
         return weeksArr;
       }
@@ -256,15 +257,25 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       const dateRight = dates[1];
       let weeks = weeksArr;
 
-      if (dateRight && isSameWeek(dateLeft.date, dateRight.date)) {
+      if (!dateRight) {
         if (!weeksArr[weekIndex]) {
-          weeks.push([dateLeft, dateRight]);
+          weeks.push([dateLeft]);
         } else {
-          weeks[weekIndex].push(dateLeft, dateRight);
+          weeks[weekIndex].push(dateLeft);
         }
-        return checkForWeek(dates.slice(2), weeks, weekIndex);
+        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
+      }
+
+      if (isSameWeek(dateLeft.date, dateRight.date)) {
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft]);
+        } else {
+          weeks[weekIndex].push(dateLeft);
+        }
+
+        return checkForWeek(dates.slice(1), weeks, weekIndex);
       } else {
-        weeks.push([dateLeft]);
+        weeks[weekIndex].push(dateLeft);
         return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
       }
     };
