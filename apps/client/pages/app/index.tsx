@@ -9,8 +9,9 @@ import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
 import { differenceInWeeks, isSameWeek } from "date-fns";
 import { MasonryGrid } from "@egjs/react-grid";
 import { useScreenSize } from "../../hooks/useScreenSize";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAlgolia } from "../../hooks/useAlgolia";
+import { useRecap } from "../../hooks/useRecap";
 import { SearchResponse } from "@algolia/client-search";
 
 import { USER_FEED_QUERY } from "../../graphql/queries";
@@ -227,6 +228,8 @@ const NoRecordsFound = styled.div`
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const { data, loading, error } = useQuery(USER_FEED_QUERY);
+  const recap = useRecap(data);
+
   const screenSize = useScreenSize();
   const searchClient = useAlgolia();
   const [hits, setHits] = useState<SearchResponse<unknown>>();
@@ -236,39 +239,37 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   }
 
   // FIXME: Create appropriate return type
+  // TODO: Write tests for this
   const splitIntoWeeks = (arr: DateInterface[]): any => {
-    if (arr.length === 1) return [arr];
+    if (arr.length == 1) return [arr];
 
-    let weeks: DateInterface[][] = [];
-    let start = 0;
-    for (let i = 0; i < arr.length; i++) {
-      const currentDate = arr[i].date;
+    const checkForWeek = (
+      dates: typeof arr = arr,
+      weeksArr: any = [],
+      weekIndex: number = 0
+    ): [][] => {
+      if (dates.length == 0) {
+        return weeksArr;
+      }
 
-      if (i >= arr.length - 1) {
-        // Checking the last date in the array
-        const previousWeek = weeks[weeks.length - 1];
-        const previousWeeksLastDate =
-          previousWeek[previousWeek.length - 1].date;
-        const appendNewWeek = Boolean(
-          differenceInWeeks(currentDate, previousWeeksLastDate)
-        );
-        if (appendNewWeek) {
-          weeks.push([arr[i]]);
+      const dateLeft = dates[0];
+      const dateRight = dates[1];
+      let weeks = weeksArr;
+
+      if (dateRight && isSameWeek(dateLeft.date, dateRight.date)) {
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft, dateRight]);
         } else {
-          weeks[weeks.length - 1] = [...weeks[weeks.length - 1], arr[i]];
+          weeks[weekIndex].push(dateLeft, dateRight);
         }
-        break;
+        return checkForWeek(dates.slice(2), weeks, weekIndex);
+      } else {
+        weeks.push([dateLeft]);
+        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
       }
+    };
 
-      const nextDate = arr[i + 1].date;
-      const difference = differenceInWeeks(currentDate, nextDate);
-
-      if (difference) {
-        weeks.push(arr.slice(start, i + 1));
-        start = i;
-      }
-    }
-    return weeks.length ? weeks : [arr];
+    return checkForWeek();
   };
 
   return (
@@ -318,15 +319,17 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             </div>
           </div>
 
-          <div
-            style={{
-              marginBottom: "7em",
-            }}
-          >
-            <AdaptiveAnimation>
-              <RecapCard records={7} />
-            </AdaptiveAnimation>
-          </div>
+          {!loading && recap ? (
+            <div
+              style={{
+                marginBottom: "7em",
+              }}
+            >
+              <AdaptiveAnimation>
+                <RecapCard records={7} />
+              </AdaptiveAnimation>
+            </div>
+          ) : null}
 
           {!loading && data ? (
             data.getUser.records.length ? (
