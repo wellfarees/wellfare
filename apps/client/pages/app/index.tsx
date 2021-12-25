@@ -227,7 +227,9 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading, error } = useQuery(USER_FEED_QUERY);
+  const { data, loading, error } = useQuery(USER_FEED_QUERY, {
+    fetchPolicy: "network-only",
+  });
   const recap = useRecap(data);
 
   const screenSize = useScreenSize();
@@ -248,7 +250,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       weeksArr: any = [],
       weekIndex: number = 0
     ): [][] => {
-      console.log(dates);
       if (dates.length == 0) {
         return weeksArr;
       }

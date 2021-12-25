@@ -3,9 +3,9 @@ import { Cron } from "../types/cron";
 import getWeekDays from "../utils/getWeekDays";
 import { generateRecapFromEmojis } from "../utils/recapGenerator";
 
-export default abstract class sendRecap extends Cron {
+export default abstract class SendRecap extends Cron {
   constructor() {
-    super("0 0 * * 0");
+    super("* * * * *");
   }
 
   async exec() {
@@ -34,9 +34,14 @@ export default abstract class sendRecap extends Cron {
       user.records.forEach((record) => emojis.push(record.emoji));
 
       const recap = generateRecapFromEmojis(emojis, user.lastIndex);
-      if (!recap.recap) continue;
+      const ids = data
+        .map((rec) => rec.records.map((rec) => rec.id))
+        .flat()
+        .map((num) => {
+          return { id: num };
+        });
 
-      server.db.user.update({
+      await server.db.user.update({
         where: {
           id: user.id,
         },
@@ -48,6 +53,7 @@ export default abstract class sendRecap extends Cron {
               startDate: daysOfWeek[daysOfWeek.length - 1],
               endDate: daysOfWeek[0],
             },
+            connect: ids,
           },
         },
       });
