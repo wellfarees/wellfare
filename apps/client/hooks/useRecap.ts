@@ -12,6 +12,7 @@ export const useRecap = (feedData: any): LightRecap => {
 
   useEffect(() => {
     if (feedData) {
+      console.log(feedData);
       const fetchedRecaps: LightRecap[] | null = feedData.getUser.recaps;
       if (!fetchedRecaps) {
         setRecap(null);
@@ -29,6 +30,10 @@ export const useRecap = (feedData: any): LightRecap => {
       }
     }
   }, [feedData]);
+
+  useEffect(() => {
+    console.log(recap);
+  }, [recap]);
 
   return recap;
 };

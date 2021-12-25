@@ -25,13 +25,18 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
     }, []);
 
     useEffect(() => {
+      if (loading) return;
+
       if (data) {
         setVerified(true);
-        return;
       }
-    }, [loading, data]);
 
-    return !verified ? <></> : <ChildComponent {...props} />;
+      if (error) {
+        router.push("/signin");
+      }
+    }, [loading, data, error]);
+
+    return loading || !verified ? <></> : <ChildComponent {...props} />;
   };
 
   return ComposedComponent;

@@ -42,7 +42,8 @@ class Server extends ApolloServer {
           const File = require(file).default;
           if (File && File.prototype instanceof Cron) {
             const cj: Cron = new File();
-            new CronJob(cj.interval, cj.exec);
+            const job = new CronJob(cj.interval, cj.exec);
+            job.start();
           }
         }
       });
