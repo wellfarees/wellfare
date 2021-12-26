@@ -76,7 +76,7 @@ export default {
           subject: "Verify your email",
           html: `Hi ${firstName}, thanks for signing up for Wellfare! <a href="${verificationURL}">Click here</a> to start using Wellfare.
           <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: ${verificationJWT}.
+          If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}.
           <br /> <br />
           Thanks,
           <br />
