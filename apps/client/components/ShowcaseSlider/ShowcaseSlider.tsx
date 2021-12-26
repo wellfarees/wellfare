@@ -3,10 +3,6 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useScreenSize } from "../../hooks/useScreenSize";
 
-import showcaseImage1 from "../../public/img/ui_settings.png";
-import showcaseImage2 from "../../public/img/main_ui.png";
-import showcaseImage3 from "../../public/img/weekly_recap.png";
-
 const Slider = styled.div`
   display: flex;
   align-items: center;
@@ -84,8 +80,12 @@ const Slider = styled.div`
   }
 `;
 
+const showcaseImage1 = "/img/ui_settings.PNG";
+const showcaseImage2 = "/img/main_ui.PNG";
+const showcaseImage3 = "/img/weekly_recap.PNG";
+
 // TODO: Take screenshots with images for showcase and ensure they all are the SAME resolution
-// NOTE: Maybe make this a public npm package???
+// NOTE: Maybe turn this thing into reusable npm package???
 const withAdaptiveContainer =
   (className: string, resolutionRatio: number) =>
   (ImageComponent: typeof Image): React.FC<any> => {
@@ -124,9 +124,9 @@ const ShowcaseSlider: React.FC = () => {
   return (
     <div className="slider">
       <Slider>
-        <Image1 src={showcaseImage1} />
-        <Image2 src={showcaseImage2} />
-        <Image3 src={showcaseImage3} />
+        <Image1 layout="fill" src={showcaseImage1} />
+        <Image2 layout="fill" src={showcaseImage2} />
+        <Image3 layout="fill" src={showcaseImage3} />
       </Slider>
     </div>
   );
