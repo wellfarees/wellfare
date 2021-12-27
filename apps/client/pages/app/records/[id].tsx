@@ -26,8 +26,6 @@ const RecordPage: NextPage<RecordProps> = ({ data, isMobile }) => {
   const router = useRouter();
   const size = useScreenSize();
 
-  console.log(isMobile);
-
   if (!isMobile) {
     router.push("/404");
   }

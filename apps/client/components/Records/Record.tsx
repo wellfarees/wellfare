@@ -4,15 +4,15 @@ import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useActions";
 import DetailedRecord from "./DetailedRecord";
-import { RecordsData } from "./RecordTypes";
 
 interface RecordProps {
   data: {
     emoji: string;
-    date: Date;
+    date: number;
     feelings: string;
     gratefulness: string;
     unease: string;
+    id: number;
   };
 }
 
@@ -53,7 +53,7 @@ const Wrapper = styled.div`
 `;
 
 const Record: React.FC<RecordProps> = ({
-  data: { date, feelings, emoji, unease, gratefulness },
+  data: { date, feelings, emoji, unease, gratefulness, id },
 }) => {
   const dateString = formatDate(date);
   const size = useScreenSize();
@@ -66,7 +66,7 @@ const Record: React.FC<RecordProps> = ({
         const RecordContent = (
           <DetailedRecord
             data={{
-              date: date.getMilliseconds(),
+              date: date,
               emoji,
               feelings,
               gratefulness,
@@ -80,7 +80,7 @@ const Record: React.FC<RecordProps> = ({
         }
 
         // TODO: redirect to the record with the appropriate (fetched) id
-        router.push("/app/records/ez");
+        router.push(`/app/records/${id}`);
       }}
     >
       <span className="date">{dateString}</span>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { isSameWeek, subDays } from "date-fns";
+import { isSameWeek, subDays, startOfDay, subSeconds } from "date-fns";
 
 interface LightRecap {
+  id: number;
   records: {
     date: number;
   }[];
@@ -12,28 +13,27 @@ export const useRecap = (feedData: any): LightRecap => {
 
   useEffect(() => {
     if (feedData) {
-      console.log(feedData);
       const fetchedRecaps: LightRecap[] | null = feedData.getUser.recaps;
-      if (!fetchedRecaps) {
+
+      if (!fetchedRecaps.length) {
         setRecap(null);
         return;
       }
 
       const lastRecap = fetchedRecaps[fetchedRecaps.length - 1];
       const lastDate = lastRecap.records[lastRecap.records.length - 1].date;
+      const today = startOfDay(new Date());
 
-      const today = new Date();
-      if (isSameWeek(subDays(today, 1), lastDate) && today.getDay() === 6) {
+      if (
+        isSameWeek(subSeconds(subDays(today, 1), 1), lastDate) &&
+        today.getDay() === 1
+      ) {
         setRecap(lastRecap);
       } else {
         setRecap(null);
       }
     }
   }, [feedData]);
-
-  useEffect(() => {
-    console.log(recap);
-  }, [recap]);
 
   return recap;
 };
