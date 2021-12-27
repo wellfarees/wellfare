@@ -4,4 +4,5 @@ export type RecordsData = {
   unease: string;
   emoji: string;
   feelings: string;
+  id: number;
 }[];

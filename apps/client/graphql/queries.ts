@@ -127,9 +127,45 @@ export const USER_FEED_QUERY = gql`
         feelings
       }
       recaps {
+        id
         records {
           date
         }
+      }
+    }
+  }
+`;
+
+export const RECAP_LIST_QUERY = gql`
+  query GetRecapList {
+    getUser {
+      id
+      recaps {
+        id
+        startDate
+        endDate
+        records {
+          emoji
+        }
+      }
+    }
+  }
+`;
+
+export const GET_RECAP = gql`
+  query GetRecap($identifier: Int!) {
+    getRecap(identifier: $identifier) {
+      id
+      startDate
+      endDate
+      description
+      records {
+        id
+        date
+        unease
+        gratefulness
+        emoji
+        feelings
       }
     }
   }

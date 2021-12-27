@@ -47,6 +47,7 @@ export default {
             config: {
               create: {},
             },
+            recaps: null,
           },
 
           include: {

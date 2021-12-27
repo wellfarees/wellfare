@@ -4,6 +4,7 @@ import login from "./login";
 import company from "./company";
 import createUser from "./createUser";
 import getUser from "./getUser";
+import getRecap from "./getRecap";
 import ping from "./ping";
 import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
@@ -40,7 +41,7 @@ const root = gql`
     information: Information!
     informationId: String!
     affirmations: String
-    recaps: [Recap]
+    recaps: [Recap!]
     lastIndex: Int
     emailLastUpdated: Float!
   }
@@ -122,6 +123,7 @@ export default [
   ping,
   company,
   getUser,
+  getRecap,
   createUser,
   login,
   addRecord,

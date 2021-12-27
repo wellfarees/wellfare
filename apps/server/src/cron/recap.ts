@@ -5,7 +5,7 @@ import { generateRecapFromEmojis } from "../utils/recapGenerator";
 
 export default abstract class SendRecap extends Cron {
   constructor() {
-    super("* * * * *");
+    super("0 0 * * MON");
   }
 
   async exec() {
@@ -51,9 +51,11 @@ export default abstract class SendRecap extends Cron {
             create: {
               description: recap.recap,
               startDate: daysOfWeek[daysOfWeek.length - 1],
-              endDate: daysOfWeek[0],
+              endDate: daysOfWeek[2],
+              records: {
+                connect: ids,
+              },
             },
-            connect: ids,
           },
         },
       });

@@ -1,4 +1,5 @@
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: Date | number): string => {
+  date = new Date(date);
   const padStart = (symbol: string, num: number): string => {
     return num < 10 ? symbol + num : num.toString();
   };

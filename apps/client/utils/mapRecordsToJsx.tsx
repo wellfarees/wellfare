@@ -3,12 +3,13 @@ import Record from "../components/Records/Record";
 
 export const mapRecordsToJsx = (records: RecordsData): JSX.Element[] => {
   return records.map((record, index) => {
-    const { emoji, date, unease, feelings, gratefulness } = record;
+    const { emoji, date, unease, feelings, gratefulness, id } = record;
     return (
       <div key={index}>
         <Record
           data={{
-            date: new Date(date),
+            id,
+            date: date,
             unease: unease,
             gratefulness,
             emoji,

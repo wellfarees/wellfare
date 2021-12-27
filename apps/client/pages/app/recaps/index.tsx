@@ -6,6 +6,9 @@ import { fontSizes } from "../../../config/userConfig";
 import AdaptiveAnimation from "../../../components/animated/AdaptiveAnimation";
 import Link from "next/link";
 
+import { useQuery } from "react-apollo";
+import { RECAP_LIST_QUERY } from "../../../graphql/queries";
+
 // TODO: Create monthly separators
 
 const Wrapper = styled.div`
@@ -136,67 +139,88 @@ interface ArchiveProps {
   }[];
 }
 
+interface ReceivedRecap {
+  getUser: {
+    recaps: {
+      id: number;
+      startDate: number;
+      endDate: number;
+      records: {
+        emoji: string;
+      }[];
+    }[];
+  };
+}
+
 const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
+  const { loading, error, data } = useQuery<ReceivedRecap>(RECAP_LIST_QUERY);
+
   return (
     <Wrapper>
       <ShrankContainer>
-        {recaps.length ? (
-          <>
-            <header>
-              <AdaptiveAnimation>
-                <h2>Weekly recap archive</h2>
-              </AdaptiveAnimation>
-              <p className="subtitle">
-                Everything you have ever journaled is stored over here.
-              </p>
-            </header>
-            <div className="recaps">
-              {recaps.map((recap, index) => {
-                const { emojis, entries, period } = recap;
-                return (
-                  <div className="recap-card" key={index}>
-                    <h3 className="watermark">{entries}</h3>
-                    <div className="content">
-                      <p className="period">
-                        {formatDate(new Date(period[0]))} -{" "}
-                        {formatDate(new Date(period[1]))}
-                      </p>
-                      <p className="amount">
-                        <b>{entries} records</b> this week
-                      </p>
-                      <div className="emojis-block">
-                        <div className="emojis">
-                          {emojis.map((emoji, index) => {
-                            return <span key={index}>{emoji}</span>;
-                          })}
-                          {entries - emojis.length > 0 ? (
-                            <p className="total">
-                              and {entries - emojis.length} more
-                            </p>
-                          ) : (
-                            ""
-                          )}
+        {!loading ? (
+          data.getUser.recaps.length ? (
+            <>
+              <header>
+                <AdaptiveAnimation>
+                  <h2>Weekly recap archive</h2>
+                </AdaptiveAnimation>
+                <p className="subtitle">
+                  Everything you have ever journaled is stored over here.
+                </p>
+              </header>
+              <div className="recaps">
+                {data.getUser.recaps.map((recap, index) => {
+                  const { endDate, startDate, id, records } = recap;
+                  const emojis = records.map((record) => record.emoji);
+
+                  return (
+                    <Link href={`/app/recaps/${id}`}>
+                      <div className="recap-card" key={index}>
+                        <h3 className="watermark">{records.length}</h3>
+                        <div className="content">
+                          <p className="period">
+                            {formatDate(new Date(startDate))} -{" "}
+                            {formatDate(new Date(endDate))}
+                          </p>
+                          <p className="amount">
+                            <b>{records.length} records</b> this week
+                          </p>
+                          <div className="emojis-block">
+                            <div className="emojis">
+                              {emojis.map((emoji, index) => {
+                                return <span key={index}>{emoji}</span>;
+                              })}
+                              {records.length - emojis.length > 0 ? (
+                                <p className="total">
+                                  and {records.length - emojis.length} more
+                                </p>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="noRecaps">
+              <p className="logo">Wellfare™</p>
+              <h2>NOTHING’S HERE</h2>
+              <p className="info">
+                Your weekly recaps will go here once you start journaling more
+                often
+              </p>
+              <Link href="/app">
+                <button className="return-btn">Return to feed</button>
+              </Link>
             </div>
-          </>
-        ) : (
-          <div className="noRecaps">
-            <p className="logo">Wellfare™</p>
-            <h2>NOTHING’S HERE</h2>
-            <p className="info">
-              Your weekly recaps will go here once you start journaling more
-              often
-            </p>
-            <Link href="/app">
-              <button className="return-btn">Return to feed</button>
-            </Link>
-          </div>
-        )}
+          )
+        ) : null}
       </ShrankContainer>
     </Wrapper>
   );

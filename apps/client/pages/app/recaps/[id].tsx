@@ -12,6 +12,10 @@ import React from "react";
 import { mapRecordsToJsx } from "../../../utils/mapRecordsToJsx";
 import { RecordsData } from "../../../components/Records/RecordTypes";
 
+import { useQuery } from "react-apollo";
+import { GET_RECAP } from "../../../graphql/queries";
+import { useEffect } from "react";
+
 const Wrapper = styled.div`
   margin-bottom: 6em;
   height: auto !important;
@@ -79,124 +83,88 @@ const Wrapper = styled.div`
 `;
 
 interface RecapProps {
-  recap: {
+  getRecap: {
     records: RecordsData;
     description: string;
-    period: [number, number];
+    startDate: number;
+    endDate: number;
   };
 }
 
-const Recap: NextPage<RecapProps> = ({
-  recap: { description, period, records },
-}) => {
+const Recap: NextPage = () => {
   const size = useScreenSize();
   const router = useRouter();
   const { id } = router.query;
-
-  const recordsAsJsx = mapRecordsToJsx(records);
+  console.log(id);
+  const { data, loading, error } = useQuery<RecapProps>(GET_RECAP, {
+    variables: { identifier: parseInt(id as string) },
+  });
 
   return (
     <Wrapper>
-      <ShrankContainer>
-        <header>
-          <GoBack />
-          <span className="interval">
-            {formatDate(new Date(period[0]))} -{" "}
-            {formatDate(new Date(period[1]))}
-          </span>
-          <h2>Weekly recap</h2>
-          <p className="subtitle">
-            Time to take a look on what you’ve been going through this week.
-          </p>
-        </header>
+      {!loading && data ? (
+        <ShrankContainer>
+          <header>
+            <GoBack />
+            <span className="interval">
+              {formatDate(new Date(data.getRecap.startDate))} -{" "}
+              {formatDate(new Date(data.getRecap.endDate))}
+            </span>
+            <h2>Weekly recap</h2>
+            <p className="subtitle">
+              Time to take a look on what you’ve been going through this week.
+            </p>
+          </header>
 
-        <div className="details">
-          <div className="feelings">
-            <h3>Feelings</h3>
-            <p
-              className="feelings-descr"
-              dangerouslySetInnerHTML={{ __html: description }}
-            ></p>
-          </div>
+          <div className="details">
+            <div className="feelings">
+              <h3>Feelings</h3>
+              <p
+                className="feelings-descr"
+                dangerouslySetInnerHTML={{
+                  __html: data.getRecap.description,
+                }}
+              ></p>
+            </div>
 
-          <div className="gratefulness">
-            <h3>Things you’ve been grateful for</h3>
-            <ul>
-              {records.map((recordData, index) => {
-                return <li key={index}>{recordData.gratefulness}</li>;
-              })}
-            </ul>
+            <div className="gratefulness">
+              <h3>Things you’ve been grateful for</h3>
+              <ul>
+                {data.getRecap.records.map((recordData, index) => {
+                  return <li key={index}>{recordData.gratefulness}</li>;
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="records-container">
-          <p className="label">
-            <b>Your records</b>
-          </p>
+          <div className="records-container">
+            <p className="label">
+              <b>Your records</b>
+            </p>
 
-          <div className="records">
-            {size ? (
-              size < 768 ? (
-                <Scroller>{recordsAsJsx}</Scroller>
-              ) : (
-                <>
-                  {recordsAsJsx.map((record, index) => {
-                    return (
-                      <div key={index}>
-                        <AdaptiveAnimation>{record}</AdaptiveAnimation>
-                      </div>
-                    );
-                  })}
-                </>
-              )
-            ) : null}
+            <div className="records">
+              {size ? (
+                size < 768 ? (
+                  <Scroller>{mapRecordsToJsx(data.getRecap.records)}</Scroller>
+                ) : (
+                  <>
+                    {mapRecordsToJsx(data.getRecap.records).map(
+                      (record, index) => {
+                        return (
+                          <div key={index}>
+                            <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                          </div>
+                        );
+                      }
+                    )}
+                  </>
+                )
+              ) : null}
+            </div>
           </div>
-        </div>
-      </ShrankContainer>
+        </ShrankContainer>
+      ) : null}
     </Wrapper>
   );
 };
 
 export default Recap;
-
-export const getServerSideProps: GetServerSideProps<RecapProps> = async () => {
-  return {
-    props: {
-      recap: {
-        description: `Very diverse, your emotions range from being very unstable to
-              feeling happy. You’re going through period of <b>mania</b>.`,
-        gratefulness: [
-          `breathing fresh air`,
-          `having a lot of free time`,
-          `Dropping outta college while its not too late lmao`,
-        ],
-        period: [Date.now(), Date.now()],
-        records: [
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "Being able to breathe fresh air, because air",
-            emoji: "😡",
-            feelings: "adventurous",
-          },
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "having a lot of free time",
-            emoji: "😍",
-            feelings: "adventurous",
-          },
-          {
-            date: Date.now(),
-            unease:
-              "Nothing, really, ive just been craving for tacos lately ://",
-            gratefulness: "Dropping outta college while its not too late lmao",
-            emoji: "😈",
-            feelings: "adventurous",
-          },
-        ],
-      },
-    },
-  };
-};

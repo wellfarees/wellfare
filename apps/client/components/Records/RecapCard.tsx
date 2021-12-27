@@ -61,7 +61,10 @@ const Card = styled.div`
   }
 `;
 
-const RecapCard: React.FC<{ records: number }> = ({ records }) => {
+const RecapCard: React.FC<{ records: number; id: number }> = ({
+  records,
+  id,
+}) => {
   return (
     <Card className="recap">
       <div className="contents">
@@ -72,7 +75,7 @@ const RecapCard: React.FC<{ records: number }> = ({ records }) => {
           You&apos;ve got <b>{records} new records</b> this week.
         </p>
 
-        <Link href="/app/recaps/ez">
+        <Link href={`/app/recaps/${id}`}>
           <span className="cta">
             Let&apos;s check it out <i className="fas fa-arrow-right"></i>
           </span>

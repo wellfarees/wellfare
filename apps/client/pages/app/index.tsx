@@ -122,7 +122,7 @@ const Wrapper = styled.main`
   }
 
   .records-container {
-    margin-top: -4em;
+    margin-top: -2em;
 
     .records {
       margin-top: 4em;
@@ -230,6 +230,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const { data, loading, error } = useQuery(USER_FEED_QUERY, {
     fetchPolicy: "network-only",
   });
+
   const recap = useRecap(data);
 
   const screenSize = useScreenSize();
@@ -338,7 +339,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               }}
             >
               <AdaptiveAnimation>
-                <RecapCard records={7} />
+                <RecapCard records={recap.records.length} id={recap.id} />
               </AdaptiveAnimation>
             </div>
           ) : null}
@@ -358,15 +359,21 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                         return (
                           <div
                             className={
-                              isSameWeek(Date.now(), week[0].date)
+                              isSameWeek(Date.now(), week[week.length - 1].date)
                                 ? "current"
                                 : undefined
                             }
                             key={index}
                           >
-                            {isSameWeek(Date.now(), week[0].date) ? null : (
+                            {differenceInWeeks(
+                              Date.now(),
+                              week[week.length - 1].date
+                            ) == 0 ? null : (
                               <p className="time">
-                                {differenceInWeeks(Date.now(), week[0].date)}{" "}
+                                {differenceInWeeks(
+                                  Date.now(),
+                                  week[week.length - 1].date
+                                )}{" "}
                                 weeks ago
                               </p>
                             )}
@@ -400,35 +407,3 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
 };
 
 export default App;
-
-export const getServerSideProps: GetServerSideProps<{
-  records: RecordsData;
-}> = async () => {
-  return {
-    props: {
-      records: [
-        {
-          date: Date.now(),
-          unease: "Nothing, really, ive just been craving for tacos lately ://",
-          gratefulness: "Being able to breathe fresh air, because air >>",
-          emoji: "😍",
-          feelings: "adventurous",
-        },
-        {
-          date: Date.now(),
-          unease: "Nothing, really, ive just been craving for tacos lately ://",
-          gratefulness: "Being able to breathe fresh air, because air >>",
-          emoji: "😍",
-          feelings: "adventurous",
-        },
-        {
-          date: Date.now(),
-          unease: "Nothing, really, ive just been craving for tacos lately ://",
-          gratefulness: "Being able to breathe fresh air, because air >>",
-          emoji: "😍",
-          feelings: "adventurous",
-        },
-      ],
-    },
-  };
-};
