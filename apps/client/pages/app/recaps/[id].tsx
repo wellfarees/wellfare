@@ -32,6 +32,7 @@ const Wrapper = styled.div`
 
   .details {
     display: flex;
+    flex-direction: column;
     gap: 4em;
     margin: 4em 0;
 
@@ -40,13 +41,11 @@ const Wrapper = styled.div`
       line-height: 1.3;
     }
 
-    p,
-    ul {
-      max-width: 300px;
-    }
-
     p.feelings-descr {
-      line-height: 1.5em;
+      p {
+        margin-top: 1em;
+        line-height: 1.8em;
+      }
     }
 
     ul {
