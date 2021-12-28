@@ -51,6 +51,7 @@ const Wrapper = styled.main`
     .journal-cta h4 {
       color: ${(props: any) => props.theme.watermark};
       transition: 0.3s;
+      padding: 0.5em 0 1em 0;
 
       &:hover {
         filter: brightness(90%);
@@ -59,7 +60,6 @@ const Wrapper = styled.main`
 
     div.affirmations-cta {
       color: ${(props: any) => props.theme.mainColor};
-      margin-top: 1em;
 
       i {
         transition: 0.3s;
@@ -97,7 +97,7 @@ const Wrapper = styled.main`
   }
 
   .ctas {
-    padding: 2em 0;
+    padding: 0em 0;
     margin-top: -1.5em;
   }
 
@@ -276,14 +276,17 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       <main>
         <ShrankContainer>
           <div className="ctas">
-            <div className="journal-cta">
-              <Link href="/app/entry">
-                <h4>
-                  Ready to journal another day?
-                  <i className="fas fa-pencil-alt"></i>
-                </h4>
-              </Link>
-            </div>
+            {data &&
+              (data.getUser.lastSubmitted >= 24 ? (
+                <div className="journal-cta">
+                  <Link href="/app/entry">
+                    <h4>
+                      Ready to journal another day?
+                      <i className="fas fa-pencil-alt"></i>
+                    </h4>
+                  </Link>
+                </div>
+              ) : null)}
             <br />
             <div className="affirmations-cta">
               <Link href="/app/affirmations">
