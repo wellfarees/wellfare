@@ -52,8 +52,8 @@ const DropDown = styled.div`
     (-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))
   ) {
     background: ${(props) => props.theme.searchBackground};
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 
   border-radius: 10px;

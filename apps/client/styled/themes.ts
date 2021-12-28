@@ -45,7 +45,7 @@ const themes: Themes = {
     searchBackground: "rgba(230, 230, 230, 0.3)",
     solidSearchbackground: "rgba(230, 230, 230, 1)",
     searchBorder: "rgba(235, 235, 235, 0.3)",
-    searchHover: "#eee",
+    searchHover: "#f9f9f9",
     searchShadow: "rgba(0, 0, 0, 0.15)",
   },
   dark: {
