@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from "apollo-server-express";
 import addRecord from "./addRecord";
 import login from "./login";
 import company from "./company";
