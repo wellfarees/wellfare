@@ -50,6 +50,8 @@ interface InputProps {
   toFocus?: boolean;
   isLocked?: boolean;
   defaultValue?: string;
+  style?: { [key: string]: any };
+  show: boolean;
 }
 
 const WatermarkInput: React.FC<InputProps> = ({
@@ -61,6 +63,8 @@ const WatermarkInput: React.FC<InputProps> = ({
   toFocus,
   defaultValue,
   isLocked,
+  style,
+  show,
 }) => {
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
   const [labelStyles, labelApi] = useSpring(() => {
@@ -106,7 +110,7 @@ const WatermarkInput: React.FC<InputProps> = ({
       if (areaRef !== null && areaRef.current !== null)
         areaRef!.current.removeEventListener("input", OnInput, false);
     };
-  }, []);
+  }, [show]);
 
   useEffect(() => {
     if (!isLocked && areaRef.current) {
@@ -117,7 +121,11 @@ const WatermarkInput: React.FC<InputProps> = ({
   }, [isLocked]);
 
   return (
-    <TextAreaContainer>
+    <TextAreaContainer
+      style={{
+        display: show ? "block" : "none",
+      }}
+    >
       <animated.label style={labelStyles} htmlFor={type}>
         {label}
       </animated.label>

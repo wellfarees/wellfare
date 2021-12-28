@@ -320,7 +320,6 @@ const SignUp = () => {
       storeUser(jwt, user);
       setSignedUp(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
-      router.push("/app/");
 
       // redirect after successful registration
       router.push("/app/entry");
