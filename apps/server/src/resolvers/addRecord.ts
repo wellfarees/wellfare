@@ -35,7 +35,7 @@ export default {
         );
       }
 
-      const newRecord = {
+      const recordBase = {
         feelings: args.feelings,
         emoji,
         unease: args.unease,
@@ -48,7 +48,7 @@ export default {
         },
         data: {
           records: {
-            create: [newRecord],
+            create: [recordBase],
           },
         },
         select: {
@@ -61,10 +61,41 @@ export default {
                   records: true,
                 },
               },
+              Recap: {
+                select: {
+                  id: true,
+                },
+              },
             },
           },
         },
       });
+
+      const today = new Date();
+      today.setHours(0, 0, 0);
+
+      const currentRecord = await server.db.record.findFirst({
+        where: {
+          date: {
+            gte: today,
+          },
+        },
+        select: {
+          id: true,
+          Recap: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      const algoliaRecordInfo = {
+        ...recordBase,
+        id: currentRecord.id,
+        date: Date.now(),
+        repcaId: currentRecord.Recap ? currentRecord.Recap.id : null,
+      };
 
       if (!data)
         throw new UserDoesNotExistsError(
@@ -74,7 +105,7 @@ export default {
       const index = client.initIndex("records");
 
       const algoliaRecord = {
-        record: newRecord,
+        record: algoliaRecordInfo,
         visible_by: id,
       };
 

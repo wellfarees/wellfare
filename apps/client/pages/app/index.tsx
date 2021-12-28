@@ -6,13 +6,11 @@ import RecapCard from "../../components/Records/RecapCard";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
-import { differenceInWeeks, isSameWeek } from "date-fns";
+import { differenceInWeeks, isSameWeek, startOfDay } from "date-fns";
 import { MasonryGrid } from "@egjs/react-grid";
 import { useScreenSize } from "../../hooks/useScreenSize";
-import { useState, useEffect } from "react";
-import { useAlgolia } from "../../hooks/useAlgolia";
 import { useRecap } from "../../hooks/useRecap";
-import { SearchResponse } from "@algolia/client-search";
+import Search from "../../components/Search/Search";
 
 import { USER_FEED_QUERY } from "../../graphql/queries";
 import { useQuery } from "react-apollo";
@@ -40,27 +38,9 @@ const Wrapper = styled.main`
       }
     }
 
-    .search-input {
-      display: flex;
-      align-items: center;
-      gap: 1em;
-      padding: 0.8em 1.5em;
-      padding-top: 0.9em;
-      width: 500px;
-      max-width: 80%;
-      background-color: ${(props: any) => props.theme.input};
-      border-radius: 7px;
+    .search-container {
       position: absolute;
       bottom: -1.5em;
-      color: ${(props: any) => props.theme.shadedColor};
-
-      input {
-        border: none;
-        background-color: transparent;
-        outline: none;
-        width: 100%;
-        color: ${(props: any) => props.theme.shadedColor};
-      }
     }
   }
 
@@ -165,13 +145,6 @@ const Wrapper = styled.main`
       background: none;
       margin-top: 0;
       padding: 0;
-
-      .search-input {
-        position: static;
-        margin-top: 2em;
-        width: 100%;
-        max-width: 100%;
-      }
     }
   }
 
@@ -234,8 +207,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   const recap = useRecap(data);
 
   const screenSize = useScreenSize();
-  const searchClient = useAlgolia();
-  const [hits, setHits] = useState<SearchResponse<unknown>>();
 
   interface DateInterface {
     date: number | Date;
@@ -277,7 +248,11 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
 
         return checkForWeek(dates.slice(1), weeks, weekIndex);
       } else {
-        weeks[weekIndex].push(dateLeft);
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft]);
+        } else {
+          weeks[weekIndex].push(dateLeft);
+        }
         return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
       }
     };
@@ -294,19 +269,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
             <b>{data && data.getUser.information.firstName}</b>
           </h2>
 
-          <div className="search-input">
-            <i className="fas fa-search"></i>
-            <input
-              onChange={async (e) => {
-                if (!searchClient) return;
-                const index = searchClient.initIndex("records");
-                const hits = await index.search(e.target.value);
-                setHits(hits);
-              }}
-              placeholder="Search a record"
-              type="text"
-            />
-          </div>
+          <Search />
         </ShrankContainer>
       </header>
 
@@ -365,14 +328,17 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                             }
                             key={index}
                           >
+                            {console.log()}
                             {differenceInWeeks(
-                              Date.now(),
-                              week[week.length - 1].date
+                              startOfDay(new Date()),
+                              startOfDay(new Date(week[week.length - 1].date))
                             ) == 0 ? null : (
                               <p className="time">
                                 {differenceInWeeks(
-                                  Date.now(),
-                                  week[week.length - 1].date
+                                  startOfDay(new Date()),
+                                  startOfDay(
+                                    new Date(week[week.length - 1].date)
+                                  )
                                 )}{" "}
                                 weeks ago
                               </p>

@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useSpring, animated, config } from "react-spring";
 import { useEffect, useRef, MutableRefObject } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { userConfig } from "../../../config/userConfig";
 import { themes } from "../../../styled/themes";
 import { useActions } from "../../../hooks/useActions";
 

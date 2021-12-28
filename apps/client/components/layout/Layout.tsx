@@ -28,7 +28,7 @@ const MainContainer = styled.main`
 
   @media only screen and (max-width: 1024px) {
     aside {
-      position: absolute;
+      position: fixed;
       left: -100%;
     }
   }
