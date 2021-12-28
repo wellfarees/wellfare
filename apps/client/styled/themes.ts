@@ -16,6 +16,11 @@ interface Themes {
     recapHover: string;
     warningBackground: string;
     warningColor: string;
+    searchBackground: string;
+    solidSearchbackground: string;
+    searchBorder: string;
+    searchHover: string;
+    searchShadow: string;
   };
 }
 
@@ -37,6 +42,11 @@ const themes: Themes = {
     recapHover: "#F9F9F9",
     warningBackground: "#fff4e5",
     warningColor: "#663c33",
+    searchBackground: "rgba(230, 230, 230, 0.3)",
+    solidSearchbackground: "rgba(230, 230, 230, 1)",
+    searchBorder: "rgba(235, 235, 235, 0.3)",
+    searchHover: "#eee",
+    searchShadow: "rgba(0, 0, 0, 0.15)",
   },
   dark: {
     backgroundColor: "#202020",
@@ -55,6 +65,11 @@ const themes: Themes = {
     recapHover: "#1C1C1C",
     warningBackground: "#1a1a1a",
     warningColor: "#b79e67",
+    searchBackground: "rgba(30, 30, 30, 0.3)",
+    solidSearchbackground: "rgba(30, 30, 30, 1)",
+    searchBorder: "rgba(35, 35, 35, 0.3)",
+    searchHover: "#191919",
+    searchShadow: "rgba(230, 230, 230, 0.09)",
   },
 }; // ... TODO: Add more and more properties to each theme (so that css heavily depends on these properties depending on the current theme)
 

@@ -87,6 +87,8 @@ const root = gql`
     feelings: String!
     User: User!
     userId: Int!
+    Recap: Recap
+    recapId: Int
   }
 
   type Emoji {

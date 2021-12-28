@@ -15,7 +15,7 @@ type Props = { [key: string]: any };
 
 export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
   const ComposedComponent: React.FC<Props> = (props) => {
-    const [verified, setVerified] = useState<null | boolean>(true);
+    const [verified, setVerified] = useState<null | boolean>(false);
     const router = useRouter();
     const [validateJwt, { loading, error, data }] =
       useLazyQuery(GET_USER_OBJECT);
