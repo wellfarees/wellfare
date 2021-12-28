@@ -9,8 +9,9 @@ import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
-import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
+import { GET_LAST_SUBMITTED } from "../graphql/queries";
+import ApolloClient from "../graphql/client";
 
 import { useLazyQuery } from "@apollo/react-hooks";
 import { LOGIN } from "../graphql/queries";
@@ -244,7 +245,23 @@ const SignIn = () => {
       storeUser(jwt, user);
       setSignedIn(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
-      router.push("/app/");
+      (async () => {
+        const {
+          data: {
+            getUser: { lastSubmitted },
+          },
+        }: {
+          data: {
+            getUser: { lastSubmitted: number | null };
+          };
+        } = await ApolloClient.query({
+          query: GET_LAST_SUBMITTED,
+          fetchPolicy: "network-only",
+        });
+
+        const endpoint = lastSubmitted > 24 ? "entry" : "";
+        router.push(`/app/${endpoint}`);
+      })();
     }
   }, [queryProps.data, queryProps.loading]);
 

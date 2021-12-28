@@ -103,10 +103,12 @@ export const AFFIRMATIONS_QUERY = gql`
 `;
 
 export const GET_FIRST_NAME = gql`
-  query getUser {
-    id
-    information {
-      firstName
+  query getUserName {
+    getUser {
+      id
+      information {
+        firstName
+      }
     }
   }
 `;
@@ -115,6 +117,7 @@ export const USER_FEED_QUERY = gql`
   query GetUserFeed {
     getUser {
       id
+      lastSubmitted
       information {
         firstName
       }
@@ -167,6 +170,15 @@ export const GET_RECAP = gql`
         emoji
         feelings
       }
+    }
+  }
+`;
+
+export const GET_LAST_SUBMITTED = gql`
+  query GetLastSubmitted {
+    getUser {
+      id
+      lastSubmitted
     }
   }
 `;
