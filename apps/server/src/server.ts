@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
 import resolvers from "./resolvers";
 import typeDefs from "./schema";
 import mail, { MailService } from "@sendgrid/mail";
@@ -8,6 +8,12 @@ import { resolve } from "path";
 import { sync } from "glob";
 import { Cron } from "./types/cron";
 import * as dotenv from "dotenv";
+import express from "express";
+import http from "http";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+
+const app = express();
+const httpServer = http.createServer(app);
 
 class Server extends ApolloServer {
   public readonly db: PrismaClient<
@@ -24,6 +30,11 @@ class Server extends ApolloServer {
       context: ({ req }) => ({
         token: req.headers.authorization,
       }),
+      plugins: [
+        ApolloServerPluginDrainHttpServer({
+          httpServer,
+        }),
+      ],
     });
 
     dotenv.config();
@@ -31,6 +42,15 @@ class Server extends ApolloServer {
     this.mail = mail;
     this.mail.setApiKey(process.env.SENDGRID_API_KEY!);
     this.initCron();
+  }
+
+  async listen() {
+    await this.start();
+    this.applyMiddleware({ app, path: "/" });
+    await new Promise<void>((resolve) =>
+      httpServer.listen({ port: 4000 }, resolve)
+    );
+    return `http://localhost:4000${server.graphqlPath}`;
   }
 
   async initCron() {

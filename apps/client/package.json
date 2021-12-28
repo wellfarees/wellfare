@@ -17,6 +17,7 @@
     "@use-gesture/react": "^10.0.3",
     "algoliasearch": "^4.11.0",
     "apollo-boost": "^0.4.9",
+    "apollo-client": "^2.6.10",
     "babel-plugin-styled-components": "^1.13.2",
     "date-fns": "^2.27.0",
     "graphql": "^15.5.1",
