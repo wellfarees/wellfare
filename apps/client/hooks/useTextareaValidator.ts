@@ -12,17 +12,19 @@ interface HandlerReturns {
   refs: Area[];
 }
 
-const useTextareaValidator = () => {
+const useTextareaValidator = (showInput?: boolean) => {
   const refs: Area[] = [];
 
   const register = (): {
     setAreaRef: Dispatch<SetStateAction<Area>>;
+    show: boolean;
   } => {
     const [areaRef, setAreaRef] = useState<Area>();
 
     refs.push(areaRef);
     return {
       setAreaRef,
+      show: showInput == undefined || showInput == true,
     };
   };
 

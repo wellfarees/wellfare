@@ -11,8 +11,8 @@ import { TouchEvent } from "react";
 import Button from "../../components/Button/Button";
 
 import { ADD_RECORD } from "../../graphql/mutations";
-import { GET_FIRST_NAME } from "../../graphql/queries";
-import { useMutation, useLazyQuery } from "react-apollo";
+import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
+import { useMutation, useQuery } from "react-apollo";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -268,6 +268,34 @@ const EmojiWrapper = styled.div`
   }
 `;
 
+const NotAllowed = styled.div`
+  height: calc(80vh - 10em);
+  display: flex;
+
+  .info {
+    margin-top: 10em;
+
+    h2 {
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    p {
+      margin-top: 1.3em;
+      color: ${(props) => props.theme.shadedColor};
+
+      b {
+        color: ${(props) => props.theme.mainColor};
+      }
+    }
+
+    button {
+      ${GlowingBLue}
+      margin-top: 2.5em;
+    }
+  }
+`;
+
 const emojisList = [
   {
     name: "At piece",
@@ -285,8 +313,6 @@ const emojisList = [
 
 const Entry: NextPage = () => {
   // TODO: To be replaced with graphql fetched username
-  const { register, handleTextareaSubmit, handleResults } =
-    useTextareaValidator();
   const [error, setError] = useState<null | string>(null);
   const router = useRouter();
   const [currentEmoji, setCurrentEmoji] = useState("");
@@ -298,11 +324,12 @@ const Entry: NextPage = () => {
   const [addRecord, mutationProps] = useMutation(ADD_RECORD, {
     refetchQueries: ["GetUserFeed"],
   });
-  const [getFirstName, userQueryProps] = useLazyQuery(GET_FIRST_NAME);
-
-  useEffect(() => {
-    getFirstName();
-  }, []);
+  const userQueryProps = useQuery(GET_FIRST_NAME);
+  const { data, loading } = useQuery(GET_LAST_SUBMITTED, {
+    fetchPolicy: "network-only",
+  });
+  const { register, handleTextareaSubmit, handleResults } =
+    useTextareaValidator(Boolean(data && data.getUser.lastSubmitted >= 24));
 
   // Variables for mobile popup window
   let touchStart = 0;
@@ -528,141 +555,178 @@ const Entry: NextPage = () => {
             <p className="logo">Wellfaree</p>
             <Pfp url="/img/sample_pfp.jpg"></Pfp>
           </div>
-          <h3 className="greetings">
-            Welcome back,{" "}
-            <b className="name">
-              {userQueryProps.data &&
-                userQueryProps.data.getUser.information.firstName}
-            </b>
-          </h3>
-          <div className="questions">
-            <form>
-              <WatermarkInput
-                main={true}
-                placeholder="How are you feeling today?"
-                label="Overall feeling"
-                toFocus={true}
-                {...register()}
-              />
 
-              <div className="details">
-                <WatermarkInput
-                  main={false}
-                  placeholder="What’s been bothering you throughout the day?"
-                  label="Bothers"
-                  {...register()}
-                />
-                <WatermarkInput
-                  main={false}
-                  placeholder="What are you grateful for at this very moment?"
-                  label="Gratefulness for"
-                  {...register()}
-                />
-                <p
-                  ref={emojiSelector}
-                  className="summarize"
-                  onClick={openModal}
-                >
-                  {currentEmoji
-                    ? `Report summarized with`
-                    : `Summarize your day with an emoji`}
-                  {currentEmoji && <span>{currentEmoji}</span>}
+          {!loading && data && data.getUser.lastSubmitted < 24 ? (
+            <NotAllowed>
+              <div className="info">
+                <h2>You've already journaled today!</h2>
+                <p>
+                  You can add another entry in{" "}
+                  <b>
+                    {24 - data.getUser.lastSubmitted == 1
+                      ? "less than 1 hour"
+                      : `${24 - data.getUser.lastSubmitted} hours`}
+                  </b>
+                  .
                 </p>
+                <Link href="/app">
+                  <Button>Moodboard</Button>
+                </Link>
               </div>
-            </form>
-          </div>
-        </div>
-        <footer>
-          {error && <Error>{error}</Error>}
-          <div className="btns">
-            <Button
-              withLoading={{
-                toBeLoading: submitInProgress,
-                toModifyOnStateChange: {
-                  word: "Save",
-                  endingToReplace: "e",
-                },
-              }}
-              onClick={() => {
-                // custom check if an emoji has been selected
-                if (!currentEmoji) {
-                  emojiSelector.current?.classList.add("error");
-                }
+            </NotAllowed>
+          ) : null}
 
-                const raw_data = handleTextareaSubmit();
-                const res = handleResults(raw_data);
-                setError(res);
-
-                if (!res && !currentEmoji) {
-                  setError("Please, summarize your day with one emoji");
-                  return;
-                }
-
-                if (!res) {
-                  setSubmitInProgress(true);
-                  const values = raw_data.values!;
-                  const keys = Object.keys(values);
-
-                  addRecord({
-                    variables: {
-                      emoji: currentEmoji,
-                      feelings: values[keys[0]],
-                      unease: values[keys[1]],
-                      gratefulness: values[keys[2]],
-                    },
-                  });
-                  setTimeout(async () => {
-                    await router.replace("/app");
-                    setSubmitInProgress(false);
-                  }, 1000);
-                }
+          <div>
+            <h3
+              className="greetings"
+              style={{
+                display:
+                  data && data.getUser.lastSubmitted >= 24
+                    ? "inline-block"
+                    : "none",
               }}
             >
-              Save the record
-            </Button>
-            <Link href="/app">Skip, I’ll do this later.</Link>
-          </div>
-        </footer>
-        <EmojiWrapper as={animated.div} style={modalWrapperStyles}>
-          <animated.div
-            onClick={closeModal}
-            className="overlay"
-            style={overlayStyles}
-          ></animated.div>
-          <animated.div
-            style={isMobile ? mobileModalStyles : modalStyles}
-            className="modal"
-            ref={modalRef}
-            onTouchStart={initDrag}
-          >
-            <div className="draggable" onTouchStart={initDrag}></div>
-            {emojisList.map((emoji, index) => {
-              return (
-                <div className="row" key={index}>
-                  <p className="name">{emoji.name}</p>
-                  <div className="emojis">
-                    {emoji.emojis.map((symbol) => (
-                      <span
-                        key={symbol}
-                        onClick={() => {
-                          setCurrentEmoji(symbol);
-                          emojiSelector.current?.classList.add("active");
-                          closeModal();
-                        }}
-                        className="emoji"
-                      >
-                        {symbol}
-                      </span>
-                    ))}
-                  </div>
+              Welcome back,{" "}
+              <b className="name">
+                {userQueryProps.data &&
+                  userQueryProps.data.getUser.information.firstName}
+              </b>
+            </h3>
+            <div className="questions">
+              <form>
+                <WatermarkInput
+                  main={true}
+                  placeholder="How are you feeling today?"
+                  label="Overall feeling"
+                  toFocus={true}
+                  {...register()}
+                />
+
+                <div className="details">
+                  <WatermarkInput
+                    main={false}
+                    placeholder="What’s been bothering you throughout the day?"
+                    label="Bothers"
+                    {...register()}
+                  />
+                  <WatermarkInput
+                    main={false}
+                    placeholder="What are you grateful for at this very moment?"
+                    label="Gratefulness for"
+                    {...register()}
+                  />
+                  {!loading && data && data.getUser.lastSubmitted >= 24 ? (
+                    <p
+                      ref={emojiSelector}
+                      className="summarize"
+                      onClick={openModal}
+                    >
+                      {currentEmoji
+                        ? `Report summarized with`
+                        : `Summarize your day with an emoji`}
+                      {currentEmoji && <span>{currentEmoji}</span>}
+                    </p>
+                  ) : null}
                 </div>
-              );
-            })}
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-          </animated.div>
-        </EmojiWrapper>
+              </form>
+            </div>
+          </div>
+        </div>
+        {!loading && data && data.getUser.lastSubmitted >= 24 ? (
+          <>
+            <footer>
+              {error && <Error>{error}</Error>}
+              <div className="btns">
+                <Button
+                  withLoading={{
+                    toBeLoading: submitInProgress,
+                    toModifyOnStateChange: {
+                      word: "Save",
+                      endingToReplace: "e",
+                    },
+                  }}
+                  onClick={() => {
+                    // custom check if an emoji has been selected
+                    if (!currentEmoji) {
+                      emojiSelector.current?.classList.add("error");
+                    }
+
+                    const raw_data = handleTextareaSubmit();
+                    const res = handleResults(raw_data);
+                    setError(res);
+
+                    if (!res && !currentEmoji) {
+                      setError("Please, summarize your day with one emoji");
+                      return;
+                    }
+
+                    if (!res) {
+                      setSubmitInProgress(true);
+                      const values = raw_data.values!;
+                      const keys = Object.keys(values);
+
+                      addRecord({
+                        variables: {
+                          emoji: currentEmoji,
+                          feelings: values[keys[0]],
+                          unease: values[keys[1]],
+                          gratefulness: values[keys[2]],
+                        },
+                      });
+                      setTimeout(async () => {
+                        await router.replace("/app");
+                        setSubmitInProgress(false);
+                      }, 1000);
+                    }
+                  }}
+                >
+                  Save the record
+                </Button>
+                <Link href="/app">Skip, I’ll do this later.</Link>
+              </div>
+            </footer>
+            <EmojiWrapper as={animated.div} style={modalWrapperStyles}>
+              <animated.div
+                onClick={closeModal}
+                className="overlay"
+                style={overlayStyles}
+              ></animated.div>
+              <animated.div
+                style={isMobile ? mobileModalStyles : modalStyles}
+                className="modal"
+                ref={modalRef}
+                onTouchStart={initDrag}
+              >
+                <div className="draggable" onTouchStart={initDrag}></div>
+                {emojisList.map((emoji, index) => {
+                  return (
+                    <div className="row" key={index}>
+                      <p className="name">{emoji.name}</p>
+                      <div className="emojis">
+                        {emoji.emojis.map((symbol) => (
+                          <span
+                            key={symbol}
+                            onClick={() => {
+                              setCurrentEmoji(symbol);
+                              emojiSelector.current?.classList.add("active");
+                              closeModal();
+                            }}
+                            className="emoji"
+                          >
+                            {symbol}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                <span className="close" onClick={closeModal}>
+                  &times;
+                </span>
+              </animated.div>
+            </EmojiWrapper>
+          </>
+        ) : null}
       </Container>
     </Wrapper>
   );

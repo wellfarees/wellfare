@@ -3,8 +3,8 @@ import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
-import msToHours from "../utils/msToHours";
 import verifyJWT from "../utils/verifyJWT";
+import differenceInHours from "date-fns/differenceInHours";
 
 export default {
   Query: {
@@ -46,9 +46,9 @@ export default {
       else
         return {
           ...data,
-          lastSubmitted: Math.abs(
-            msToHours(new Date().getTime() - data.records[0].date.getTime())
-          ),
+          // +2 for GMT+2 timezone but it's weird behavior that timezones are not already determined automatically
+          lastSubmitted:
+            differenceInHours(new Date(), data.records[0].date) + 2,
         };
     },
   },
