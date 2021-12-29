@@ -12,7 +12,7 @@ import Button from "../../components/Button/Button";
 
 import { ADD_RECORD } from "../../graphql/mutations";
 import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery, useLazyQuery } from "react-apollo";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -321,13 +321,17 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
-  const [addRecord, mutationProps] = useMutation(ADD_RECORD, {
+  const [addRecord] = useMutation(ADD_RECORD, {
     refetchQueries: ["GetUserFeed"],
   });
   const userQueryProps = useQuery(GET_FIRST_NAME);
-  const { data, loading } = useQuery(GET_LAST_SUBMITTED, {
-    fetchPolicy: "network-only",
-  });
+  const [getLastSubmitted, { data, loading }] = useLazyQuery(
+    GET_LAST_SUBMITTED,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator(Boolean(data && data.getUser.lastSubmitted >= 24));
 
@@ -335,6 +339,10 @@ const Entry: NextPage = () => {
   let touchStart = 0;
   let startTime = 0;
   let endTime = 0;
+
+  useEffect(() => {
+    getLastSubmitted();
+  }, []);
 
   const startDragging = (e: TouchEvent<HTMLDivElement>): void => {
     if (!modalRef || !modalRef.current) return;
