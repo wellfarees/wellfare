@@ -10,6 +10,7 @@ import GoBack from "../../../components/Routing/GoBack";
 import React from "react";
 import { mapRecordsToJsx } from "../../../utils/mapRecordsToJsx";
 import { RecordsData } from "../../../components/Records/RecordTypes";
+import ExistsNot from "../../../components/ExistsNot";
 
 import { useQuery } from "react-apollo";
 import { GET_RECAP } from "../../../graphql/queries";
@@ -98,7 +99,9 @@ const Recap: NextPage = () => {
 
   return (
     <Wrapper>
-      {!loading && data ? (
+      {loading ? (
+        <></>
+      ) : data.getRecap ? (
         <ShrankContainer>
           <header>
             <GoBack />
@@ -158,7 +161,11 @@ const Recap: NextPage = () => {
             </div>
           </div>
         </ShrankContainer>
-      ) : null}
+      ) : (
+        <ShrankContainer>
+          <ExistsNot name="recap" />
+        </ShrankContainer>
+      )}
     </Wrapper>
   );
 };
