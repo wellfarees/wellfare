@@ -6,6 +6,7 @@ import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
+import { sendVerificationEmai } from "../utils/sendVerificationEmail";
 
 export default {
   Mutation: {
@@ -30,17 +31,10 @@ export default {
         email?: string;
         password?: string;
         pfp?: string;
-        emailLastUpdated?: Date;
       } = {};
       if (args.firstName) updateData.firstName = args.firstName;
       if (args.lastName) updateData.lastName = args.lastName;
-      if (args.email) {
-        updateData.email = args.email;
-        updateData.emailLastUpdated = new Date();
-      }
-      if (args.changePassword)
-        updateData.password = await hash(args.changePassword.new, 10);
-      if (args.pfp) updateData.email = args.pfp;
+      if (args.pfp) updateData.pfp = args.pfp;
 
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
@@ -54,13 +48,26 @@ export default {
           information: {
             select: {
               password: true,
+              email: true,
             },
           },
+          emailLastUpdated: true,
         },
       });
 
+      const currentEmail = args.email && data.information.email;
+
+      const emailLastUpdated =
+        currentEmail === data.information.email
+          ? data.emailLastUpdated
+          : new Date();
+
+      updateData.email = args.email;
+
       if (!data)
         throw new UserDoesNotExistsError("User does not exist in database.");
+
+      if (!args.changePassword) updateData.password = data.information.password;
 
       if (args.changePassword) {
         const passwordsMatch = await compare(
@@ -70,6 +77,12 @@ export default {
 
         if (!passwordsMatch)
           throw new WrongPasswordError("Current password is incorrect.");
+
+        updateData.password = await hash(args.changePassword.new, 10);
+      }
+
+      if (updateData.email !== data.information.email) {
+        await sendVerificationEmai(updateData.email, updateData.firstName, id);
       }
 
       return (
@@ -79,8 +92,12 @@ export default {
           },
           data: {
             information: {
-              update: updateData,
+              update: {
+                ...updateData,
+                verified: updateData.email === data.information.email,
+              },
             },
+            emailLastUpdated,
           },
           select: {
             information: {

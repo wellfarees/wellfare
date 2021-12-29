@@ -1,4 +1,3 @@
-import { GetStaticProps, NextPage } from "next";
 import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import { GlowingBLue } from "../../styled/reusable";
@@ -17,7 +16,7 @@ import {
   ResultingObject,
 } from "../../utils/mapRefsIntoValues";
 
-import { useMutation, useQuery, useLazyQuery } from "react-apollo";
+import { useMutation, useQuery } from "react-apollo";
 import {
   EDIT_USER_INFORMATION,
   RESEND_VERIFICATION,
@@ -156,6 +155,14 @@ const Warning = styled.div`
   }
 `;
 
+interface Credentials {
+  firstName: string;
+  lastName: string;
+  email: string;
+  pfp: string;
+  verified: boolean;
+}
+
 const User = () => {
   const { register, handleSubmit } = useForm();
   const handleErrors = useHandleFormErrors();
@@ -164,29 +171,25 @@ const User = () => {
   const [inProgress, setInProgress] = useState(false);
   const { jwt } = useTypedSelector((state) => state.user);
 
-  const [userInformationQuery, { data, loading }] = useLazyQuery(
+  const { data, loading } = useQuery<{ getUser: { information: Credentials } }>(
     USER_INFORMATION_QUERY,
     {
       fetchPolicy: "network-only",
     }
   );
 
-  const [resendVerificationLink, verificationResult] = useMutation(
-    RESEND_VERIFICATION,
-    { variables: { token: jwt } }
-  );
+  const [resendVerificationLink] = useMutation(RESEND_VERIFICATION, {
+    variables: { token: jwt },
+  });
 
-  const [editUserInformation, mutationProps] = useMutation(
-    EDIT_USER_INFORMATION
-  );
+  const [editUserInformation, mutationProps] = useMutation<{
+    _;
+    editInformation: Credentials;
+  }>(EDIT_USER_INFORMATION);
 
   useEffect(() => {
     setInProgress(!inProgress);
   }, [isSaved]);
-
-  useEffect(() => {
-    userInformationQuery();
-  }, []);
 
   const isImage = (type: string): boolean => {
     var ext = type.split("/")[1];
@@ -255,8 +258,9 @@ const User = () => {
             </h2>
           </AdaptiveAnimation>
         </header>
-        {loading ? null : data && !data.getUser.information.verified ? (
-          // TODO: Support styling for dark mode
+        {loading ? null : (data && !data.getUser.information.verified) ||
+          (mutationProps.data &&
+            !mutationProps.data.editInformation.verified) ? (
           <Warning>
             <p>
               <b>
