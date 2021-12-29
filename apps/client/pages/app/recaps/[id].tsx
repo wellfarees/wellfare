@@ -1,11 +1,10 @@
 import { ShrankContainer } from "../../../styled/reusable";
-import Record from "../../../components/Records/Record";
 import AdaptiveAnimation from "../../../components/animated/AdaptiveAnimation";
 import { formatDate } from "../../../utils/formatDate";
 import styled from "styled-components";
 import Scroller from "../../../components/Scroller/Scroller";
 import { useScreenSize } from "../../../hooks/useScreenSize";
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import GoBack from "../../../components/Routing/GoBack";
 import React from "react";
@@ -14,7 +13,6 @@ import { RecordsData } from "../../../components/Records/RecordTypes";
 
 import { useQuery } from "react-apollo";
 import { GET_RECAP } from "../../../graphql/queries";
-import { useEffect } from "react";
 
 const Wrapper = styled.div`
   margin-bottom: 6em;
@@ -94,7 +92,7 @@ const Recap: NextPage = () => {
   const size = useScreenSize();
   const router = useRouter();
   const { id } = router.query;
-  const { data, loading, error } = useQuery<RecapProps>(GET_RECAP, {
+  const { data, loading } = useQuery<RecapProps>(GET_RECAP, {
     variables: { identifier: parseInt(id as string) },
   });
 

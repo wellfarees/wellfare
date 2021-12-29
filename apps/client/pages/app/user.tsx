@@ -199,7 +199,6 @@ const User = () => {
       case "bmp":
       case "png":
       case "jpeg":
-        //etc
         return true;
     }
     return false;

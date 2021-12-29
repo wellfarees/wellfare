@@ -46,9 +46,7 @@ export default {
       else
         return {
           ...data,
-          // +2 for GMT+2 timezone but it's weird behavior that timezones are not already determined automatically
-          lastSubmitted:
-            differenceInHours(new Date(), data.records[0].date) + 2,
+          lastSubmitted: differenceInHours(new Date(), data.records[0].date),
         };
     },
   },
