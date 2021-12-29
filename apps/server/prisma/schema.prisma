@@ -32,7 +32,7 @@ model Information {
   dbid            String  @id @default(cuid())
   firstName       String
   lastName        String
-  email           String
+  email           String?
   associatedEmail String
   password        String
   verified        Boolean @default(false)

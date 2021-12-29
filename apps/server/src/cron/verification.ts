@@ -5,12 +5,11 @@ import { differenceInWeeks } from "date-fns";
 export default abstract class VerifyUser extends Cron {
   constructor() {
     // run every day at 00:00
-    super("* * * * * *");
+    super("0 0 * * *");
   }
 
   async exec() {
-    //   FIXME: its executing before the following statement, but not after it
-    const data = await server.db.user.findFirst({
+    const data = await server.db.user.findMany({
       where: {
         information: {
           verified: false,
@@ -21,7 +20,7 @@ export default abstract class VerifyUser extends Cron {
       },
     });
 
-    for (const user of [data]) {
+    for (const user of data) {
       if (differenceInWeeks(new Date(), user.emailLastUpdated) == 2) {
         await server.db.user.update({
           where: {
