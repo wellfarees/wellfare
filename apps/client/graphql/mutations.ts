@@ -61,6 +61,7 @@ export const EDIT_USER_INFORMATION = gql`
       changePassword: $changePassword
     ) {
       dbid
+      email
     }
   }
 `;

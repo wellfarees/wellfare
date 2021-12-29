@@ -3,8 +3,8 @@ import server from "../server";
 import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
-import { CLIENT_URL } from "../endpoints";
 import { client } from "../algolia";
+import { sendVerificationEmai } from "../utils/sendVerificationEmail";
 
 export default {
   Mutation: {
@@ -65,24 +65,12 @@ export default {
         );
 
         const jwt = generateJWT({ id: userData.id }, "client");
-        const verificationJWT = generateJWT(
-          { id: userData.id },
-          "verification"
+        await sendVerificationEmai(
+          userData.information.email,
+          userData.information.firstName,
+          userData.id
         );
-        const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;
 
-        server.mail.send({
-          from: process.env.EMAIL_ADDRESS!,
-          to: args.email,
-          subject: "Verify your email",
-          html: `Hi ${firstName}, thanks for signing up for Wellfare! <a href="${verificationURL}">Click here</a> to start using Wellfare.
-          <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}.
-          <br /> <br />
-          Thanks,
-          <br />
-          Wellfare`,
-        });
         return { jwt, user: userData, publicAlgoliaKey };
       }
     },
