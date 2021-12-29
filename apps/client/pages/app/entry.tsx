@@ -333,7 +333,13 @@ const Entry: NextPage = () => {
   );
 
   const { register, handleTextareaSubmit, handleResults } =
-    useTextareaValidator(Boolean(data && data.getUser.lastSubmitted >= 24));
+    useTextareaValidator(
+      Boolean(
+        data &&
+          (data.getUser.lastSubmitted === null ||
+            data.getUser.lastSubmitted >= 24)
+      )
+    );
 
   // Variables for mobile popup window
   let touchStart = 0;
@@ -564,7 +570,10 @@ const Entry: NextPage = () => {
             <Pfp url="/img/sample_pfp.jpg"></Pfp>
           </div>
 
-          {!loading && data && data.getUser.lastSubmitted < 24 ? (
+          {!loading &&
+          data &&
+          data.getUser.lastSubmitted !== null &&
+          data.getUser.lastSubmitted < 24 ? (
             <NotAllowed>
               <div className="info">
                 <h2>You've already journaled today!</h2>
@@ -589,9 +598,11 @@ const Entry: NextPage = () => {
               className="greetings"
               style={{
                 display:
-                  data && data.getUser.lastSubmitted >= 24
-                    ? "inline-block"
-                    : "none",
+                  data &&
+                  data.getUser.lastSubmitted !== null &&
+                  data.getUser.lastSubmitted < 24
+                    ? "none"
+                    : "inline-block",
               }}
             >
               Welcome back,{" "}
@@ -623,7 +634,12 @@ const Entry: NextPage = () => {
                     label="Gratefulness for"
                     {...register()}
                   />
-                  {!loading && data && data.getUser.lastSubmitted >= 24 ? (
+                  {!loading &&
+                  !(
+                    data &&
+                    data.getUser.lastSubmitted !== null &&
+                    data.getUser.lastSubmitted < 24
+                  ) ? (
                     <p
                       ref={emojiSelector}
                       className="summarize"
@@ -640,7 +656,12 @@ const Entry: NextPage = () => {
             </div>
           </div>
         </div>
-        {!loading && data && data.getUser.lastSubmitted >= 24 ? (
+        {!loading &&
+        !(
+          data &&
+          data.getUser.lastSubmitted !== null &&
+          data.getUser.lastSubmitted < 24
+        ) ? (
           <>
             <footer>
               {error && <Error>{error}</Error>}
