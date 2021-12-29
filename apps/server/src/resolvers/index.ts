@@ -1,5 +1,6 @@
 import getUser from "./getUser";
 import getRecap from "./getRecap";
+import getRecord from "./getRecord";
 import company from "./company";
 import ping from "./ping";
 import createUser from "./createUser";
@@ -19,6 +20,7 @@ const Query = {
   ...company.Query,
   ...getUser.Query,
   ...getRecap.Query,
+  ...getRecord.Query,
   ...login.Query,
   ...getUserInformationFromEmailToken.Query,
 };

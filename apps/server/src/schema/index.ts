@@ -5,6 +5,7 @@ import company from "./company";
 import createUser from "./createUser";
 import getUser from "./getUser";
 import getRecap from "./getRecap";
+import getRecord from "./getRecord";
 import ping from "./ping";
 import addAffirmations from "./addAffirmations";
 import editAppearance from "./editAppearance";
@@ -129,6 +130,7 @@ export default [
   createUser,
   login,
   addRecord,
+  getRecord,
   addAffirmations,
   editAppearance,
   editInformation,
