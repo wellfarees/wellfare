@@ -277,7 +277,8 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
         <ShrankContainer>
           <div className="ctas">
             {data &&
-              (data.getUser.lastSubmitted >= 24 ? (
+              (data.getUser.lastSubmitted >= 24 ||
+              data.getUser.lastSubmitted === null ? (
                 <div className="journal-cta">
                   <Link href="/app/entry">
                     <h4>

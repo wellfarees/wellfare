@@ -29,14 +29,15 @@ model User {
 }
 
 model Information {
-  dbid      String  @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String
-  password  String
-  verified  Boolean @default(false)
-  pfp       String?
-  User      User[]
+  dbid            String  @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String
+  associatedEmail String
+  password        String
+  verified        Boolean @default(false)
+  pfp             String?
+  User            User[]
 }
 
 model Configuration {

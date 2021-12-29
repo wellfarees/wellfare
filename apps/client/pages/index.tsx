@@ -8,7 +8,6 @@ import { Button } from "../styled/reusable";
 import { Showcase as ShowcaseComp, Card } from "../components";
 import Fade from "react-reveal/Fade";
 import { emailRegExp } from "../utils/emailRegExp";
-import { useSpring, animated, config } from "react-spring";
 import Scroller from "../components/Scroller/Scroller";
 import LoadingButton from "../components/Button/Button";
 import { useTypedSelector } from "../hooks/useTypedSelector";

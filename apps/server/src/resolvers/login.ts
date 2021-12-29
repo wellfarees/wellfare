@@ -25,28 +25,29 @@ export default {
         throw new UserDoesNotExistsError(
           "User does not exist in the database."
         );
-      else {
-        if (!(await compare(args.password, userData.information.password)))
-          throw new WrongPasswordError("Wrong password.");
 
-        const publicAlgoliaKey = client.generateSecuredApiKey(
-          process.env.ALGOLIA_SEARCH!,
+      if (!userData.information.email) throw new Error("Account suspended.");
+
+      if (!(await compare(args.password, userData.information.password)))
+        throw new WrongPasswordError("Wrong password.");
+
+      const publicAlgoliaKey = client.generateSecuredApiKey(
+        process.env.ALGOLIA_SEARCH!,
+        {
+          filters: `visible_by=${userData.id}`,
+        }
+      );
+
+      return {
+        jwt: generateJWT(
           {
-            filters: `visible_by=${userData.id}`,
-          }
-        );
-
-        return {
-          jwt: generateJWT(
-            {
-              id: userData.id,
-            },
-            "client"
-          ),
-          user: userData,
-          publicAlgoliaKey,
-        };
-      }
+            id: userData.id,
+          },
+          "client"
+        ),
+        user: userData,
+        publicAlgoliaKey,
+      };
     },
   },
 };

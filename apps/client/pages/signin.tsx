@@ -234,7 +234,12 @@ const SignIn = () => {
     const { error, data } = queryProps;
 
     if (error) {
-      setError(error.graphQLErrors[0].message);
+      const gqlError = error.graphQLErrors[0].message;
+      if (gqlError === "Account suspended.") {
+        initModal(true, <>Acount suspended!</>);
+      }
+
+      setError(gqlError);
       setSignedIn(false);
 
       // open modal if its a blocking error

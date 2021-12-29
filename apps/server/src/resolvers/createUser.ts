@@ -41,13 +41,14 @@ export default {
                 lastName,
                 firstName,
                 email: args.email,
+                associatedEmail: args.email,
                 password,
               },
             },
             config: {
               create: {},
             },
-            recaps: null,
+            recaps: undefined,
           },
 
           include: {

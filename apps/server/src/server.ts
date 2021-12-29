@@ -67,8 +67,11 @@ class Server extends ApolloServer {
           }
         }
       });
+
       // eslint-disable-next-line no-console
-      console.log("[Success] Successfully registered cron jobs.");
+      console.log(
+        `[Success] Successfully registered ${commandFiles.length} cron jobs.`
+      );
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log("[Error] Error while registering cron jobs:");
