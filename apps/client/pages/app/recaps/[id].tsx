@@ -94,7 +94,6 @@ const Recap: NextPage = () => {
   const size = useScreenSize();
   const router = useRouter();
   const { id } = router.query;
-  console.log(id);
   const { data, loading, error } = useQuery<RecapProps>(GET_RECAP, {
     variables: { identifier: parseInt(id as string) },
   });

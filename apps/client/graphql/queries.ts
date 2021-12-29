@@ -174,6 +174,19 @@ export const GET_RECAP = gql`
   }
 `;
 
+export const GET_RECORD = gql`
+  query GetRecord($identifier: Int!) {
+    getRecord(identifier: $identifier) {
+      id
+      date
+      unease
+      gratefulness
+      emoji
+      feelings
+    }
+  }
+`;
+
 export const GET_LAST_SUBMITTED = gql`
   query GetLastSubmitted {
     getUser {

@@ -5,26 +5,30 @@ import DetailedRecord from "../../../components/Records/DetailedRecord";
 import { useRouter } from "next/router";
 import { useScreenSize } from "../../../hooks/useScreenSize";
 import { useEffect } from "react";
-import { useActions } from "../../../hooks/useActions";
+
+import { useQuery } from "react-apollo";
+import { GET_RECORD } from "../../../graphql/queries";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
 `;
 
 interface RecordProps {
-  data: {
-    date: number;
-    feelings: string;
-    unease: string;
-    gratefulness: string;
-    emoji: string;
-  };
-  isMobile: boolean;
+  date: number;
+  feelings: string;
+  unease: string;
+  gratefulness: string;
+  emoji: string;
 }
 
-const RecordPage: NextPage<RecordProps> = ({ data, isMobile }) => {
+const RecordPage: NextPage<{ isMobile: boolean }> = ({ isMobile }) => {
   const router = useRouter();
   const size = useScreenSize();
+  const { id } = router.query;
+  const { data } = useQuery<{ getRecord: RecordProps }, { identifier: number }>(
+    GET_RECORD,
+    { variables: { identifier: parseInt(id as string) } }
+  );
 
   if (!isMobile) {
     router.push("/404");
@@ -39,16 +43,18 @@ const RecordPage: NextPage<RecordProps> = ({ data, isMobile }) => {
       return;
     }
   }, [size]);
+
   return (
     <Wrapper>
       <ShrankContainer>
         {size ? (
-          isMobile &&
-          size! > 425 &&
-          !(size! <= 812 && window.innerHeight <= 425) ? (
+          (isMobile &&
+            size! > 425 &&
+            !(size! <= 812 && window.innerHeight <= 425)) ||
+          !data ? (
             ""
           ) : (
-            <DetailedRecord data={{ ...data }} />
+            <DetailedRecord data={data.getRecord} />
           )
         ) : (
           ""
@@ -60,9 +66,9 @@ const RecordPage: NextPage<RecordProps> = ({ data, isMobile }) => {
 
 export default RecordPage;
 
-export const getServerSideProps: GetServerSideProps<RecordProps> = async (
-  ctx
-) => {
+export const getServerSideProps: GetServerSideProps<{
+  isMobile: boolean;
+}> = async (ctx) => {
   const UA = ctx.req.headers["user-agent"]!;
   const isMobile = Boolean(
     UA.match(
@@ -72,13 +78,6 @@ export const getServerSideProps: GetServerSideProps<RecordProps> = async (
 
   return {
     props: {
-      data: {
-        date: Date.now(),
-        feelings: "adventurous",
-        unease: "Nothing really, ive just been craving for tacos lately ://",
-        gratefulness: "Being able to breathe fresh air, because air >>",
-        emoji: "😍",
-      },
       isMobile,
     },
   };
