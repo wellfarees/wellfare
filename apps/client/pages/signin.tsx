@@ -228,7 +228,7 @@ const SignIn = () => {
   const [login, queryProps] = useLazyQuery(LOGIN, {
     fetchPolicy: "network-only",
   });
-  const { storeUser } = useActions();
+  const { storeUser, initModal } = useActions();
 
   useEffect(() => {
     const { error, data } = queryProps;
@@ -236,6 +236,8 @@ const SignIn = () => {
     if (error) {
       setError(error.graphQLErrors[0].message);
       setSignedIn(false);
+
+      // open modal if its a blocking error
       return;
     }
 
