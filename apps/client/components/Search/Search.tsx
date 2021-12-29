@@ -3,6 +3,8 @@ import { SearchResponse } from "@algolia/client-search";
 import { formatDate } from "../../utils/formatDate";
 import { useState } from "react";
 import styled from "styled-components";
+import { GlowingBLue } from "../../styled/reusable";
+import Link from "next/link";
 import DetailedRecord from "../Records/DetailedRecord";
 import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useActions";
@@ -103,6 +105,13 @@ const StyledListItem = styled.div`
         display: inline-block;
       }
     }
+
+    button {
+      ${GlowingBLue}
+      padding: 0.3em 1em !important;
+      display: inline-block;
+      width: auto !important;
+    }
   }
 `;
 
@@ -158,7 +167,11 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
             <span className="date">{formatDate(date)}</span>
           </div>
         </div>
-        {recapId && "ezpz"}
+        {recapId && (
+          <Link href={`/app/recaps/${recapId}`}>
+            <button>Go to recap</button>
+          </Link>
+        )}
       </div>
     </StyledListItem>
   );
