@@ -11,7 +11,7 @@ export default {
       const userData = await server.db.user.findFirst({
         where: {
           information: {
-            email: args.email,
+            associatedEmail: args.email,
           },
         },
         include: {

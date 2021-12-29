@@ -12,6 +12,7 @@ import Button from "../components/Button/Button";
 import { useActions } from "../hooks/useActions";
 import { GET_LAST_SUBMITTED } from "../graphql/queries";
 import ApolloClient from "../graphql/client";
+import AccountSuspended from "../components/AccountSuspended/AccountSuspended";
 
 import { useLazyQuery } from "@apollo/react-hooks";
 import { LOGIN } from "../graphql/queries";
@@ -236,7 +237,7 @@ const SignIn = () => {
     if (error) {
       const gqlError = error.graphQLErrors[0].message;
       if (gqlError === "Account suspended.") {
-        initModal(true, <>Acount suspended!</>);
+        initModal(true, <AccountSuspended />);
       }
 
       setError(gqlError);

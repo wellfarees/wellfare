@@ -21,7 +21,7 @@ export default abstract class VerifyUser extends Cron {
     });
 
     for (const user of data) {
-      if (differenceInWeeks(new Date(), user.emailLastUpdated) == 2) {
+      if (differenceInWeeks(new Date(), user.emailLastUpdated) >= 2) {
         await server.db.user.update({
           where: {
             id: user.id,
@@ -32,6 +32,9 @@ export default abstract class VerifyUser extends Cron {
                 email: null,
               },
             },
+          },
+          include: {
+            information: true,
           },
         });
       }
