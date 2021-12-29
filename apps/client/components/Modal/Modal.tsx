@@ -40,6 +40,7 @@ const ModalWindow = styled.div`
     padding: 0.5em;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 1.6em;
 
     &:hover {
       color: ${(props) => props.theme.shadedColor};
