@@ -138,7 +138,13 @@ export default {
                     : false,
                 emailsUsed:
                   args.email == data.information.email || inUse !== null
-                    ? {}
+                    ? {
+                        deleteMany: {
+                          id: {
+                            in: deprecatedIds,
+                          },
+                        },
+                      }
                     : {
                         create: {
                           address: args.email,
