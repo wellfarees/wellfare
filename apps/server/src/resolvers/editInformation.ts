@@ -7,6 +7,10 @@ import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
 import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
+import { getDeprecatedIds } from "../utils/getDeprecatedIds";
+
+const EMAIL_RATE_LIMIT = parseInt(process.env.EMAIL_RATELIMIT_PER_24HRS!);
 
 export default {
   Mutation: {
@@ -49,11 +53,45 @@ export default {
             select: {
               password: true,
               email: true,
+              emailsUsed: true,
+              verified: true,
             },
           },
           emailLastUpdated: true,
         },
       });
+
+      const inUse = await server.db.user.findFirst({
+        where: {
+          information: {
+            email: args.email,
+          },
+          AND: {
+            NOT: {
+              id,
+            },
+          },
+        },
+      });
+
+      if (inUse !== null) {
+        throw new Error("Email in use.");
+      }
+
+      let currentEmailsUsed = data.information.emailsUsed;
+
+      const recentEmailsChanged = countRecentEmailsChanged(currentEmailsUsed);
+
+      if (
+        recentEmailsChanged >= EMAIL_RATE_LIMIT &&
+        args.email !== data.information.email
+      ) {
+        throw new Error(
+          "Too many emails have been changed in the past 24 hours."
+        );
+      }
+
+      const deprecatedIds = getDeprecatedIds(currentEmailsUsed);
 
       const currentEmail = args.email && data.information.email;
 
@@ -94,7 +132,24 @@ export default {
             information: {
               update: {
                 ...updateData,
-                verified: updateData.email === data.information.email,
+                verified:
+                  args.email === data.information.email
+                    ? data.information.verified
+                    : false,
+                emailsUsed:
+                  args.email == data.information.email || inUse !== null
+                    ? {}
+                    : {
+                        create: {
+                          address: args.email,
+                          set: new Date(),
+                        },
+                        deleteMany: {
+                          id: {
+                            in: deprecatedIds,
+                          },
+                        },
+                      },
               },
             },
             emailLastUpdated,
