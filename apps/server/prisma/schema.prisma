@@ -29,13 +29,14 @@ model User {
 }
 
 model Information {
-  dbid            String  @id @default(cuid())
+  dbid            String         @id @default(cuid())
   firstName       String
   lastName        String
   email           String?
   associatedEmail String
+  emailsUsed      ChangedEmail[]
   password        String
-  verified        Boolean @default(false)
+  verified        Boolean        @default(false)
   pfp             String?
   User            User[]
 }
@@ -46,6 +47,14 @@ model Configuration {
   reducedMotion Boolean @default(false)
   fontSize      Int     @default(14)
   User          User[]
+}
+
+model ChangedEmail {
+  id              Int          @id @default(autoincrement())
+  address         String
+  set             DateTime
+  Information     Information? @relation(fields: [informationDbid], references: [dbid])
+  informationDbid String?
 }
 
 model Record {

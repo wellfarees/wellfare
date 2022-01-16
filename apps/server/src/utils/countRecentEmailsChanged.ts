@@ -1,0 +1,19 @@
+import { differenceInHours } from "date-fns";
+
+export interface EmailsChanged {
+  address: string;
+  set: Date;
+  id;
+}
+
+export const countRecentEmailsChanged = (arr: EmailsChanged[]): number => {
+  let changed = 0;
+
+  for (let email of arr) {
+    if (differenceInHours(email.set, Date.now()) < 24) {
+      changed++;
+    }
+  }
+
+  return changed;
+};

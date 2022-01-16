@@ -43,6 +43,12 @@ export default {
                 email: args.email,
                 associatedEmail: args.email,
                 password,
+                emailsUsed: {
+                  create: {
+                    address: args.email,
+                    set: new Date(),
+                  },
+                },
               },
             },
             config: {
