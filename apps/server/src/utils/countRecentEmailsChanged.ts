@@ -3,7 +3,7 @@ import { differenceInHours } from "date-fns";
 export interface EmailsChanged {
   address: string;
   set: Date;
-  id;
+  id: number;
 }
 
 export const countRecentEmailsChanged = (arr: EmailsChanged[]): number => {
