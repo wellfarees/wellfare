@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
-import { Pfp } from "../..";
+import { UserPfp } from "../../Pfp/Pfp";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useRouter } from "next/router";
 import { useActions } from "../../../hooks/useActions";
@@ -91,7 +91,7 @@ const Navigation: React.FC = () => {
           )}
         </ActionPoint>
         <div className="pfpContainer">
-          <Pfp url="/img/sample_pfp.jpg"></Pfp>
+          <UserPfp />
         </div>
       </Container>
     </NavContainer>

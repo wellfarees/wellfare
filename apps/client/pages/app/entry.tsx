@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import styled from "styled-components";
 import { Container, GlowingBLue, Error } from "../../styled/reusable";
-import { WatermarkInput, Pfp } from "../../components";
+import { WatermarkInput } from "../../components";
+import { UserPfp } from "../../components/Pfp/Pfp";
 import { useEffect, useRef, useState } from "react";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
@@ -567,7 +568,7 @@ const Entry: NextPage = () => {
         <div className="upper">
           <div className="top-bar">
             <p className="logo">Wellfaree</p>
-            <Pfp url="/img/sample_pfp.jpg"></Pfp>
+            <UserPfp />
           </div>
 
           {!loading &&
