@@ -1,11 +1,7 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { SERVER_URL } from "../endpoints";
 import { createUploadLink } from "apollo-upload-client";
-
-const httpLink = createHttpLink({
-  uri: `${SERVER_URL}/graphql`,
-});
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

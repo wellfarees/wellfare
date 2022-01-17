@@ -17,6 +17,7 @@ model Subscription {
 
 model User {
   id               Int           @id @unique @default(autoincrement())
+  uid              String        @unique @default(cuid())
   config           Configuration @relation(fields: [configurationId], references: [id])
   records          Record[]
   information      Information   @relation(fields: [informationId], references: [dbid])

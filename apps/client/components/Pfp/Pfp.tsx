@@ -25,16 +25,10 @@ const Pfp: React.FC<PfpProps> = ({ url }) => {
   );
 };
 
-type Props = { [key: string]: any };
-
-const UserPfp: React.FC = () => {
-  const ComposedComponent: React.FC = (props: Props) => {
-    // TODO: Try to fetch actual pfp if it exists
-    const url = "/img/mesh-gradient.png";
-    return <Pfp url={url} />;
-  };
-
-  return <ComposedComponent />;
+const UserPfp: React.FC<Partial<PfpProps>> = ({ url }) => {
+  // TODO: Try to fetch actual pfp if it exists
+  const path = url || "/img/mesh-gradient.png";
+  return <Pfp url={path} />;
 };
 
 export default Pfp;

@@ -123,6 +123,10 @@ const root = gql`
   type Success {
     success: Boolean!
   }
+
+  type Location {
+    location: String!
+  }
 `;
 
 export default [
