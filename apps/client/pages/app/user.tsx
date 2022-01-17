@@ -22,6 +22,7 @@ import {
   RESEND_VERIFICATION,
 } from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
+import { UserPfp } from "../../components/Pfp/Pfp";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -355,7 +356,7 @@ const User = () => {
               <div className="profile-img">
                 <p className="name">Profile image</p>
                 <div className="pfp-block">
-                  <Pfp url="/img/sample_pfp.jpg" />
+                  <UserPfp />
                   <label htmlFor="pfp-file" className="change-btn">
                     Change
                   </label>
