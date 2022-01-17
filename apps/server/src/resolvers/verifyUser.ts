@@ -40,6 +40,7 @@ export default {
             information: {
               update: {
                 verified: true,
+                reconfirmationNeeded: false,
               },
             },
           },

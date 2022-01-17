@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const AccountSuspended: React.FC = () => {
+const AccountSuspended: React.FC<{ email: string }> = ({ email }) => {
   return (
     <Wrapper>
       <h2>Your account got suspended.</h2>
@@ -47,7 +47,8 @@ const AccountSuspended: React.FC = () => {
           <h3>What do I do?</h3>
           <p>
             Either verify your current email by clicking on the link we had sent
-            you, or add another email <Link href="/">here</Link>
+            you, or add another email{" "}
+            <Link href={`/auth/restore?email=${email}`}>here</Link>
           </p>
         </section>
       </div>

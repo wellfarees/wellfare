@@ -118,3 +118,14 @@ export const RESEND_VERIFICATION = gql`
     }
   }
 `;
+
+export const RESTORE_EMAIL = gql`
+  mutation RestoreEmail($email: String!, $newEmail: String!) {
+    restoreEmail(email: $email, newEmail: $newEmail) {
+      information {
+        firstName
+        email
+      }
+    }
+  }
+`;

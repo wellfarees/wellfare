@@ -26,6 +26,9 @@ export default {
           "User does not exist in the database."
         );
 
+      if (userData.information.reconfirmationNeeded)
+        throw new Error("Confirm your current email before signing in.");
+
       if (!userData.information.email) throw new Error("Account suspended.");
 
       if (!(await compare(args.password, userData.information.password)))

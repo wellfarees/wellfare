@@ -118,24 +118,19 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   // TODO: Replace with actual graphql / redux data
   // -> basically instead of showing full UI, inquires user to journal their day first (so there's no typical UI layout, just the bare minimum)
   // newDay determines whether or not we enter the REAL layout
-  let newDay = false;
   const router = useRouter();
   const size = useScreenSize();
   const isMobileOnly = /app\/records\/\[id\]+/.test(router.pathname);
   const { content, open } = useTypedSelector((state) => state.modal);
   const { user } = useTypedSelector((state) => state);
   const userInfo = user.info!;
-
-  if (router.pathname === "/app/entry") {
-    newDay = true;
-  } else {
-    newDay = false;
-  }
+  const { initModal } = useActions();
 
   const history = useRef<string[]>([]);
   const { setLocalStorage, toggleSidebar } = useActions();
 
   useEffect(() => {
+    initModal(false);
     if (history.current.length <= 1) {
       if (localStorage.getItem("lastRoute") !== "null") {
         history.current[0] = localStorage.getItem("lastRoute")!;

@@ -13,6 +13,7 @@ import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import resetPassword from "./resetPassword";
+import restoreEmail from "./restoreEmail";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
@@ -137,6 +138,7 @@ export default [
   verifyUser,
   resendVerificationEmail,
   resetPassword,
+  restoreEmail,
   addEmailToNewsletter,
   getUserInformationFromEmailToken,
 ];
