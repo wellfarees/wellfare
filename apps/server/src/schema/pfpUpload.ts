@@ -2,6 +2,6 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Mutation {
-    pfpUpload(image: Upload!): Success!
+    pfpUpload(image: Upload!): Location!
   }
 `;

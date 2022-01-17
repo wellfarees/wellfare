@@ -188,7 +188,11 @@ const User = () => {
     editInformation: Credentials;
   }>(EDIT_USER_INFORMATION);
 
-  const [uploadPfp, uploadProps] = useMutation(UPLOAD_PFP);
+  const [uploadPfp, uploadProps] = useMutation<{
+    pfpUpload: {
+      location: string;
+    };
+  }>(UPLOAD_PFP);
 
   useEffect(() => {
     setInProgress(!inProgress);
@@ -248,6 +252,11 @@ const User = () => {
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
   }, [mutationProps.loading]);
+  useEffect(() => {
+    if (uploadProps.data) {
+      console.log(uploadProps.data);
+    }
+  }, [uploadProps.loading]);
 
   return (
     <Wrapper>
@@ -358,7 +367,13 @@ const User = () => {
               <div className="profile-img">
                 <p className="name">Profile image</p>
                 <div className="pfp-block">
-                  <UserPfp />
+                  <UserPfp
+                    url={
+                      uploadProps.data
+                        ? uploadProps.data.pfpUpload.location
+                        : null
+                    }
+                  />
                   <label htmlFor="pfp-file" className="change-btn">
                     Change
                   </label>
@@ -370,7 +385,6 @@ const User = () => {
                       },
                     }) => {
                       console.log(file);
-                      // TODO: Implement file uploading to the server and live reload of the pfp
                       validity.valid && uploadPfp({ variables: { file } });
                       if (!isImage(file.type)) {
                         scrollToBottom();
