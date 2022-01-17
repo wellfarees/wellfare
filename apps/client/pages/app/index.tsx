@@ -264,10 +264,12 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
     <Wrapper>
       <header>
         <ShrankContainer>
-          <h2>
-            Here&apos;s your moodboard,{" "}
-            <b>{data && data.getUser.information.firstName}</b>
-          </h2>
+          <AdaptiveAnimation>
+            <h2>
+              Here&apos;s your moodboard,{" "}
+              <b>{data && data.getUser.information.firstName}</b>
+            </h2>
+          </AdaptiveAnimation>
 
           <Search />
         </ShrankContainer>

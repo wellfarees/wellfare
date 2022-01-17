@@ -14,11 +14,14 @@ import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import resetPassword from "./resetPassword";
 import restoreEmail from "./restoreEmail";
+import pfpUpload from "./pfpUpload";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
 const root = gql`
   # Base types
+  scalar Upload
+
   type Query {
     root: String
   }
@@ -139,6 +142,7 @@ export default [
   resendVerificationEmail,
   resetPassword,
   restoreEmail,
+  pfpUpload,
   addEmailToNewsletter,
   getUserInformationFromEmailToken,
 ];

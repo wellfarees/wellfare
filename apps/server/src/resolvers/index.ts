@@ -12,6 +12,7 @@ import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
 import restoreEmail from "./restoreEmail";
+import pfpUpload from "./pfpUpload";
 import forgetPassword from "./resetPassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
@@ -37,6 +38,9 @@ const Mutation = {
   ...restoreEmail.Mutation,
   ...forgetPassword.Mutation,
   ...addEmailToNewsletter.Mutation,
+  ...pfpUpload.Mutation,
 };
 
-export default { Query, Mutation };
+const Upload = pfpUpload.Upload;
+
+export default { Query, Mutation, Upload };
