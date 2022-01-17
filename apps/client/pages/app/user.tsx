@@ -2,7 +2,6 @@ import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import { GlowingBLue } from "../../styled/reusable";
 import { LabeledInput } from "../../components";
-import { Pfp } from "../../components";
 import { useForm } from "../../hooks/useForm";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
@@ -20,6 +19,7 @@ import { useMutation, useQuery } from "react-apollo";
 import {
   EDIT_USER_INFORMATION,
   RESEND_VERIFICATION,
+  UPLOAD_PFP,
 } from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import { UserPfp } from "../../components/Pfp/Pfp";
@@ -187,6 +187,8 @@ const User = () => {
     _;
     editInformation: Credentials;
   }>(EDIT_USER_INFORMATION);
+
+  const [uploadPfp, uploadProps] = useMutation(UPLOAD_PFP);
 
   useEffect(() => {
     setInProgress(!inProgress);
@@ -361,18 +363,23 @@ const User = () => {
                     Change
                   </label>
                   <input
-                    onChange={(e) => {
+                    onChange={({
+                      target: {
+                        validity,
+                        files: [file],
+                      },
+                    }) => {
+                      console.log(file);
                       // TODO: Implement file uploading to the server and live reload of the pfp
-                      const files = e.target.files!;
-
-                      if (!isImage(files[0].type)) {
+                      validity.valid && uploadPfp({ variables: { file } });
+                      if (!isImage(file.type)) {
                         scrollToBottom();
 
                         setError("File has to have a type of an image!");
                         return;
                       }
 
-                      if (files[0].size > 80000) {
+                      if (file.size > 80000) {
                         scrollToBottom();
 
                         setError(

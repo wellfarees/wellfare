@@ -11,8 +11,10 @@ import * as dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { graphqlUploadExpress } from "graphql-upload";
 
 const app = express();
+app.use(graphqlUploadExpress());
 const httpServer = http.createServer(app);
 
 class Server extends ApolloServer {

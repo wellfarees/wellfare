@@ -129,3 +129,11 @@ export const RESTORE_EMAIL = gql`
     }
   }
 `;
+
+export const UPLOAD_PFP = gql`
+  mutation PfpUpload($file: Upload!) {
+    pfpUpload(image: $file) {
+      success
+    }
+  }
+`;
