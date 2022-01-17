@@ -230,6 +230,7 @@ const SignIn = () => {
     fetchPolicy: "network-only",
   });
   const { storeUser, initModal } = useActions();
+  const [emailUsed, setEmailUsed] = useState<string>();
 
   useEffect(() => {
     const { error, data } = queryProps;
@@ -237,7 +238,7 @@ const SignIn = () => {
     if (error) {
       const gqlError = error.graphQLErrors[0].message;
       if (gqlError === "Account suspended.") {
-        initModal(true, <AccountSuspended />);
+        initModal(true, <AccountSuspended email={emailUsed} />);
       }
 
       setError(gqlError);
@@ -307,6 +308,7 @@ const SignIn = () => {
 
                 try {
                   const { email, password } = credentials.values!;
+                  setEmailUsed(email);
                   login({ variables: { email, password } });
                 } catch (err) {}
               }

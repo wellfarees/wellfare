@@ -1,6 +1,6 @@
 import server from "../server";
 import { Cron } from "../types/cron";
-import { differenceInWeeks } from "date-fns";
+import { subDays } from "date-fns";
 
 export default abstract class VerifyUser extends Cron {
   constructor() {
@@ -13,31 +13,36 @@ export default abstract class VerifyUser extends Cron {
       where: {
         information: {
           verified: false,
-          NOT: {
-            email: null,
+          AND: {
+            email: {
+              not: null,
+            },
+          },
+        },
+        AND: {
+          emailLastUpdated: {
+            lte: subDays(new Date(), 7),
           },
         },
       },
     });
 
     for (const user of data) {
-      if (differenceInWeeks(new Date(), user.emailLastUpdated) >= 2) {
-        await server.db.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            information: {
-              update: {
-                email: null,
-              },
+      await server.db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          information: {
+            update: {
+              email: null,
             },
           },
-          include: {
-            information: true,
-          },
-        });
-      }
+        },
+        include: {
+          information: true,
+        },
+      });
     }
   }
 }

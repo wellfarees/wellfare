@@ -11,6 +11,7 @@ import editAppearance from "./editAppearance";
 import editInformation from "./editInformation";
 import verifyUser from "./verifyUser";
 import resendVerificationEmail from "./resendVerificationEmail";
+import restoreEmail from "./restoreEmail";
 import forgetPassword from "./resetPassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
@@ -33,6 +34,7 @@ const Mutation = {
   ...editInformation.Mutation,
   ...verifyUser.Mutation,
   ...resendVerificationEmail.Mutation,
+  ...restoreEmail.Mutation,
   ...forgetPassword.Mutation,
   ...addEmailToNewsletter.Mutation,
 };
