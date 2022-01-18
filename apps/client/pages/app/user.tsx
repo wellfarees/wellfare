@@ -185,7 +185,7 @@ const User = () => {
     variables: { token: jwt },
   });
 
-  const [editUserInformatiion, mutationProps] = useMutation<{
+  const [editUserInformation, mutationProps] = useMutation<{
     _;
     editInformation: Credentials;
   }>(EDIT_USER_INFORMATION);

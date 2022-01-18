@@ -11,8 +11,13 @@ import Input from "../../components/Input/LabeledInput";
 import { useForm } from "../../hooks/useForm";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
+import { useRouter } from "next/router";
+import { VALID_JWT } from "../../graphql/queries";
+import { CHANGE_PASSWORD } from "../../graphql/mutations";
+import { useQuery } from "@apollo/client";
 
 import { useMutation } from "@apollo/client";
+import { useEffect } from "react";
 // FIXME: WHY IS THE MUTATION CALL NOT IMPLEMENTED???
 
 const Wrapper = styled.div`
@@ -146,90 +151,129 @@ const PasswordReset: NextPage = () => {
   const handleErrors = useHandleFormErrors();
   const [result, setResult] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter();
+
+  const { data, loading } = useQuery<{
+    verifyJWT: {
+      success: boolean;
+    };
+  }>(VALID_JWT, {
+    variables: {
+      token: router.query.token,
+      type: "password",
+    },
+  });
+
+  const [changePassword, _] = useMutation<
+    {
+      changePassword: {
+        id;
+      };
+    },
+    { jwt: string; password: string }
+  >(CHANGE_PASSWORD);
 
   return (
     <Wrapper>
       <Container>
-        {true ? (
-          <div className="submission-block">
-            <header>
-              <h3>We got your back, let's reset the password</h3>
-              <p className="descr">
-                Here's your chance to regain access to your personal account.
-                Catch it!
-              </p>
-            </header>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const res = handleSubmit();
-                const { success, message, target } = handleErrors(res);
-                if (!success) {
-                  setSuccess("");
-                  target.forEach((input) => {
-                    input.style.background = "rgba(255, 179, 176, 0.2)";
-                  });
-                  setResult(message);
-                } else {
-                  const values = mapRefsIntoValues(res.refs);
-                  if (target) {
-                    if (
-                      values["password"] !== values["password confirmation"]
-                    ) {
-                      setSuccess("");
-                      res.refs[1].style.background = "rgba(255, 179, 176, 0.2)";
-                      setResult("Passwords do not match.");
-                    } else {
-                      res.refs.forEach((input) => {
-                        input.style.background = "#f6f6f6";
-                      });
-                      setResult("");
-                      setSuccess(
-                        "Your password has been successfully reset. You may now close this tab."
-                      );
-                    }
+        <div
+          style={{
+            display: loading
+              ? "none"
+              : data.verifyJWT.success
+              ? "flex"
+              : "none",
+          }}
+          className="submission-block"
+        >
+          <header>
+            <h3>We got your back, let's reset the password</h3>
+            <p className="descr">
+              Here's your chance to regain access to your personal account.
+              Catch it!
+            </p>
+          </header>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const res = handleSubmit();
+              const { success, message, target } = handleErrors(res);
+              if (!success) {
+                setSuccess("");
+                target.forEach((input) => {
+                  input.style.background = "rgba(255, 179, 176, 0.2)";
+                });
+                setResult(message);
+              } else {
+                const values = mapRefsIntoValues(res.refs);
+                if (target) {
+                  if (values["password"] !== values["password confirmation"]) {
+                    setSuccess("");
+                    res.refs[1].style.background = "rgba(255, 179, 176, 0.2)";
+                    setResult("Passwords do not match.");
+                  } else {
+                    changePassword({
+                      variables: {
+                        jwt: router.query.token as string,
+                        password: values.password,
+                      },
+                    });
+                    res.refs.forEach((input) => {
+                      input.style.background = "#f6f6f6";
+                    });
+                    setResult("");
+                    setSuccess(
+                      "Your password has been successfully reset. You may now close this tab."
+                    );
                   }
                 }
+              }
+            }}
+          >
+            <Input {...register("password")} />
+            <Input {...register("password confirmation")} />
+
+            <Button
+              withLoading={{
+                toBeLoading: false,
+                toModifyOnStateChange: {
+                  endingToReplace: "d",
+                  word: "Send",
+                  keepEnding: true,
+                },
               }}
             >
-              <Input {...register("password")} />
-              <Input {...register("password confirmation")} />
+              Reset now
+            </Button>
+          </form>
+          {(result || success) && (
+            <p className={success ? "success" : "error"}>{result || success}</p>
+          )}
+        </div>
 
-              <Button
-                withLoading={{
-                  toBeLoading: false,
-                  toModifyOnStateChange: {
-                    endingToReplace: "d",
-                    word: "Send",
-                    keepEnding: true,
-                  },
-                }}
-              >
-                Reset now
-              </Button>
-            </form>
-            {(result || success) && (
-              <p className={success ? "success" : "error"}>
-                {result || success}
-              </p>
-            )}
+        <div
+          style={{
+            display: loading
+              ? "none"
+              : data.verifyJWT.success
+              ? "none"
+              : "flex",
+          }}
+          className="failure"
+        >
+          <h1>
+            This verification link is <b>invalid</b>
+          </h1>
+          <div className="descr">
+            <p>
+              The link you clicked on has either expired or been faked. Please,
+              make sure you do not use links from unverified sources.
+            </p>
           </div>
-        ) : (
-          <div className="failure">
-            <h1>
-              This verification link is <b>invalid</b>
-            </h1>
-            <div className="descr">
-              <p>
-                The link you clicked on has either expired or been faked.
-                Please, make sure you do not use links from unverified sources.
-              </p>
-            </div>
-            <Link href="/">
-              <span>Return home</span>
-            </Link>
-          </div>
-        )}
+          <Link href="/">
+            <span>Return home</span>
+          </Link>
+        </div>
       </Container>
     </Wrapper>
   );

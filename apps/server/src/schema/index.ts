@@ -15,6 +15,8 @@ import resendVerificationEmail from "./resendVerificationEmail";
 import resetPassword from "./resetPassword";
 import restoreEmail from "./restoreEmail";
 import pfpUpload from "./pfpUpload";
+import verifyJWT from "./verifyJWT";
+import changePassword from "./changePassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
@@ -146,6 +148,8 @@ export default [
   resendVerificationEmail,
   resetPassword,
   restoreEmail,
+  changePassword,
+  verifyJWT,
   pfpUpload,
   addEmailToNewsletter,
   getUserInformationFromEmailToken,

@@ -22,7 +22,8 @@ export default {
 
       const verificationJWT = generateJWT({ id: data.id }, "password");
       const verificationURL = `${CLIENT_URL}auth/passwordreset?token=${verificationJWT}`;
-      server.mail.send({
+
+      await server.mail.send({
         from: process.env.EMAIL_ADDRESS!,
         to: data.information.email,
         subject: "Verify your email",
