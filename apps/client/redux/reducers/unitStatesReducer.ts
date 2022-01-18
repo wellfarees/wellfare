@@ -1,4 +1,3 @@
-import { ToggleSidebar } from "../actions";
 import { produce } from "immer";
 import { ActionType } from "../actions/actionTypes";
 import { Action } from "../actions";

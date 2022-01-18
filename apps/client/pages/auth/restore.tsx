@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Container } from "../../styled/reusable";
 import styled from "styled-components";
-import Link from "next/link";
-import { GlowingBLue } from "../../styled/reusable";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/LabeledInput";
 import { useForm } from "../../hooks/useForm";

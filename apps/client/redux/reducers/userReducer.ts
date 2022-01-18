@@ -33,8 +33,9 @@ export const userReducer = (
 ): UserState => {
   switch (action.type) {
     case ActionType.STORE_USER:
-      // store in cache
+      // store in local storage
       localStorage.setItem("jwt", action.payload.jwt);
+
       // save to the global state
       return {
         info: {

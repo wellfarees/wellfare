@@ -16,7 +16,7 @@ export const initModalReducer = (
         state = { content: state.content, open: action.payload.open };
         return state;
       }
-      // state.content = action.payload.content;
+
       return (state = action.payload);
 
     default:

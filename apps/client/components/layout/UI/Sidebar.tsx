@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSpring, animated, config } from "react-spring";
+import { useSpring, animated } from "react-spring";
 import { useEffect, useRef, MutableRefObject } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { themes } from "../../../styled/themes";
