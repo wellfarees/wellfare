@@ -190,13 +190,11 @@ const Wrapper = styled.div`
   }
 `;
 
-type ConfigProps = typeof userConfig;
 
-const Conf: NextPage<ConfigProps> = () => {
+const Conf: NextPage = () => {
   const { saveConfig } = useActions();
   const { user } = useTypedSelector((state) => state);
-  const [mutateAppearance, { data, loading, error }] =
-    useMutation(EDIT_USER_CONFIG);
+  const [mutateAppearance, { data, loading }] = useMutation(EDIT_USER_CONFIG);
 
   const mutateSpecificValue = (mutation: { [key: string]: any }) => {
     mutateAppearance({
@@ -275,12 +273,3 @@ const Conf: NextPage<ConfigProps> = () => {
 };
 
 export default Conf;
-
-export const getStaticProps: GetStaticProps<ConfigProps> = async () => {
-  return {
-    props: {
-      ...userConfig,
-    },
-    revalidate: 10,
-  };
-};
