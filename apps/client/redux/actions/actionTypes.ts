@@ -7,4 +7,5 @@ export enum ActionType {
   LOGOUT = "logout",
   SAVE_TOKEN = "saveToken",
   SAVE_CONFIG = "saveConfig",
+  SET_PFP = "savePfp",
 }

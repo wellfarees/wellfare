@@ -4,12 +4,14 @@ export interface UserConfig {
   fontSize: number;
   reducedMotion: boolean;
   theme: "dark" | "light";
+  pfp: string | null;
 }
 
 export const userConfig: UserConfig = {
   fontSize: 14,
   reducedMotion: false,
   theme: "light",
+  pfp: null,
 };
 
 // all dynamic font sizes, that derive from the base fontSize in userConfig

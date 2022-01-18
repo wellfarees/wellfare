@@ -1,5 +1,4 @@
 import { ActionType } from "./actionTypes";
-import { UserSchema } from "../../graphql/schemas";
 import { UserConfig } from "../../config/userConfig";
 
 export interface RetrieveLocalStorage {
@@ -42,6 +41,7 @@ export interface StoreUser {
         reducedMotion: boolean;
         fontSize: number;
       };
+      pfp: null | string;
       id: number;
     };
   };
@@ -62,6 +62,13 @@ export interface SaveConfig {
   payload: UserConfig;
 }
 
+export interface SetPfp {
+  type: ActionType.SET_PFP;
+  payload: {
+    url: string;
+  };
+}
+
 export type Action =
   | RetrieveLocalStorage
   | SetLocalStorage
@@ -70,4 +77,5 @@ export type Action =
   | StoreUser
   | Logout
   | SaveToken
-  | SaveConfig;
+  | SaveConfig
+  | SetPfp;

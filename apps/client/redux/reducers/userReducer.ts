@@ -1,4 +1,3 @@
-import { UserSchema } from "../../graphql/schemas";
 import { ActionType } from "../actions/actionTypes";
 import { Action } from "../actions";
 import { transformFetchedConfig } from "../../utils/transformFetchedConfig";
@@ -11,6 +10,7 @@ type UserState = {
       fontSize: number;
     };
     id: number;
+    pfp: null | string;
   } | null;
   jwt: string | null;
 };
@@ -21,6 +21,7 @@ const initialState: UserState = {
       reducedMotion: false,
       theme: "light",
     },
+    pfp: null,
     id: 0,
   },
   jwt: null,
@@ -52,10 +53,22 @@ export const userReducer = (
 
     case ActionType.SAVE_CONFIG:
       if (!state.info) {
-        return { ...state, info: { id: 0, config: action.payload } };
+        return {
+          ...state,
+          info: { id: 0, config: action.payload, pfp: action.payload.pfp },
+        };
       }
 
       return { ...state, info: { ...state.info, config: action.payload } };
+
+    case ActionType.SET_PFP:
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          pfp: action.payload.url,
+        },
+      };
 
     default:
       return state;

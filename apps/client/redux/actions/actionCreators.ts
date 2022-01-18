@@ -6,8 +6,8 @@ import {
   StoreUser,
   SaveToken,
   SaveConfig,
+  SetPfp,
 } from ".";
-import { UserSchema } from "../../graphql/schemas";
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
 
@@ -62,6 +62,7 @@ export const storeUser = (
       fontSize: number;
       reducedMotion: boolean;
     };
+    pfp: null | string;
   }
 ): StoreUser => {
   return {
@@ -91,5 +92,14 @@ export const saveConfig = (config: UserConfig): SaveConfig => {
   return {
     type: ActionType.SAVE_CONFIG,
     payload: config,
+  };
+};
+
+export const setPfp = (url: string | null): SetPfp => {
+  return {
+    type: ActionType.SET_PFP,
+    payload: {
+      url,
+    },
   };
 };

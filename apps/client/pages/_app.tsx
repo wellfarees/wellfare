@@ -25,7 +25,7 @@ const navStateContext = createContext<
 
 const ReduxMiddleComponent: React.FC = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
-  const { saveToken, saveConfig } = useActions();
+  const { saveToken, saveConfig, setPfp } = useActions();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -45,7 +45,9 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
         fontSize: data.getUser.config.fontSize,
         reducedMotion: data.getUser.config.reducedMotion,
         theme: data.getUser.config.darkMode ? "dark" : "light",
+        pfp: data.getUser.information.pfp,
       });
+      setPfp(data.getUser.information.pfp);
       setReady(true);
     }
   }, [loading, data, error]);
