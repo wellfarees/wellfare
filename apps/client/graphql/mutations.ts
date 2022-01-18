@@ -62,6 +62,7 @@ export const EDIT_USER_INFORMATION = gql`
     ) {
       dbid
       email
+      verified
     }
   }
 `;
