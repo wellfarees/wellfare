@@ -23,6 +23,7 @@ import {
 } from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import { UserPfp } from "../../components/Pfp/Pfp";
+import { useActions } from "../../hooks/useActions";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -171,6 +172,7 @@ const User = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const { jwt } = useTypedSelector((state) => state.user);
+  const { setPfp } = useActions();
 
   const { data, loading } = useQuery<{ getUser: { information: Credentials } }>(
     USER_INFORMATION_QUERY,
@@ -197,6 +199,12 @@ const User = () => {
   useEffect(() => {
     setInProgress(!inProgress);
   }, [isSaved]);
+
+  useEffect(() => {
+    if (uploadProps.data) {
+      setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime());
+    }
+  }, [uploadProps.loading]);
 
   const isImage = (type: string): boolean => {
     var ext = type.split("/")[1];
@@ -252,11 +260,6 @@ const User = () => {
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
   }, [mutationProps.loading]);
-  useEffect(() => {
-    if (uploadProps.data) {
-      console.log(uploadProps.data);
-    }
-  }, [uploadProps.loading]);
 
   return (
     <Wrapper>
@@ -367,13 +370,7 @@ const User = () => {
               <div className="profile-img">
                 <p className="name">Profile image</p>
                 <div className="pfp-block">
-                  <UserPfp
-                    url={
-                      uploadProps.data
-                        ? uploadProps.data.pfpUpload.location
-                        : null
-                    }
-                  />
+                  <UserPfp />
                   <label htmlFor="pfp-file" className="change-btn">
                     Change
                   </label>
@@ -384,20 +381,22 @@ const User = () => {
                         files: [file],
                       },
                     }) => {
-                      console.log(file);
                       validity.valid && uploadPfp({ variables: { file } });
                       if (!isImage(file.type)) {
                         scrollToBottom();
-
                         setError("File has to have a type of an image!");
                         return;
                       }
 
-                      if (file.size > 80000) {
-                        scrollToBottom();
+                      const fileSizeInMb = parseInt(
+                        (file.size / (1024 * 1024)).toFixed(2)
+                      );
 
+                      // image size limit
+                      if (fileSizeInMb > 5) {
+                        scrollToBottom();
                         setError(
-                          "Could not upload the file because size exceeds limit of 8MB."
+                          "Could not upload the file because size exceeds limit of 5MB."
                         );
                         return;
                       }

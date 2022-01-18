@@ -1,5 +1,5 @@
 import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { upload } from "../utils/s3/methods";
+import { uploadObject, deleteObject } from "../utils/s3/methods";
 import verifyJWT from "../utils/verifyJWT";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import { decodedToken } from "../types/jwt";
@@ -31,9 +31,27 @@ export default {
 
       let imageLocation = "";
       try {
-        const res = await upload(stream, data.uid, extension);
+        // delete the previous avatar
+        if (data.information.pfp) {
+          const targetFilename = /([^\/]+$)/.exec(data.information.pfp)[0];
+          await deleteObject(targetFilename);
+        }
+
+        const res = await uploadObject(stream, data.uid, extension);
         imageLocation = res.Location;
-        console.log(imageLocation);
+
+        await server.db.user.update({
+          where: {
+            id,
+          },
+          data: {
+            information: {
+              update: {
+                pfp: imageLocation,
+              },
+            },
+          },
+        });
       } catch (e) {
         throw new Error("Failed to upload avatar.");
       }

@@ -72,6 +72,10 @@ export const APPEARANCE_QUERY = gql`
         fontSize
         reducedMotion
       }
+      information {
+        dbid
+        pfp
+      }
     }
   }
 `;
@@ -192,6 +196,16 @@ export const GET_LAST_SUBMITTED = gql`
     getUser {
       id
       lastSubmitted
+    }
+  }
+`;
+
+export const GET_USER_PROFILE_PICTURE = gql`
+  query GetUserProfilePicture {
+    getUser {
+      information {
+        pfp
+      }
     }
   }
 `;
