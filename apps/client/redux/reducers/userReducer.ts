@@ -10,7 +10,7 @@ type UserState = {
       fontSize: number;
     };
     id: number;
-    pfp: null | string;
+    pfp?: null | string;
   } | null;
   jwt: string | null;
 };
@@ -55,7 +55,7 @@ export const userReducer = (
       if (!state.info) {
         return {
           ...state,
-          info: { id: 0, config: action.payload, pfp: action.payload.pfp },
+          info: { id: 0, config: action.payload },
         };
       }
 

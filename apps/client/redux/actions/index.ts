@@ -59,7 +59,7 @@ export interface SaveToken {
 
 export interface SaveConfig {
   type: ActionType.SAVE_CONFIG;
-  payload: UserConfig;
+  payload: Omit<UserConfig, "pfp">;
 }
 
 export interface SetPfp {

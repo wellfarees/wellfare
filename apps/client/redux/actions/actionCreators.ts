@@ -88,7 +88,7 @@ export const logout = () => {
   };
 };
 
-export const saveConfig = (config: UserConfig): SaveConfig => {
+export const saveConfig = (config: Omit<UserConfig, "pfp">): SaveConfig => {
   return {
     type: ActionType.SAVE_CONFIG,
     payload: config,
