@@ -7,7 +7,7 @@ import { useScreenSize } from "../../../hooks/useScreenSize";
 import { useEffect } from "react";
 import ExistsNot from "../../../components/ExistsNot";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { GET_RECORD } from "../../../graphql/queries";
 
 const Wrapper = styled.div`

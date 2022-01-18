@@ -6,7 +6,7 @@ import { fontSizes } from "../../../config/userConfig";
 import AdaptiveAnimation from "../../../components/animated/AdaptiveAnimation";
 import Link from "next/link";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { RECAP_LIST_QUERY } from "../../../graphql/queries";
 
 // TODO: Create monthly separators

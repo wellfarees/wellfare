@@ -12,7 +12,7 @@ import { useForm } from "../../hooks/useForm";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
 
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 
 const Wrapper = styled.div`
   min-height: 100vh;

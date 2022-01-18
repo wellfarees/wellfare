@@ -10,7 +10,7 @@ import { useState, useRef } from "react";
 import Button from "../../components/Button/Button";
 import { EDIT_AFFIRMATIONS } from "../../graphql/mutations";
 import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 
 const Wrapper = styled.div`

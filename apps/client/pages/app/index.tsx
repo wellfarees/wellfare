@@ -13,7 +13,7 @@ import { useRecap } from "../../hooks/useRecap";
 import Search from "../../components/Search/Search";
 
 import { USER_FEED_QUERY } from "../../graphql/queries";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 
 const Wrapper = styled.main`
   color: ${(props: any) => props.theme.mainColor};

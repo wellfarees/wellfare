@@ -14,7 +14,7 @@ import { GET_LAST_SUBMITTED } from "../graphql/queries";
 import ApolloClient from "../graphql/client";
 import AccountSuspended from "../components/AccountSuspended/AccountSuspended";
 
-import { useLazyQuery } from "@apollo/react-hooks";
+import { useLazyQuery } from "@apollo/client";
 import { LOGIN } from "../graphql/queries";
 
 const Wrapper = styled.main`

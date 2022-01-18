@@ -4,7 +4,6 @@ import { themes } from "../../styled/themes";
 import { ThemeProvider } from "styled-components";
 import { SpringContext } from "react-spring";
 import styled, { createGlobalStyle } from "styled-components";
-import { GetServerSideProps, NextPage } from "next";
 import { useEffect, useRef } from "react";
 import { useActions } from "../../hooks/useActions";
 import { useScreenSize } from "../../hooks/useScreenSize";
@@ -13,9 +12,6 @@ import Modal from "../../components/Modal/Modal";
 import { withAuthRequired } from "../../components/HOC/withAuthRequired";
 import { generateFontSizesFromBase } from "../../utils/generateFontSizesFromBase";
 import ClientOnly from "../ClientOnly";
-
-import { APPEARANCE_QUERY } from "../../graphql/queries";
-import { useLazyQuery } from "react-apollo";
 
 interface LayoutProps {
   loggedIn: boolean;
