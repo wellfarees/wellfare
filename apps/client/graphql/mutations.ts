@@ -107,7 +107,7 @@ export const ADD_RECORD = gql`
 export const SEND_RESET_PASSWORD = gql`
   mutation ResetPassword($email: String!) {
     resetPassword(email: $email) {
-      success
+      id
     }
   }
 `;
@@ -135,6 +135,14 @@ export const UPLOAD_PFP = gql`
   mutation PfpUpload($file: Upload!) {
     pfpUpload(image: $file) {
       location
+    }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation ChangePassword($password: String!, $jwt: String!) {
+    changePassword(password: $password, jwt: $jwt) {
+      id
     }
   }
 `;

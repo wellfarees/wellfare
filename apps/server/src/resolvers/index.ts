@@ -14,6 +14,8 @@ import resendVerificationEmail from "./resendVerificationEmail";
 import restoreEmail from "./restoreEmail";
 import pfpUpload from "./pfpUpload";
 import forgetPassword from "./resetPassword";
+import verifyJWT from "./verifyJWT";
+import changePassword from "./changePassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 
@@ -24,6 +26,7 @@ const Query = {
   ...getRecap.Query,
   ...getRecord.Query,
   ...login.Query,
+  ...verifyJWT.Query,
   ...getUserInformationFromEmailToken.Query,
 };
 
@@ -37,6 +40,7 @@ const Mutation = {
   ...resendVerificationEmail.Mutation,
   ...restoreEmail.Mutation,
   ...forgetPassword.Mutation,
+  ...changePassword.Mutation,
   ...addEmailToNewsletter.Mutation,
   ...pfpUpload.Mutation,
 };

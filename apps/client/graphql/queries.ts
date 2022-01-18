@@ -111,6 +111,7 @@ export const GET_FIRST_NAME = gql`
     getUser {
       id
       information {
+        dbid
         firstName
       }
     }
@@ -123,6 +124,7 @@ export const USER_FEED_QUERY = gql`
       id
       lastSubmitted
       information {
+        dbid
         firstName
       }
       records {
@@ -204,8 +206,17 @@ export const GET_USER_PROFILE_PICTURE = gql`
   query GetUserProfilePicture {
     getUser {
       information {
+        dbid
         pfp
       }
+    }
+  }
+`;
+
+export const VALID_JWT = gql`
+  query VerifyJWT($token: String!, $type: String!) {
+    verifyJWT(token: $token, type: $type) {
+      success
     }
   }
 `;

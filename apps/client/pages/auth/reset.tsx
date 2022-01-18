@@ -123,11 +123,13 @@ const Reset: NextPage = () => {
             <h3>Wellfare shall help with your problem</h3>
             <p className="descr">
               Just enter your email and we will send you an email with further
-              email reset instructions.
+              password reset instructions.
             </p>
           </header>
           <form
             onSubmit={async (e) => {
+              setResult("");
+              setSuccess("");
               e.preventDefault();
               const res = handleSubmit();
               const { success, message, target } = handleErrors(res);
@@ -139,7 +141,10 @@ const Reset: NextPage = () => {
                 const values = mapRefsIntoValues(res.refs);
 
                 try {
-                  await sendResetEmail({ variables: { email: values.Email } });
+                  console.log(values.Email);
+                  await sendResetEmail({
+                    variables: { email: values.Email },
+                  });
                   res.refs.forEach((input) => {
                     input.style.background = "#f6f6f6";
                   });

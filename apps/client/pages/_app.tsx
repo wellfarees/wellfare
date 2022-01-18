@@ -45,7 +45,6 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
         fontSize: data.getUser.config.fontSize,
         reducedMotion: data.getUser.config.reducedMotion,
         theme: data.getUser.config.darkMode ? "dark" : "light",
-        pfp: data.getUser.information.pfp,
       });
       setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
