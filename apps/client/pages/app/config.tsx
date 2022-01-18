@@ -206,7 +206,6 @@ const Conf: NextPage<ConfigProps> = () => {
   };
 
   // TODO: Solve the reactive reduced motion problem by calling the mutation on component's unmounting lifecycle (useEffect cleanup function)
-
   useEffect(() => {
     if (data) {
       saveConfig(transformFetchedConfig(data.editAppearance.config));
@@ -260,7 +259,7 @@ const Conf: NextPage<ConfigProps> = () => {
                 max={19}
                 renderTrack={Track}
                 className="slider"
-                defaultValue={user.info?.config.fontSize}
+                value={user.info?.config.fontSize}
                 marks={[14, 15, 16, 17, 18, 19]}
                 onChange={(val) => {
                   mutateSpecificValue({ fontSize: val });
