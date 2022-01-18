@@ -4,6 +4,11 @@ import verifyJWT from "../utils/verifyJWT";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import { decodedToken } from "../types/jwt";
 import server from "../server";
+import { createWriteStream, unlinkSync } from "fs";
+import path from "path";
+import imagemin from "imagemin";
+import imageminJpegtran from "imagemin-jpegtran";
+import imageminPngquant from "imagemin-pngquant";
 
 export default {
   Upload: GraphQLUpload,
@@ -37,9 +42,35 @@ export default {
           await deleteObject(targetFilename);
         }
 
-        const res = await uploadObject(stream, data.uid, extension);
+        // save the image file locally
+        await new Promise((res) =>
+          stream
+            .pipe(
+              createWriteStream(
+                path.join(__dirname, "../../images", `${data.uid}${extension}`)
+              )
+            )
+            .on("close", res)
+        );
+
+        // compress / minify the image
+        const files = await imagemin([`images/${data.uid}${extension}`], {
+          plugins: [
+            imageminJpegtran(),
+            imageminPngquant({
+              quality: [0.4, 0.5],
+            }),
+          ],
+        });
+
+        // store in aws s3
+        const res = await uploadObject(files[0].data, data.uid, extension);
         imageLocation = res.Location;
 
+        // delete the local file
+        unlinkSync(
+          path.join(__dirname, "../../images/" + `${data.uid}${extension}`)
+        );
         await server.db.user.update({
           where: {
             id,

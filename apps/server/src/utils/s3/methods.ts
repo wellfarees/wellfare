@@ -1,16 +1,16 @@
 import { s3, bucketName } from ".";
-import { ReadStream } from "fs-capacitor";
 import { ManagedUpload } from "aws-sdk/clients/s3";
+import { Buffer } from "buffer";
 
 export const uploadObject = async (
-  stream: ReadStream,
+  body: Buffer,
   uid: string,
   extension: string
 ): Promise<ManagedUpload.SendData> => {
   return s3
     .upload({
       Bucket: bucketName,
-      Body: stream,
+      Body: body,
       Key: uid + extension,
     })
     .promise();

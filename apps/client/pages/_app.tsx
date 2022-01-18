@@ -47,7 +47,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
         theme: data.getUser.config.darkMode ? "dark" : "light",
         pfp: data.getUser.information.pfp,
       });
-      setPfp(data.getUser.information.pfp);
+      setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
     }
   }, [loading, data, error]);
