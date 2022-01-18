@@ -15,6 +15,7 @@ const Pfp: React.FC<PfpProps> = ({ url }) => {
     cursor: pointer;
     background-image: url(${url});
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
   `;
 
