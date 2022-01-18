@@ -111,9 +111,6 @@ const PrivateRoute: React.FC = ({ children }) => {
 const AuthRoute = withAuthRequired(PrivateRoute);
 
 const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
-  // TODO: Replace with actual graphql / redux data
-  // -> basically instead of showing full UI, inquires user to journal their day first (so there's no typical UI layout, just the bare minimum)
-  // newDay determines whether or not we enter the REAL layout
   const router = useRouter();
   const size = useScreenSize();
   const isMobileOnly = /app\/records\/\[id\]+/.test(router.pathname);

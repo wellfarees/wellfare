@@ -89,7 +89,6 @@ const Verify: NextPage = () => {
       if (token) {
         try {
           await verifyUser({ variables: { token } });
-          // TODO: Implement additional user information when support for decoding these type of tokens is added to the backend
         } catch (e) {}
       }
     })();

@@ -1,4 +1,3 @@
-import { retrieveLocalStorage } from "../actions/actionCreators";
 import { Action } from "../actions";
 import { ActionType } from "../actions/actionTypes";
 import produce from "immer";
