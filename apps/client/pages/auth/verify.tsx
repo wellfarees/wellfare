@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { GlowingBLue } from "../../styled/reusable";
 
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { VERIFY_USER } from "../../graphql/mutations";
 
 const Wrapper = styled.div`

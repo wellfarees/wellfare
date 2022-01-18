@@ -9,7 +9,7 @@ import {
   useEffect,
 } from "react";
 import type { AppProps } from "next/app";
-import { ApolloProvider, useLazyQuery } from "react-apollo";
+import { ApolloProvider, useLazyQuery } from "@apollo/client";
 import client from "../graphql/client";
 import Layout from "../components/layout/Layout";
 import "@fortawesome/fontawesome-free/css/all.min.css";

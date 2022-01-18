@@ -15,7 +15,7 @@ import {
   ResultingObject,
 } from "../../utils/mapRefsIntoValues";
 
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   EDIT_USER_INFORMATION,
   RESEND_VERIFICATION,

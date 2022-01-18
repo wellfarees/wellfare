@@ -7931,9 +7931,9 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo@^3.1.5:
+@apollo/client@^3.1.5:
   version "3.1.5"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-3.1.5.tgz#36692d393c47e7ccc37f0a885c7cc5a8b4961c91"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/@apollo/client-3.1.5.tgz#36692d393c47e7ccc37f0a885c7cc5a8b4961c91"
   integrity sha512-xOxMqxORps+WHrUYbjVHPliviomefOpu5Sh35oO3osuOyPTxvrljdfTLGCggMhcXBsDljtS5Oy4g+ijWg3D4JQ==
   dependencies:
     "@apollo/react-common" "^3.1.4"

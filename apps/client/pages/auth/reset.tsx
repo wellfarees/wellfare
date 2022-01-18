@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
 
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { SEND_RESET_PASSWORD } from "../../graphql/mutations";
 
 const Wrapper = styled.div`

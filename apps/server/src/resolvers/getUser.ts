@@ -9,10 +9,13 @@ import differenceInHours from "date-fns/differenceInHours";
 export default {
   Query: {
     getUser: async (_: unknown, _args: null, headers: { token?: string }) => {
-      if (!headers.token)
-        return new NoTokenInHeaderError(
+      if (!headers.token) {
+        console.log(headers.token);
+        throw new NoTokenInHeaderError(
           "No token was found in the header. Please provide in Authorization header."
         );
+      }
+
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 

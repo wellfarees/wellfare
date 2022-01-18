@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
 
 // GraphQL
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutations";
 
 // Redux

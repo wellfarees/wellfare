@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useLazyQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { gql } from "graphql-tag";
 
 const GET_USER_OBJECT = gql`
@@ -17,12 +17,9 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
   const ComposedComponent: React.FC<Props> = (props) => {
     const [verified, setVerified] = useState<null | boolean>(false);
     const router = useRouter();
-    const [validateJwt, { loading, error, data }] =
-      useLazyQuery(GET_USER_OBJECT);
-
-    useEffect(() => {
-      validateJwt();
-    }, []);
+    const { loading, error, data } = useQuery(GET_USER_OBJECT, {
+      fetchPolicy: "network-only",
+    });
 
     useEffect(() => {
       if (loading) return;
@@ -34,7 +31,7 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
       if (error) {
         router.push("/signin");
       }
-    }, [loading, data, error]);
+    }, [loading]);
 
     return loading || !verified ? <></> : <ChildComponent {...props} />;
   };

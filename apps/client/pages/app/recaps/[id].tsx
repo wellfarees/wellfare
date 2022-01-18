@@ -12,7 +12,7 @@ import { mapRecordsToJsx } from "../../../utils/mapRecordsToJsx";
 import { RecordsData } from "../../../components/Records/RecordTypes";
 import ExistsNot from "../../../components/ExistsNot";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { GET_RECAP } from "../../../graphql/queries";
 
 const Wrapper = styled.div`

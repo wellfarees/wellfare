@@ -9,7 +9,7 @@ import { GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
 
 import { useActions } from "../../hooks/useActions";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { transformFetchedConfig } from "../../utils/transformFetchedConfig";

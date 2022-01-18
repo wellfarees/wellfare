@@ -13,7 +13,7 @@ import Button from "../../components/Button/Button";
 
 import { ADD_RECORD } from "../../graphql/mutations";
 import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
-import { useMutation, useQuery, useLazyQuery } from "react-apollo";
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 
 const Wrapper = styled.main`
   min-height: 100vh;
