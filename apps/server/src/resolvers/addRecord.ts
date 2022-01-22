@@ -27,7 +27,7 @@ export default {
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
       const emoji = args.emoji;
       if (emoji && !isEmoji(emoji)) {
         throw new InvalidEmojiError(

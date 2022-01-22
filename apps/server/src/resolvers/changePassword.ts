@@ -11,7 +11,7 @@ export default {
     ) => {
       const dToken = verifyJWT(args.jwt, "password");
 
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
       const newPassword = await hash(args.password, 10);
       const data = await server.db.user.update({
         where: {

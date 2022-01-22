@@ -16,21 +16,20 @@ model Subscription {
 }
 
 model User {
-  id               Int           @id @unique @default(autoincrement())
-  uid              String        @unique @default(cuid())
+  id               String        @id @unique @default(cuid())
   config           Configuration @relation(fields: [configurationId], references: [id])
   records          Record[]
-  information      Information   @relation(fields: [informationId], references: [dbid])
   informationId    String
   affirmations     String?
   configurationId  String
   recaps           Recap[]
   lastIndex        Int?
   emailLastUpdated DateTime      @default(now())
+  information      Information   @relation(fields: [informationId], references: [id])
 }
 
 model Information {
-  dbid                 String         @id @unique @default(cuid())
+  id                   String         @id @unique @default(cuid())
   firstName            String
   lastName             String
   email                String?
@@ -55,7 +54,7 @@ model ChangedEmail {
   id              Int          @id @default(autoincrement())
   address         String
   set             DateTime
-  Information     Information? @relation(fields: [informationDbid], references: [dbid])
+  Information     Information? @relation(fields: [informationDbid], references: [id])
   informationDbid String?
 }
 
@@ -66,10 +65,10 @@ model Record {
   gratefulness String
   emoji        String
   feelings     String
-  User         User?    @relation(fields: [userId], references: [id])
-  userId       Int?
-  Recap        Recap?   @relation(fields: [recapId], references: [id])
+  userId       String
   recapId      Int?
+  User         User     @relation(fields: [userId], references: [id])
+  Recap        Recap?   @relation(fields: [recapId], references: [id])
 }
 
 model Recap {
@@ -79,7 +78,7 @@ model Recap {
   description String
   records     Record[]
   User        User?    @relation(fields: [userId], references: [id])
-  userId      Int?
+  userId      String
 }
 
 model Newsletter {

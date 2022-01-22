@@ -42,7 +42,7 @@ export default {
 
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
 
       const data = await server.db.user.findFirst({
         where: {

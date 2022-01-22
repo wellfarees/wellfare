@@ -10,7 +10,7 @@ export default {
     verifyUser: async (_: unknown, args: { token: string }) => {
       const dToken = verifyJWT(args.token, "verification");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
 
       const data = await server.db.user.findFirst({
         where: {
