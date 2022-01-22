@@ -41,7 +41,7 @@ const root = gql`
 
   type lastSubmittedUser {
     lastSubmitted: Float
-    id: Int!
+    id: String!
     config: Configuration!
     configurationId: String!
     records: [Record]!
@@ -55,7 +55,7 @@ const root = gql`
 
   # Database types
   type User {
-    id: Int!
+    id: String!
     config: Configuration!
     configurationId: String!
     records: [Record]!
@@ -68,7 +68,7 @@ const root = gql`
   }
 
   type Information {
-    dbid: String!
+    id: String!
     firstName: String!
     lastName: String!
     email: String!

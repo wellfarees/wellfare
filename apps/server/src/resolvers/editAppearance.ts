@@ -31,7 +31,7 @@ export default {
         updateData.reducedMotion = args.reducedMotion;
       if (args.fontSize) updateData.fontSize = args.fontSize;
 
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
 
       return await server.db.user.update({
         where: {

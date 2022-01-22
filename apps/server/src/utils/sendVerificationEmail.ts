@@ -5,7 +5,7 @@ import { CLIENT_URL } from "../endpoints";
 export const sendVerificationEmai = async (
   email: string,
   name: string,
-  id: number
+  id: string
 ): Promise<void> => {
   const verificationJWT = generateJWT({ id }, "verification");
   const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;

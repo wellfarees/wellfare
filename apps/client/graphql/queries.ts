@@ -28,6 +28,7 @@ export const LOGIN = gql`
           email
           firstName
           lastName
+          pfp
         }
         records {
           id
@@ -53,6 +54,7 @@ export const GET_USER = gql`
         email
         firstName
         lastName
+        pfp
       }
       records {
         id
@@ -73,8 +75,8 @@ export const APPEARANCE_QUERY = gql`
         reducedMotion
       }
       information {
-        dbid
         pfp
+        firstName
       }
     }
   }
@@ -89,6 +91,7 @@ export const USER_INFORMATION_QUERY = gql`
         lastName
         email
         verified
+        pfp
       }
     }
   }
@@ -101,6 +104,7 @@ export const AFFIRMATIONS_QUERY = gql`
       affirmations
       information {
         firstName
+        pfp
       }
     }
   }
@@ -111,8 +115,9 @@ export const GET_FIRST_NAME = gql`
     getUser {
       id
       information {
-        dbid
+        id
         firstName
+        pfp
       }
     }
   }
@@ -124,8 +129,8 @@ export const USER_FEED_QUERY = gql`
       id
       lastSubmitted
       information {
-        dbid
         firstName
+        pfp
       }
       records {
         date
@@ -206,8 +211,8 @@ export const GET_USER_PROFILE_PICTURE = gql`
   query GetUserProfilePicture {
     getUser {
       information {
-        dbid
         pfp
+        firstName
       }
     }
   }

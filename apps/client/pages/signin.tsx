@@ -236,7 +236,7 @@ const SignIn = () => {
     const { error, data } = queryProps;
 
     if (error) {
-      const gqlError = error.graphQLErrors[0].message;
+      const gqlError = error.graphQLErrors[0]?.message || error.message;
       if (gqlError === "Account suspended.") {
         initModal(true, <AccountSuspended email={emailUsed} />);
       }

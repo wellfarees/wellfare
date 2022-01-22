@@ -20,13 +20,12 @@ export default {
     ) => {
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
-      const id = Number((dToken as decodedToken).id);
+      const id = (dToken as decodedToken).id;
 
       const data = await server.db.user.findFirst({
         where: { id },
         select: {
           information: true,
-          uid: true,
         },
       });
 
@@ -47,14 +46,14 @@ export default {
           stream
             .pipe(
               createWriteStream(
-                path.join(__dirname, "../../images", `${data.uid}${extension}`)
+                path.join(__dirname, "../../images", `${id}${extension}`)
               )
             )
             .on("close", res)
         );
 
         // compress / minify the image
-        const files = await imagemin([`images/${data.uid}${extension}`], {
+        const files = await imagemin([`images/$}${extension}`], {
           plugins: [
             imageminJpegtran(),
             imageminPngquant({
@@ -64,13 +63,11 @@ export default {
         });
 
         // store in aws s3
-        const res = await uploadObject(files[0].data, data.uid, extension);
+        const res = await uploadObject(files[0].data, id, extension);
         imageLocation = res.Location;
 
         // delete the local file
-        unlinkSync(
-          path.join(__dirname, "../../images/" + `${data.uid}${extension}`)
-        );
+        unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
         await server.db.user.update({
           where: {
             id,

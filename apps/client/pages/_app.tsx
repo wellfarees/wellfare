@@ -27,6 +27,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const { saveToken, saveConfig, setPfp } = useActions();
   const [ready, setReady] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -38,6 +39,8 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (!router.pathname.includes("app")) return;
+
     const jwt = localStorage.getItem("jwt");
     if (data) {
       saveToken(jwt);
@@ -49,7 +52,10 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
     }
-  }, [loading, data, error]);
+    if (error) {
+      console.error(error);
+    }
+  }, [loading, data, error, router.pathname]);
   return ready ? <>{children}</> : <></>;
 };
 
