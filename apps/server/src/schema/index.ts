@@ -18,7 +18,10 @@ import pfpUpload from "./pfpUpload";
 import verifyJWT from "./verifyJWT";
 import changePassword from "./changePassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
+import getAcessToken from "./getAcessToken";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
+import oauthLogin from "./oauth/login";
+import oauthSignup from "./oauth/siginup";
 
 const root = gql`
   # Base types
@@ -129,6 +132,10 @@ const root = gql`
   type Location {
     location: String!
   }
+
+  type Token {
+    token: String!
+  }
 `;
 
 export default [
@@ -150,7 +157,10 @@ export default [
   restoreEmail,
   changePassword,
   verifyJWT,
+  getAcessToken,
   pfpUpload,
   addEmailToNewsletter,
   getUserInformationFromEmailToken,
+  oauthLogin,
+  oauthSignup,
 ];

@@ -225,3 +225,19 @@ export const VALID_JWT = gql`
     }
   }
 `;
+
+export const GET_GOOGLE_ACCESS_TOKEN = gql`
+  query GetAccessToken($code: String!, $service: String!) {
+    getAccessToken(code: $code, service: $service) {
+      token
+    }
+  }
+`;
+
+export const OAUTH_LOGIN = gql`
+  query OAuthLogin($service: String!, $token: String!) {
+    oAuthLogin(service: $service, token: $token) {
+      id
+    }
+  }
+`;

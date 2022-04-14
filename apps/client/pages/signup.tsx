@@ -9,6 +9,7 @@ import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
+import { GOOGLE_AUTH_LINK } from "../constants";
 
 // GraphQL
 import { useMutation } from "@apollo/client";
@@ -400,10 +401,12 @@ const SignUp = () => {
               <i className="fab fa-apple"></i>
               AppleId
             </div>
-            <div className="method">
-              <i className="fab fa-google"></i>
-              Google
-            </div>
+            <Link href={GOOGLE_AUTH_LINK}>
+              <div className="method">
+                <i className="fab fa-google"></i>
+                Google
+              </div>
+            </Link>
           </div>
           <p className="form-cta">
             Already been here?{" "}
