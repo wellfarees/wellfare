@@ -37,7 +37,7 @@ export default {
       const publicAlgoliaKey = client.generateSecuredApiKey(
         process.env.ALGOLIA_SEARCH!,
         {
-          filters: `visible_by=${userData.id}`,
+          filters: `visible_by:"${userData.id}"`,
         }
       );
 

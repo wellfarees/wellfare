@@ -25,7 +25,8 @@ model User {
   recaps           Recap[]
   lastIndex        Int?
   emailLastUpdated DateTime      @default(now())
-  information      Information   @relation(fields: [informationId], references: [id])
+  information      Information?  @relation(fields: [informationId], references: [id])
+  OAuthEmail       String?
 }
 
 model Information {

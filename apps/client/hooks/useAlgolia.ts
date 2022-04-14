@@ -9,7 +9,7 @@ export const useAlgolia = (): ReturnClient => {
   useEffect(() => {
     const searchKey = localStorage.getItem("algolia-search");
     if (!searchKey) throw new Error("Algolia search key is not present.");
-    setClient(algoliasearch("0KJ0CAO9FH", searchKey));
+    setClient(algoliasearch("4EDTXBAU9Q", searchKey));
   }, []);
 
   return client;

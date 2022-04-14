@@ -51,6 +51,7 @@
     "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
     "aws-sdk": "^2.1058.0",
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cron": "^1.8.2",
     "date-fns": "^2.27.0",
