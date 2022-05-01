@@ -98,7 +98,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
     }
-  }, [oAuthUserProps.loading, router.pathname]);
+  }, [oAuthUserProps.loading]);
 
   return ready ? <>{children}</> : <></>;
 };
