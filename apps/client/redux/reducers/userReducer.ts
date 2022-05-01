@@ -33,21 +33,29 @@ export const userReducer = (
 ): UserState => {
   switch (action.type) {
     case ActionType.STORE_USER:
+      // clear out the localstorage first
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("sync-type");
+
       // store in local storage
       localStorage.setItem("jwt", action.payload.jwt);
+      localStorage.setItem("sync-type", action.payload.type);
 
       // save to the global state
       return {
         info: {
           ...action.payload.user,
           config: transformFetchedConfig(action.payload.user.config),
+          pfp: action.payload.user.pfp,
         },
         jwt: action.payload.jwt,
       };
 
     case ActionType.LOGOUT:
       localStorage.removeItem("jwt");
-      return (state = initialState);
+      localStorage.removeItem("sync-type");
+
+      return initialState;
 
     case ActionType.SAVE_TOKEN:
       return { ...state, jwt: action.payload };

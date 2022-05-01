@@ -42,6 +42,11 @@ const root = gql`
     publicAlgoliaKey: String!
   }
 
+  type oAuthUser {
+    user: User!
+    publicAlgoliaKey: String!
+  }
+
   type lastSubmittedUser {
     lastSubmitted: Float
     id: String!
@@ -54,6 +59,7 @@ const root = gql`
     recaps: [Recap!]
     lastIndex: Int
     emailLastUpdated: Float!
+    OAuthEmail: String
   }
 
   # Database types
@@ -68,13 +74,14 @@ const root = gql`
     recaps: Recap!
     lastIndex: Int
     emailLastUpdated: Float!
+    OAuthEmail: String
   }
 
   type Information {
     id: String!
     firstName: String!
     lastName: String!
-    email: String!
+    email: String
     password: String!
     verified: Boolean!
     pfp: String

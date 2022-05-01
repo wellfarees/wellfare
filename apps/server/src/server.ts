@@ -12,9 +12,59 @@ import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { graphqlUploadExpress } from "graphql-upload";
+import { login } from "./utils/oauth/login";
+import generateJWT from "./utils/generateJWT";
+import verifyJWT from "./utils/verifyJWT";
+import { JwtPayload } from "jsonwebtoken";
 
 const app = express();
 app.use(graphqlUploadExpress());
+app.use(async (req, res, next) => {
+  const auth = req.headers.authorization;
+  if (!auth || auth.split("").length < 2) {
+    next();
+    return;
+  }
+
+  const [type, token] = auth.split(" ") as [
+    "apple" | "google" | "native",
+    string
+  ];
+
+  if (token == "null") {
+    next();
+    return;
+  }
+
+  if (type == "native") {
+    req.headers.authorization = token;
+    next();
+    return;
+  }
+
+  if (type == "apple" || type == "google") {
+    const pureToken = verifyJWT(token, "client") as JwtPayload;
+    const credentials = await login(type, pureToken.id);
+
+    const user = await server.db.user.findFirst({
+      where: {
+        OAuthEmail: credentials.email,
+      },
+    });
+
+    if (!user) {
+      next();
+      return;
+    }
+
+    if (user) {
+      const nativeJWT = generateJWT({ id: user.id }, "client");
+      req.headers.authorization = nativeJWT;
+    }
+  }
+
+  next();
+});
 const httpServer = http.createServer(app);
 
 class Server extends ApolloServer {

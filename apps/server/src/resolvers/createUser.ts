@@ -24,6 +24,8 @@ export default {
         },
       });
 
+      console.log(data);
+
       if (data) throw new UserExistsError("Email already exists in database.");
       else {
         const nameArray = args.name.split(" ");

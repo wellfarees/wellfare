@@ -2,6 +2,7 @@ import server from "../../server";
 import verifyJWT from "../../utils/verifyJWT";
 import { login } from "../../utils/oauth/login";
 import { JwtPayload } from "jsonwebtoken";
+import { client } from "../../algolia";
 
 export default {
   Query: {
@@ -18,14 +19,14 @@ export default {
       // perform obligotary checks
 
       // check if user exists with the email
-      const possbileUser = server.db.user.findFirst({
+      const possbileUser = await server.db.user.findFirst({
         where: {
           information: {
             associatedEmail: credentials.email,
           },
           AND: {
             information: {
-              NOT: null,
+              isNot: null,
             },
           },
         },
@@ -37,19 +38,67 @@ export default {
         );
       }
 
-      const user = server.db.user.findFirst({
+      const user = await server.db.user.findFirst({
         where: {
           OAuthEmail: credentials.email,
         },
+        include: {
+          information: true,
+          config: true,
+        },
       });
 
+      console.log(user);
+
       if (!user) {
-        throw new Error(
-          "User with the email associated with such login method was not found."
+        const userData = await server.db.user.create({
+          data: {
+            information: {
+              create: {
+                lastName: credentials.lastName,
+                firstName: credentials.firstName,
+                email: credentials.email,
+                associatedEmail: null,
+                verified: true,
+                pfp: credentials.pfp,
+              },
+            },
+            OAuthEmail: credentials.email,
+            config: {
+              create: {
+                darkMode: false,
+                fontSize: 14,
+                reducedMotion: false,
+              },
+            },
+            recaps: undefined,
+          },
+
+          include: {
+            information: true,
+            config: true,
+            records: true,
+          },
+        });
+
+        const publicAlgoliaKey = client.generateSecuredApiKey(
+          process.env.ALGOLIA_SEARCH!,
+          {
+            filters: `visible_by:${userData.id}`,
+          }
         );
+
+        return { user: userData, publicAlgoliaKey };
       }
 
-      // return the user if eveything's successful
+      const publicAlgoliaKey = client.generateSecuredApiKey(
+        process.env.ALGOLIA_SEARCH!,
+        {
+          filters: `visible_by:${user.id}`,
+        }
+      );
+
+      return { user, publicAlgoliaKey };
     },
   },
 };

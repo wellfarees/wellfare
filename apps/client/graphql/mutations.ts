@@ -60,7 +60,7 @@ export const EDIT_USER_INFORMATION = gql`
       email: $email
       changePassword: $changePassword
     ) {
-      dbid
+      id
       email
       verified
     }

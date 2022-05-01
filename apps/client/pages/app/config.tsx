@@ -3,9 +3,9 @@ import styled from "styled-components";
 import Toggle from "react-toggle";
 import "react-toggle/style.css"; // for ES6 modules
 import ReactSlider from "react-slider";
-import { userConfig, fontSizes } from "../../config/userConfig";
+import { fontSizes } from "../../config/userConfig";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
-import { GetStaticProps, NextPage } from "next";
+import { NextPage } from "next";
 import { useEffect } from "react";
 
 import { useActions } from "../../hooks/useActions";
@@ -189,7 +189,6 @@ const Wrapper = styled.div`
     }
   }
 `;
-
 
 const Conf: NextPage = () => {
   const { saveConfig } = useActions();

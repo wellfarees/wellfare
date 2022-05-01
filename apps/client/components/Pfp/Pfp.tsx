@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useEffect } from "react";
 
 interface PfpProps {
   url: string;
@@ -30,11 +29,7 @@ const Pfp: React.FC<PfpProps> = ({ url }) => {
 
 const UserPfp: React.FC = () => {
   const { pfp } = useTypedSelector((state) => state.user).info;
-
-  useEffect(() => {
-    console.log(pfp);
-  }, [pfp]);
-  return <Pfp url={pfp} />;
+  return <Pfp url={pfp || "/img/mesh-gradient.png"} />;
 };
 
 export default Pfp;

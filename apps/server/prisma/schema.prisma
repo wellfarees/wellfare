@@ -25,7 +25,7 @@ model User {
   recaps           Recap[]
   lastIndex        Int?
   emailLastUpdated DateTime      @default(now())
-  information      Information?  @relation(fields: [informationId], references: [id])
+  information      Information   @relation(fields: [informationId], references: [id])
   OAuthEmail       String?
 }
 
@@ -34,10 +34,10 @@ model Information {
   firstName            String
   lastName             String
   email                String?
-  associatedEmail      String
+  associatedEmail      String?
   emailsUsed           ChangedEmail[]
   reconfirmationNeeded Boolean        @default(false)
-  password             String
+  password             String?
   verified             Boolean        @default(false)
   pfp                  String?
   User                 User[]
