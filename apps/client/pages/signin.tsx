@@ -251,7 +251,7 @@ const SignIn = () => {
     if (data) {
       setError(null);
       const { jwt, user, publicAlgoliaKey } = data.login;
-      storeUser(jwt, user);
+      storeUser("native", jwt, user);
       setSignedIn(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
       (async () => {

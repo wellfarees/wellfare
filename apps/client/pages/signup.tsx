@@ -318,7 +318,7 @@ const SignUp = () => {
       setError(null);
 
       const { jwt, user, publicAlgoliaKey } = data.createUser;
-      storeUser(jwt, user);
+      storeUser("native", jwt, user);
       setSignedUp(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
 

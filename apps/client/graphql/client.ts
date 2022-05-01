@@ -3,17 +3,23 @@ import { setContext } from "@apollo/client/link/context";
 import { SERVER_URL } from "../endpoints";
 import { createUploadLink } from "apollo-upload-client";
 
+const getSyncInfo = (): [string | null, string | null] => {
+  return [localStorage.getItem("jwt"), localStorage.getItem("sync-type")];
+};
+
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  let token: null | string = null;
+  let [token, serviceType] = getSyncInfo();
   try {
-    token = localStorage.getItem("jwt");
+    while (!serviceType && token) {
+      [token, serviceType] = getSyncInfo();
+    }
   } catch (e) {}
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token || "",
+      authorization: `${serviceType} ${token}` || "",
     },
   };
 });

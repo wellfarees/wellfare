@@ -54,6 +54,7 @@ export const initModal = (open: boolean, content?: JSX.Element): InitModal => {
 
 // FIXME: figure out what to do with the id: string and reducedMotion | theme interferences
 export const storeUser = (
+  type: "native" | "apple" | "google",
   jwt: string,
   user: {
     id: number;
@@ -68,6 +69,7 @@ export const storeUser = (
   return {
     type: ActionType.STORE_USER,
     payload: {
+      type,
       jwt,
       user,
     },

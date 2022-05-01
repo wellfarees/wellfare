@@ -35,6 +35,7 @@ export interface StoreUser {
   type: ActionType.STORE_USER;
   payload: {
     jwt: string;
+    type: "native" | "apple" | "google";
     user: {
       config: {
         darkMode: boolean;

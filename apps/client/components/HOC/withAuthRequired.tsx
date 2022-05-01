@@ -22,13 +22,16 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
     });
 
     useEffect(() => {
+      const jwt = localStorage.getItem("jwt");
+
       if (loading) return;
 
       if (data) {
         setVerified(true);
       }
 
-      if (error) {
+      if (error || !jwt) {
+        console.log(JSON.stringify(error, null, 2));
         router.push("/signin");
       }
     }, [loading]);

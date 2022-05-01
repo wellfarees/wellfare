@@ -174,12 +174,18 @@ const User = () => {
   const { jwt } = useTypedSelector((state) => state.user);
   const { setPfp } = useActions();
 
-  const { data, loading } = useQuery<{ getUser: { information: Credentials } }>(
-    USER_INFORMATION_QUERY,
-    {
-      fetchPolicy: "network-only",
+  const { data, loading } = useQuery<{
+    getUser: { information: Credentials; OAuthEmail: string };
+  }>(USER_INFORMATION_QUERY, {
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      console.log(data);
     }
-  );
+    console.log(loading);
+  }, [data, error]);
 
   const [resendVerificationLink] = useMutation(RESEND_VERIFICATION, {
     variables: { token: jwt },
@@ -257,6 +263,8 @@ const User = () => {
 
   useEffect(() => {
     if (mutationProps.error) {
+      console.log(JSON.stringify(mutationProps.error, null, 2));
+      return;
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
   }, [mutationProps.loading]);
@@ -381,6 +389,7 @@ const User = () => {
                         files: [file],
                       },
                     }) => {
+                      // FIXME: AWS account no longer works (suspension)
                       validity.valid && uploadPfp({ variables: { file } });
                       if (!isImage(file.type)) {
                         scrollToBottom();
@@ -429,7 +438,12 @@ const User = () => {
               <div className="email-section">
                 <p className="name">Email</p>
                 <LabeledInput
-                  defaultValue={data ? data.getUser.information.email : null}
+                  defaultValue={
+                    data
+                      ? data.getUser.information.email ||
+                        data.getUser.OAuthEmail
+                      : null
+                  }
                   {...register("Email")}
                 />
               </div>

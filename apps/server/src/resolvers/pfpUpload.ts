@@ -81,6 +81,7 @@ export default {
           },
         });
       } catch (e) {
+        console.log(e);
         throw new Error("Failed to upload avatar.");
       }
 
