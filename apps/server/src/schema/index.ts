@@ -45,6 +45,7 @@ const root = gql`
   type oAuthUser {
     user: User!
     publicAlgoliaKey: String!
+    oAuthRefresh: String
   }
 
   type lastSubmittedUser {
