@@ -1,23 +1,95 @@
 import server from "../../server";
-import verifyJWT from "../../utils/verifyJWT";
 import { login } from "../../utils/oauth/login";
-import { JwtPayload } from "jsonwebtoken";
 import { client } from "../../algolia";
+import axios from "axios";
+import generateJWT from "../../utils/generateJWT";
+import verifyJWT from "../../utils/verifyJWT";
+import { JwtPayload } from "jsonwebtoken";
+const endpoint = "https://oauth2.googleapis.com/token";
+const getGoogleAccessToken = async (code: string): Promise<string> => {
+  const opts = {
+    grant_type: "authorization_code",
+    code: code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: "http://localhost:3000/auth/oauth/google",
+  };
+
+  try {
+    const res = await axios.post(endpoint, new URLSearchParams(opts), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    const refresh_token = res.data.refresh_token;
+    const refresh_opts = {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: refresh_token,
+    };
+
+    const refreshed = await axios.post(
+      endpoint,
+      new URLSearchParams(refresh_opts),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    return refreshed.data.access_token;
+  } catch (e) {
+    throw new Error(e.response.data.error);
+  }
+};
 
 export default {
-  Query: {
+  Mutation: {
     oAuthLogin: async (
       _: unknown,
-      args: { service: "google" | "apple"; token: string }
+      args: {
+        service: "google" | "apple";
+        token: string;
+        type: "code" | "token";
+      }
     ) => {
-      // decode the token
-      const accessToken = (verifyJWT(args.token, "client") as JwtPayload).id;
+      let pureToken =
+        args.type == "code"
+          ? await getGoogleAccessToken(args.token)
+          : args.token;
+
+      if (args.type == "token") {
+        const decoded_refresh = verifyJWT(pureToken, "client") as JwtPayload;
+        console.log(decoded_refresh);
+        const refresh_opts = {
+          client_id: process.env.GOOGLE_CLIENT_ID,
+          client_secret: process.env.GOOGLE_CLIENT_SECRET,
+          grant_type: "refresh_token",
+          refresh_token: decoded_refresh.id,
+        };
+
+        const refreshed = await axios.post(
+          endpoint,
+          new URLSearchParams(refresh_opts),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
+
+        pureToken = refreshed.data.access_token;
+
+        // console.log(pureTokenk);
+      }
 
       // obtain the actual user information
-      const credentials = await login(args.service, accessToken);
+      const credentials = await login(args.service, pureToken);
 
       // perform obligotary checks
-
       // check if user exists with the email
       const possbileUser = await server.db.user.findFirst({
         where: {
@@ -48,7 +120,10 @@ export default {
         },
       });
 
-      console.log(user);
+      const encoded_refresh =
+        args.type == "code"
+          ? generateJWT({ id: pureToken }, "client")
+          : args.token;
 
       if (!user) {
         const userData = await server.db.user.create({
@@ -72,6 +147,7 @@ export default {
               },
             },
             recaps: undefined,
+            //TODO: Replace with an actual token
           },
 
           include: {
@@ -88,7 +164,11 @@ export default {
           }
         );
 
-        return { user: userData, publicAlgoliaKey };
+        return {
+          user: userData,
+          publicAlgoliaKey,
+          oAuthRefresh: encoded_refresh,
+        };
       }
 
       const publicAlgoliaKey = client.generateSecuredApiKey(
@@ -98,7 +178,7 @@ export default {
         }
       );
 
-      return { user, publicAlgoliaKey };
+      return { user, publicAlgoliaKey, oAuthRefresh: encoded_refresh };
     },
   },
 };

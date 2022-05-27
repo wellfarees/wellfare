@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_GOOGLE_ACCESS_TOKEN, OAUTH_LOGIN } from "../../../graphql/queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_GOOGLE_ACCESS_TOKEN } from "../../../graphql/queries";
+import { OAUTH_LOGIN } from "../../../graphql/mutations";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
@@ -26,22 +27,11 @@ const Main = styled.main`
 
 const GoogleOauth: React.FC = () => {
   const router = useRouter();
-  const { data, loading, error } = useQuery<{
-    getAccessToken: {
-      token: string;
-    };
-  }>(GET_GOOGLE_ACCESS_TOKEN, {
-    variables: {
-      code: router.query.code,
-      service: "google",
-    },
-  });
 
   const { setPfp, saveConfig, saveToken } = useActions();
 
-  const [login, OAuthProps] = useLazyQuery<{
+  const [login, OAuthProps] = useMutation<{
     oAuthLogin: {
-      publicAlgoliaKey;
       user: {
         config: {
           darkMode: boolean;
@@ -52,38 +42,35 @@ const GoogleOauth: React.FC = () => {
           pfp: string;
         };
       };
+      publicAlgoliaKey;
+      oAuthRefresh: string;
     };
   }>(OAUTH_LOGIN);
 
   useEffect(() => {
-    if (data) {
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("sync-type");
-
-      localStorage.setItem("jwt", data.getAccessToken.token);
-      localStorage.setItem("sync-type", "google");
-
-      login({
-        variables: {
-          service: "google",
-          token: data.getAccessToken.token,
-        },
-      });
-    }
-
-    if (error) {
-      console.log(JSON.stringify(error, null, 2));
-    }
-  }, [loading, error, data]);
+    if (!router.query.code) return;
+    login({
+      variables: {
+        service: "google",
+        token: router.query.code,
+        type: "code",
+      },
+    });
+  }, [router.query]);
 
   useEffect(() => {
     if (OAuthProps.data) {
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("sync-type");
+      console.log(OAuthProps.data);
+
+      localStorage.setItem("jwt", OAuthProps.data.oAuthLogin.oAuthRefresh);
+      localStorage.setItem("sync-type", "google");
+
       localStorage.setItem(
         "algolia-search",
         OAuthProps.data.oAuthLogin.publicAlgoliaKey
       );
-
-      console.log(OAuthProps.data);
 
       const user = OAuthProps.data.oAuthLogin.user;
       // saveToken(localStorage.getItem("jwt") as string);

@@ -15,6 +15,8 @@ import {
   ResultingObject,
 } from "../../utils/mapRefsIntoValues";
 
+import { Checkbox, useCheckboxState } from "pretty-checkbox-react";
+
 import { useMutation, useQuery } from "@apollo/client";
 import {
   EDIT_USER_INFORMATION,
@@ -173,6 +175,8 @@ const User = () => {
   const [inProgress, setInProgress] = useState(false);
   const { jwt } = useTypedSelector((state) => state.user);
   const { setPfp } = useActions();
+
+  const checkbox = useCheckboxState();
 
   const { data, loading } = useQuery<{
     getUser: { information: Credentials; OAuthEmail: string };
@@ -448,11 +452,22 @@ const User = () => {
                 />
               </div>
 
+              {/* TODO: Make the changes dependant on type of jwt verified on BACKEND (sync-type needs to be encoded inside of jwt) */}
+
               <div className="password-section">
                 <p className="name">Password</p>
                 <LabeledInput {...register("Current password")} />
                 <LabeledInput {...register("New password")} />
               </div>
+
+              {localStorage.getItem("sync-type") !== "native" && (
+                <div className="ch">
+                  <Checkbox color="danger" {...checkbox}>
+                    I understand I will not be able log in through the{" "}
+                    {localStorage.getItem("sync-type")} service.
+                  </Checkbox>
+                </div>
+              )}
             </div>
           </div>
 

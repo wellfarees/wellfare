@@ -146,3 +146,26 @@ export const CHANGE_PASSWORD = gql`
     }
   }
 `;
+
+export const OAUTH_LOGIN = gql`
+  mutation OAuthLogin($service: String!, $token: String!, $type: String!) {
+    oAuthLogin(service: $service, token: $token, type: $type) {
+      user {
+        id
+        information {
+          pfp
+          firstName
+          lastName
+        }
+        config {
+          darkMode
+          fontSize
+          reducedMotion
+        }
+        OAuthEmail
+      }
+      publicAlgoliaKey
+      oAuthRefresh
+    }
+  }
+`;

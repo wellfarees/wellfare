@@ -32,7 +32,6 @@ const Query = {
   ...verifyJWT.Query,
   ...getUserInformationFromEmailToken.Query,
   ...getAccessToken.Query,
-  ...oAauthLogin.Query,
 };
 
 const Mutation = {
@@ -49,6 +48,7 @@ const Mutation = {
   ...addEmailToNewsletter.Mutation,
   ...pfpUpload.Mutation,
   ...oAauthSignup.Mutation,
+  ...oAauthLogin.Mutation,
 };
 
 const Upload = pfpUpload.Upload;

@@ -9,7 +9,7 @@ import {
   useEffect,
 } from "react";
 import type { AppProps } from "next/app";
-import { ApolloProvider, useLazyQuery } from "@apollo/client";
+import { ApolloProvider, useLazyQuery, useMutation } from "@apollo/client";
 import client from "../graphql/client";
 import Layout from "../components/layout/Layout";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -17,7 +17,8 @@ import { Provider } from "react-redux";
 import { store } from "../redux/store";
 
 import { useActions } from "../hooks/useActions";
-import { APPEARANCE_QUERY, OAUTH_LOGIN } from "../graphql/queries";
+import { APPEARANCE_QUERY } from "../graphql/queries";
+import { OAUTH_LOGIN } from "../graphql/mutations";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -25,7 +26,7 @@ const navStateContext = createContext<
 
 const ReduxMiddleComponent: React.FC = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
-  const [getOauthUser, oAuthUserProps] = useLazyQuery(OAUTH_LOGIN);
+  const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
   const { saveToken, saveConfig, setPfp } = useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
@@ -44,6 +45,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
         variables: {
           service: serviceType,
           token: jwt,
+          type: "token",
         },
       });
     } else {
@@ -97,6 +99,10 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       });
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
+    }
+
+    if (oAuthUserProps.error) {
+      console.log(JSON.stringify(oAuthUserProps.error, null, 2));
     }
   }, [oAuthUserProps.loading]);
 

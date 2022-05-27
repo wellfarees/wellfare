@@ -234,25 +234,3 @@ export const GET_GOOGLE_ACCESS_TOKEN = gql`
     }
   }
 `;
-
-export const OAUTH_LOGIN = gql`
-  query OAuthLogin($service: String!, $token: String!) {
-    oAuthLogin(service: $service, token: $token) {
-      user {
-        id
-        information {
-          pfp
-          firstName
-          lastName
-        }
-        config {
-          darkMode
-          fontSize
-          reducedMotion
-        }
-        OAuthEmail
-      }
-      publicAlgoliaKey
-    }
-  }
-`;
