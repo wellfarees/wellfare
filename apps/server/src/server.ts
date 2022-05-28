@@ -16,6 +16,7 @@ import { login } from "./utils/oauth/login";
 import generateJWT from "./utils/generateJWT";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
+import axios from "axios";
 
 const app = express();
 app.use(graphqlUploadExpress());
@@ -43,8 +44,28 @@ app.use(async (req, res, next) => {
   }
 
   if (type == "apple" || type == "google") {
-    const pureToken = verifyJWT(token, "client") as JwtPayload;
-    const credentials = await login(type, pureToken.id);
+    const endpoint = "https://oauth2.googleapis.com/token";
+    const decoded_refresh = verifyJWT(token, "client") as JwtPayload;
+
+    const refresh_opts = {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: decoded_refresh.id,
+    };
+
+    const refreshed = await axios.post(
+      endpoint,
+      new URLSearchParams(refresh_opts as any),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    //Also gotta exchange for the access token!!
+    const credentials = await login(type, refreshed.data.access_token);
 
     const user = await server.db.user.findFirst({
       where: {
