@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_GOOGLE_ACCESS_TOKEN } from "../../../graphql/queries";
 import { OAUTH_LOGIN } from "../../../graphql/mutations";
 import { useEffect } from "react";
 import styled from "styled-components";
