@@ -5,27 +5,27 @@ import { LabeledInput } from "../../components";
 import { useForm } from "../../hooks/useForm";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import GoBack from "../../components/Routing/GoBack";
 import { scrollToBottom } from "../../utils/scrollToBottom";
 import Button from "../../components/Button/Button";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   mapRefsIntoValues,
   ResultingObject,
 } from "../../utils/mapRefsIntoValues";
-
-import { Checkbox, useCheckboxState } from "pretty-checkbox-react";
 
 import { useMutation, useQuery } from "@apollo/client";
 import {
   EDIT_USER_INFORMATION,
   RESEND_VERIFICATION,
   UPLOAD_PFP,
+  CHANGE_TO_NATIVE,
 } from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import { UserPfp } from "../../components/Pfp/Pfp";
 import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { fontSizes } from "../../config/userConfig";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -109,6 +109,24 @@ const Wrapper = styled.div`
     line-height: 1.5;
   }
 
+  .ch {
+    max-width: 500px;
+    line-height: 2em;
+
+    label {
+      color: ${(props) => props.theme.mainColor};
+      font-size: ${fontSizes.base}px !important;
+    }
+  }
+
+  footer {
+    .footer-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3em;
+    }
+  }
+
   @media only screen and (max-width: 768px) {
     input {
       width: 100%;
@@ -121,6 +139,15 @@ const Wrapper = styled.div`
 
     .save-btn {
       margin-bottom: 4em;
+    }
+
+    .ch {
+      width: 100%;
+    }
+
+    .footer-container {
+      flex-direction: column;
+      gap: 3em !important;
     }
   }
 `;
@@ -175,21 +202,15 @@ const User = () => {
   const [inProgress, setInProgress] = useState(false);
   const { jwt } = useTypedSelector((state) => state.user);
   const { setPfp } = useActions();
-
-  const checkbox = useCheckboxState();
+  const warningCheck = useRef(null);
+  const [changeToNative, changeResult] = useMutation(CHANGE_TO_NATIVE);
+  const [isSetToNative, setToNative] = useState(false);
 
   const { data, loading } = useQuery<{
     getUser: { information: Credentials; OAuthEmail: string };
   }>(USER_INFORMATION_QUERY, {
     fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    if (!loading) {
-      console.log(data);
-    }
-    console.log(loading);
-  }, [data, error]);
 
   const [resendVerificationLink] = useMutation(RESEND_VERIFICATION, {
     variables: { token: jwt },
@@ -209,6 +230,10 @@ const User = () => {
   useEffect(() => {
     setInProgress(!inProgress);
   }, [isSaved]);
+
+  useEffect(() => {
+    setToNative(localStorage.getItem("sync-type") == "native");
+  }, []);
 
   useEffect(() => {
     if (uploadProps.data) {
@@ -267,11 +292,24 @@ const User = () => {
 
   useEffect(() => {
     if (mutationProps.error) {
-      console.log(JSON.stringify(mutationProps.error, null, 2));
-      return;
+      // console.log(JSON.stringify(mutationProps.error, null, 2));
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
   }, [mutationProps.loading]);
+
+  useEffect(() => {
+    if (localStorage.getItem("sync-type") == "native") {
+      return;
+    }
+
+    if (changeResult.data) {
+      localStorage.setItem("sync-type", "native");
+      localStorage.setItem("jwt", changeResult.data.changeToNative.token);
+      setToNative(true);
+    } else if (changeResult.error) {
+      console.log(JSON.stringify(changeResult.error, null, 2));
+    }
+  }, [changeResult.loading]);
 
   return (
     <Wrapper>
@@ -286,7 +324,10 @@ const User = () => {
         </header>
         {loading ? null : (data && !data.getUser.information.verified) ||
           (mutationProps.data &&
-            !mutationProps.data.editInformation.verified) ? (
+            !mutationProps.data.editInformation.verified) ||
+          (changeResult.data
+            ? !changeResult.data.changeToNative.verified
+            : null) ? (
           <Warning>
             <p>
               <b>
@@ -317,6 +358,7 @@ const User = () => {
           onSubmit={(e) => {
             e.preventDefault();
             setIsSaved(false);
+
             const submitted = handleSubmit();
             const res = handleErrors(submitted);
             let isSuccessful = true;
@@ -334,15 +376,52 @@ const User = () => {
                 (input) => input.id === "New password"
               );
 
+              const values = mapRefsIntoValues<HTMLInputElement>(
+                submitted.refs
+              );
+
+              if (
+                passwInput.value.length ||
+                (data.getUser.information.email !== values["Email"] &&
+                  localStorage.getItem("sync-type") !== "native")
+              ) {
+                if (!warningCheck.current?.checked) {
+                  setError(
+                    "Please, check the below statement before continuing."
+                  );
+                  return;
+                } else {
+                  // TODO: chnage from oauth to native auth
+                  changeToNative({
+                    variables: {
+                      service: localStorage.getItem("sync-type"),
+                      password: passwInput.value,
+                      email: values["Email"],
+                      refresh: localStorage.getItem("jwt"),
+                    },
+                  });
+
+                  // button loading animation
+                  setIsSaved(true);
+                  setTimeout(() => {
+                    setIsSaved(false);
+                  }, 1000);
+
+                  return;
+                }
+              }
+
               if (passwInput?.value.length) {
                 setIsSaved(false);
                 const currentPasswordInput = submitted.refs.find(
                   (input) => input.id === "Current password"
                 )!;
 
-                if (currentPasswordInput.value === "") {
-                  setError("Please, enter your current password");
-                  return;
+                if (localStorage.getItem("sync-type") == "native") {
+                  if (currentPasswordInput.value === "") {
+                    setError("Please, enter your current password");
+                    return;
+                  }
                 }
 
                 if (passwInput?.value.length <= 5) {
@@ -351,10 +430,6 @@ const User = () => {
                   );
                   return;
                 }
-
-                const values = mapRefsIntoValues<HTMLInputElement>(
-                  submitted.refs
-                );
 
                 sendData(values, true);
                 setIsSaved(true);
@@ -452,42 +527,49 @@ const User = () => {
                 />
               </div>
 
-              {/* TODO: Make the changes dependant on type of jwt verified on BACKEND (sync-type needs to be encoded inside of jwt) */}
-
               <div className="password-section">
                 <p className="name">Password</p>
-                <LabeledInput {...register("Current password")} />
+                <div style={isSetToNative ? {} : { display: "none" }}>
+                  <LabeledInput {...register("Current password")} />
+                </div>
                 <LabeledInput {...register("New password")} />
               </div>
-
-              {localStorage.getItem("sync-type") !== "native" && (
-                <div className="ch">
-                  <Checkbox color="danger" {...checkbox}>
-                    I understand I will not be able log in through the{" "}
-                    {localStorage.getItem("sync-type")} service.
-                  </Checkbox>
-                </div>
-              )}
             </div>
           </div>
 
           <footer>
             <p className="error">{error}</p>
-            <div
-              className={`btw-wrapper ${!isSaved ? "" : "saving"}
+            <div className="footer-container">
+              <div
+                className={`btn-wrapper ${!isSaved ? "" : "saving"}
               `}
-            >
-              <Button
-                withLoading={{
-                  toBeLoading: !inProgress,
-                  toModifyOnStateChange: {
-                    endingToReplace: "e",
-                    word: "Save",
-                  },
-                }}
               >
-                Save changes
-              </Button>
+                <Button
+                  withLoading={{
+                    toBeLoading: !inProgress,
+                    toModifyOnStateChange: {
+                      endingToReplace: "e",
+                      word: "Save",
+                    },
+                  }}
+                >
+                  Save changes
+                </Button>
+              </div>
+              {!isSetToNative && (
+                <div className="ch">
+                  <input
+                    ref={warningCheck}
+                    type="checkbox"
+                    id="warning-check"
+                  />
+                  <label htmlFor="warning-check">
+                    I understand the change of email or password will result in
+                    no longer being able to log in through the{" "}
+                    <b>{localStorage.getItem("sync-type")}</b> service.
+                  </label>
+                </div>
+              )}
             </div>
           </footer>
         </form>

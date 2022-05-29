@@ -102,12 +102,10 @@ export default {
         const possbileUser = await server.db.user.findFirst({
           where: {
             information: {
-              associatedEmail: credentials.email,
+              email: credentials.email,
             },
             AND: {
-              information: {
-                isNot: null,
-              },
+              OAuthEmail: null,
             },
           },
         });

@@ -21,6 +21,7 @@ import getAccessToken from "./getAccessToken";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 import oAauthLogin from "./oauth/login";
 import oAauthSignup from "./oauth/signup";
+import changeToNative from "./changeToNative";
 
 const Query = {
   ...ping.Query,
@@ -49,6 +50,7 @@ const Mutation = {
   ...pfpUpload.Mutation,
   ...oAauthSignup.Mutation,
   ...oAauthLogin.Mutation,
+  ...changeToNative.Mutation,
 };
 
 const Upload = pfpUpload.Upload;

@@ -79,9 +79,8 @@ const GoogleOauth: React.FC = () => {
         theme: user.config.darkMode ? "dark" : "light",
       });
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
+      router.push("/app");
     }
-
-    router.push("/app");
 
     if (OAuthProps.error) {
       console.log(JSON.stringify(OAuthProps.error, null, 2));
