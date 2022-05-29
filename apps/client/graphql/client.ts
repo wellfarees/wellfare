@@ -4,7 +4,9 @@ import { SERVER_URL } from "../endpoints";
 import { createUploadLink } from "apollo-upload-client";
 
 const getSyncInfo = (): [string | null, string | null] => {
-  return [localStorage.getItem("jwt"), localStorage.getItem("sync-type")];
+  if (typeof window !== "undefined") {
+    return [localStorage.getItem("jwt"), localStorage.getItem("sync-type")];
+  } else return [null, null];
 };
 
 const authLink = setContext((_, { headers }) => {
