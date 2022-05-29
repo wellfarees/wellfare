@@ -32,6 +32,12 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
+    if (localStorage.getItem("algolia-search") == null) {
+      localStorage.setItem("algolia-search", undefined);
+    }
+  }, []);
+
+  useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     const serviceType = localStorage.getItem("sync-type");
 
@@ -54,8 +60,8 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
   }, [router.pathname]);
 
   useEffect(() => {
-    const serviceType = localStorage.getItem("sync-type");
-    if (!router.pathname.includes("app") || serviceType == "native") return;
+    // const serviceType = localStorage.getItem("sync-type");
+    // if (!router.pathname.includes("app") || serviceType == "native") return;
 
     const jwt = localStorage.getItem("jwt");
 

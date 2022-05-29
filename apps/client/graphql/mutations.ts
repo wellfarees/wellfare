@@ -169,3 +169,21 @@ export const OAUTH_LOGIN = gql`
     }
   }
 `;
+
+export const CHANGE_TO_NATIVE = gql`
+  mutation ChangeToNative(
+    $service: String!
+    $password: String!
+    $email: String
+    $refresh: String!
+  ) {
+    changeToNative(
+      service: $service
+      email: $email
+      password: $password
+      refresh: $refresh
+    ) {
+      token
+    }
+  }
+`;

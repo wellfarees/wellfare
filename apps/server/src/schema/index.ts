@@ -22,6 +22,7 @@ import getAcessToken from "./getAcessToken";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 import oauthLogin from "./oauth/login";
 import oauthSignup from "./oauth/siginup";
+import changeToNative from "./changeToNative";
 
 const root = gql`
   # Base types
@@ -144,6 +145,11 @@ const root = gql`
   type Token {
     token: String!
   }
+
+  type ChangeToNative {
+    token: String!
+    verified: Boolean!
+  }
 `;
 
 export default [
@@ -171,4 +177,5 @@ export default [
   getUserInformationFromEmailToken,
   oauthLogin,
   oauthSignup,
+  changeToNative,
 ];
