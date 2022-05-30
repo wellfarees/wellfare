@@ -13,6 +13,7 @@ import { useActions } from "../hooks/useActions";
 import { GET_LAST_SUBMITTED } from "../graphql/queries";
 import ApolloClient from "../graphql/client";
 import AccountSuspended from "../components/AccountSuspended/AccountSuspended";
+import OAuthMethods from "../components/OAuth/OAuthMethods";
 
 import { useLazyQuery } from "@apollo/client";
 import { LOGIN } from "../graphql/queries";
@@ -118,7 +119,6 @@ const Wrapper = styled.main`
     box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.05);
     border-radius: 9px;
     padding-top: 1em;
-    padding-bottom: 19em;
     width: 300px;
 
     form {
@@ -154,6 +154,10 @@ const Wrapper = styled.main`
         font-weight: 600;
         text-decoration: underline;
       }
+    }
+
+    .forgot {
+      margin-bottom: 0em;
     }
   }
 
@@ -333,9 +337,10 @@ const SignIn = () => {
             </Button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
-          <p className="form-cta">
+          <p className="form-cta forgot">
             <Link href="/auth/reset">Forgot your password?</Link>
           </p>
+          <OAuthMethods />
           <p className="form-cta">
             New out here? <Link href="/signup">Sign up</Link>!
           </p>

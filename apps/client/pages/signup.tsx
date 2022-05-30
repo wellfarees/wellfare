@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { LabeledInput } from "../components";
 import { Container } from "../styled/reusable";
@@ -9,7 +8,8 @@ import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
-import { GOOGLE_AUTH_LINK } from "../constants";
+import OAuthMethods from "../components/OAuth/OAuthMethods";
+import Link from "next/dist/client/link";
 
 // GraphQL
 import { useMutation } from "@apollo/client";
@@ -142,64 +142,6 @@ const Wrapper = styled.main`
 
     .input-block {
       margin-top: 2em;
-    }
-
-    .divider {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1.5em;
-
-      span {
-        color: #a6a6a6;
-        font-size: 1.2rem;
-      }
-
-      &:before,
-      &:after {
-        content: "";
-        display: inline-block;
-        height: 2px;
-        width: 40%;
-        background-color: #f0f0f0;
-        position: absolute;
-        top: 50%;
-        bottom: 50%;
-      }
-
-      &:before {
-        left: 0;
-      }
-
-      &:after {
-        right: 0;
-      }
-    }
-
-    .oAuth-methods {
-      .method {
-        padding: 0.9em;
-        background-color: #fff;
-        border: 1px solid #ececec;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1.4rem;
-        border-radius: 6px;
-        font-weight: 500;
-        margin-top: 1.5em;
-        transition: 0.3s;
-
-        &:hover {
-          background-color: #fafafa;
-        }
-
-        i {
-          margin-right: 0.7em;
-        }
-      }
     }
 
     .form-cta {
@@ -393,21 +335,7 @@ const SignUp = () => {
             </Button>
             {error && <ErrorWrapper>{error}</ErrorWrapper>}
           </form>
-          <div className="divider">
-            <span>or</span>
-          </div>
-          <div className="oAuth-methods">
-            <div className="method">
-              <i className="fab fa-apple"></i>
-              AppleId
-            </div>
-            <Link href={GOOGLE_AUTH_LINK}>
-              <div className="method">
-                <i className="fab fa-google"></i>
-                Google
-              </div>
-            </Link>
-          </div>
+          <OAuthMethods />
           <p className="form-cta">
             Already been here?{" "}
             <Link href="/signin">
