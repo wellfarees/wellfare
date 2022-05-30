@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { OAUTH_LOGIN } from "../../../graphql/mutations";
 import { useEffect } from "react";
 import styled from "styled-components";
@@ -48,20 +48,30 @@ const GoogleOauth: React.FC = () => {
 
   useEffect(() => {
     if (!router.query.code) return;
-    login({
-      variables: {
-        service: "google",
-        token: router.query.code,
-        type: "code",
-      },
-    });
+    (async () => {
+      try {
+        await login({
+          variables: {
+            service: "google",
+            token: router.query.code,
+            type: "code",
+          },
+        });
+      } catch (e) {}
+    })();
   }, [router.query]);
 
   useEffect(() => {
+    if (OAuthProps.error) {
+      const error = OAuthProps.error.graphQLErrors[0];
+      if (error && error.extensions.code) {
+        router.push(`/signin?error=${error.extensions.code}`);
+      }
+    }
+
     if (OAuthProps.data) {
       localStorage.removeItem("jwt");
       localStorage.removeItem("sync-type");
-      console.log(OAuthProps.data);
 
       localStorage.setItem("jwt", OAuthProps.data.oAuthLogin.oAuthRefresh);
       localStorage.setItem("sync-type", "google");
@@ -80,10 +90,6 @@ const GoogleOauth: React.FC = () => {
       });
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       router.push("/app");
-    }
-
-    if (OAuthProps.error) {
-      console.log(JSON.stringify(OAuthProps.error, null, 2));
     }
   }, [OAuthProps.loading]);
 

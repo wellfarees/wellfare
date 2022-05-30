@@ -5,6 +5,8 @@ import axios from "axios";
 import generateJWT from "../../utils/generateJWT";
 import verifyJWT from "../../utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
+import { ApolloError } from "apollo-server-core";
+
 const endpoint = "https://oauth2.googleapis.com/token";
 const getGoogleTokens = async (code: string): Promise<[string, string]> => {
   const opts = {
@@ -102,7 +104,7 @@ export default {
         const possbileUser = await server.db.user.findFirst({
           where: {
             information: {
-              email: credentials.email,
+              associatedEmail: credentials.email,
             },
             AND: {
               OAuthEmail: null,
@@ -111,8 +113,9 @@ export default {
         });
 
         if (possbileUser) {
-          throw new Error(
-            "Email used to sign in is not associated with this authentication method."
+          return new ApolloError(
+            "Email used to sign in is not associated with this authentication method.",
+            "EMAIL_IN_USE"
           );
         }
 
@@ -185,7 +188,7 @@ export default {
 
         return { user, publicAlgoliaKey, oAuthRefresh: encoded_refresh };
       } catch (e) {
-        console.log(e);
+        return new ApolloError("oAuth failed", "INVALID_OAUTH");
       }
     },
   },
