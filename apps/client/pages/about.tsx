@@ -208,13 +208,13 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
   return (
     <div>
       <Head>
-        <title>About Wellfaree</title>
+        <title>About Wellfare™</title>
       </Head>
 
       <AboutInfo>
         <Container>
           <Fade bottom>
-            <h1>About Wellfaree</h1>
+            <h1>About Wellfare™</h1>
           </Fade>
 
           <div className="description">
