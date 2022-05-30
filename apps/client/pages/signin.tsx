@@ -237,6 +237,23 @@ const SignIn = () => {
   const [emailUsed, setEmailUsed] = useState<string>();
 
   useEffect(() => {
+    const error_type =
+      router.query["error"] ||
+      router.asPath.match(new RegExp(`[&?]error=(.*)(&|$)`))[1];
+
+    switch (error_type) {
+      case "EMAIL_IN_USE":
+        setError(
+          "Email used in the oauth method already occupied by another user."
+        );
+        break;
+      case "INVALID_OAUTH":
+        setError("Could not verify oauth identity, please try again.");
+        break;
+    }
+  }, []);
+
+  useEffect(() => {
     const { error, data } = queryProps;
 
     if (error) {

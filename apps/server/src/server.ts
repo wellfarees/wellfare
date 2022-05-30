@@ -54,37 +54,40 @@ app.use(async (req, res, next) => {
       refresh_token: decoded_refresh.id,
     };
 
-    const refreshed = await axios.post(
-      endpoint,
-      new URLSearchParams(refresh_opts as any),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+    try {
+      const refreshed = await axios.post(
+        endpoint,
+        new URLSearchParams(refresh_opts as any),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      //Also gotta exchange for the access token!!
+      const credentials = await login(type, refreshed.data.access_token);
+
+      const user = await server.db.user.findFirst({
+        where: {
+          OAuthEmail: credentials.email,
         },
+      });
+
+      if (!user) {
+        next();
+        return;
       }
-    );
 
-    //Also gotta exchange for the access token!!
-    const credentials = await login(type, refreshed.data.access_token);
-
-    const user = await server.db.user.findFirst({
-      where: {
-        OAuthEmail: credentials.email,
-      },
-    });
-
-    if (!user) {
+      if (user) {
+        const nativeJWT = generateJWT({ id: user.id }, "client");
+        req.headers.authorization = nativeJWT;
+      }
       next();
-      return;
-    }
-
-    if (user) {
-      const nativeJWT = generateJWT({ id: user.id }, "client");
-      req.headers.authorization = nativeJWT;
+    } catch (e) {
+      next();
     }
   }
-
-  next();
 });
 const httpServer = http.createServer(app);
 
