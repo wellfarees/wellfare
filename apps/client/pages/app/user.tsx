@@ -308,6 +308,9 @@ const User = () => {
       setToNative(true);
     } else if (changeResult.error) {
       console.log(JSON.stringify(changeResult.error, null, 2));
+      if (changeResult.error.graphQLErrors[0]) {
+        setError(changeResult.error.graphQLErrors[0].message);
+      }
     }
   }, [changeResult.loading]);
 
@@ -355,7 +358,7 @@ const User = () => {
         ) : null}
 
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             setIsSaved(false);
 
@@ -381,9 +384,9 @@ const User = () => {
               );
 
               if (
-                passwInput.value.length ||
-                (data.getUser.information.email !== values["Email"] &&
-                  localStorage.getItem("sync-type") !== "native")
+                (passwInput.value.length ||
+                  data.getUser.information.email !== values["Email"]) &&
+                localStorage.getItem("sync-type") !== "native"
               ) {
                 if (!warningCheck.current?.checked) {
                   setError(
@@ -391,18 +394,21 @@ const User = () => {
                   );
                   return;
                 } else {
-                  // TODO: chnage from oauth to native auth
-                  changeToNative({
-                    variables: {
-                      service: localStorage.getItem("sync-type"),
-                      password: passwInput.value,
-                      email: values["Email"],
-                      refresh: localStorage.getItem("jwt"),
-                    },
-                  });
-
                   // button loading animation
                   setIsSaved(true);
+                  try {
+                    await changeToNative({
+                      variables: {
+                        service: localStorage.getItem("sync-type"),
+                        password: passwInput.value,
+                        email: values["Email"],
+                        refresh: localStorage.getItem("jwt"),
+                      },
+                    });
+                  } catch (e) {
+                    console.log("ezpz");
+                  }
+
                   setTimeout(() => {
                     setIsSaved(false);
                   }, 1000);
@@ -424,7 +430,7 @@ const User = () => {
                   }
                 }
 
-                if (passwInput?.value.length <= 5) {
+                if (passwInput?.value.length < 5) {
                   setError(
                     "Your password has to be at least 5 characters long."
                   );

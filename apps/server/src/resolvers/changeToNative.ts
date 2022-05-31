@@ -6,6 +6,8 @@ import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import generateJWT from "../utils/generateJWT";
 import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { SIGNIN_METHODS } from "../../../../constants";
+import { ApolloError } from "apollo-server-core";
 
 export default {
   Mutation: {
@@ -14,10 +16,10 @@ export default {
       args: {
         email: string | null;
         password: string;
-        service: "google" | "apple";
+        service: SIGNIN_METHODS;
         refresh: string;
       }
-    ): Promise<{ token: string; verified: boolean }> => {
+    ) => {
       switch (args.service) {
         case "google":
           const endpoint = "https://oauth2.googleapis.com/token";
@@ -66,7 +68,36 @@ export default {
 
           const newPassword = await hash(args.password, 10);
 
+          let isFinallyVerified: boolean;
+
           if (targetUser.OAuthEmail !== args.email && args.email !== null) {
+            if (!args.password) {
+              return new ApolloError(
+                "Please, provide a new password.",
+                "NO_PASSWORD"
+              );
+            }
+
+            if (args.password.length < 5) {
+              return new ApolloError(
+                "Your password has to be at least 5 characters long.",
+                "INVALID_PASSWORD"
+              );
+            }
+            const possbileUser = await server.db.user.findFirst({
+              where: {
+                information: {
+                  associatedEmail: args.email,
+                },
+                AND: {
+                  OAuthEmail: null,
+                },
+              },
+            });
+
+            if (possbileUser) {
+              return new ApolloError("Email already in use.", "EMAIL_IN_USE");
+            }
             await server.db.user.update({
               where: {
                 id: targetUser.id,
@@ -79,6 +110,7 @@ export default {
                     associatedEmail: args.email,
                   },
                 },
+                OAuthEmail: null,
               },
             });
 
@@ -87,33 +119,35 @@ export default {
               targetUser.information.firstName,
               targetUser.id
             );
-          }
+          } else {
+            const finalUser = await server.db.user.update({
+              where: {
+                id: targetUser.id,
+              },
+              data: {
+                information: {
+                  update: {
+                    password: newPassword,
+                    associatedEmail: targetUser.OAuthEmail,
+                  },
+                },
+                OAuthEmail: null,
+              },
+              select: {
+                information: {
+                  select: {
+                    verified: true,
+                  },
+                },
+              },
+            });
 
-          const finalUser = await server.db.user.update({
-            where: {
-              id: targetUser.id,
-            },
-            data: {
-              information: {
-                update: {
-                  password: newPassword,
-                  associatedEmail: targetUser.OAuthEmail,
-                },
-              },
-              OAuthEmail: null,
-            },
-            select: {
-              information: {
-                select: {
-                  verified: true,
-                },
-              },
-            },
-          });
+            isFinallyVerified = finalUser.information.verified;
+          }
 
           return {
             token: generateJWT({ id: targetUser.id }, "client"),
-            verified: finalUser.information.verified,
+            verified: isFinallyVerified,
           };
       }
     },

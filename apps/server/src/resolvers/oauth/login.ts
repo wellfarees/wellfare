@@ -6,6 +6,7 @@ import generateJWT from "../../utils/generateJWT";
 import verifyJWT from "../../utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import { ApolloError } from "apollo-server-core";
+import { SIGNIN_METHODS } from "../../../../../constants";
 
 const endpoint = "https://oauth2.googleapis.com/token";
 const getGoogleTokens = async (code: string): Promise<[string, string]> => {
@@ -53,7 +54,7 @@ export default {
     oAuthLogin: async (
       _: unknown,
       args: {
-        service: "google" | "apple";
+        service: SIGNIN_METHODS;
         token: string;
         type: "code" | "token";
       }

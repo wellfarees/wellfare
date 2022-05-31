@@ -1,5 +1,6 @@
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
+import { SIGNIN_METHODS } from "../../../../constants";
 
 export interface RetrieveLocalStorage {
   type: ActionType.RETRIEVE_LOCAL_STORAGE;
@@ -35,7 +36,7 @@ export interface StoreUser {
   type: ActionType.STORE_USER;
   payload: {
     jwt: string;
-    type: "native" | "apple" | "google";
+    type: SIGNIN_METHODS;
     user: {
       config: {
         darkMode: boolean;
