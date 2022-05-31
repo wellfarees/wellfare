@@ -237,9 +237,13 @@ const SignIn = () => {
   const [emailUsed, setEmailUsed] = useState<string>();
 
   useEffect(() => {
-    const error_type =
+    let error_type =
       router.query["error"] ||
-      router.asPath.match(new RegExp(`[&?]error=(.*)(&|$)`))[1];
+      router.asPath.match(new RegExp(`[&?]error=(.*)(&|$)`));
+
+    if (error_type && Array.isArray(error_type)) {
+      error_type = error_type[1];
+    }
 
     switch (error_type) {
       case "EMAIL_IN_USE":

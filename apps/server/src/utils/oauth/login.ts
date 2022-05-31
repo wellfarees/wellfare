@@ -1,8 +1,9 @@
 import axios from "axios";
+import { SIGNIN_METHODS } from "../../../../../constants";
 import { User } from "./types";
 
 export const login = async (
-  service: "google" | "apple",
+  service: SIGNIN_METHODS,
   token: string
 ): Promise<User> => {
   switch (service) {

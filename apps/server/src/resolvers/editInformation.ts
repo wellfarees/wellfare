@@ -64,7 +64,7 @@ export default {
       const inUse = await server.db.user.findFirst({
         where: {
           information: {
-            email: args.email,
+            associatedEmail: args.email,
           },
           AND: {
             NOT: {
@@ -75,7 +75,7 @@ export default {
       });
 
       if (inUse !== null) {
-        throw new Error("Email in use.");
+        throw new Error("Email already in use.");
       }
 
       let currentEmailsUsed = data.information.emailsUsed;

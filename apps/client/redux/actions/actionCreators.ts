@@ -10,6 +10,7 @@ import {
 } from ".";
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
+import { SIGNIN_METHODS } from "../../../../constants";
 
 export const retrieveLocalStorage = (key: string): RetrieveLocalStorage => {
   return {
@@ -54,7 +55,7 @@ export const initModal = (open: boolean, content?: JSX.Element): InitModal => {
 
 // FIXME: figure out what to do with the id: string and reducedMotion | theme interferences
 export const storeUser = (
-  type: "native" | "apple" | "google",
+  type: SIGNIN_METHODS,
   jwt: string,
   user: {
     id: number;

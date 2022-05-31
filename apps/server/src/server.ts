@@ -17,6 +17,7 @@ import generateJWT from "./utils/generateJWT";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
+import { SIGNIN_METHODS } from "../../../constants";
 
 const app = express();
 app.use(graphqlUploadExpress());
@@ -27,10 +28,7 @@ app.use(async (req, res, next) => {
     return;
   }
 
-  const [type, token] = auth.split(" ") as [
-    "apple" | "google" | "native",
-    string
-  ];
+  const [type, token] = auth.split(" ") as [SIGNIN_METHODS, string];
 
   if (token == "null") {
     next();
@@ -43,50 +41,48 @@ app.use(async (req, res, next) => {
     return;
   }
 
-  if (type == "apple" || type == "google") {
-    const endpoint = "https://oauth2.googleapis.com/token";
-    const decoded_refresh = verifyJWT(token, "client") as JwtPayload;
+  const endpoint = "https://oauth2.googleapis.com/token";
+  const decoded_refresh = verifyJWT(token, "client") as JwtPayload;
 
-    const refresh_opts = {
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      grant_type: "refresh_token",
-      refresh_token: decoded_refresh.id,
-    };
+  const refresh_opts = {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    grant_type: "refresh_token",
+    refresh_token: decoded_refresh.id,
+  };
 
-    try {
-      const refreshed = await axios.post(
-        endpoint,
-        new URLSearchParams(refresh_opts as any),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
-
-      //Also gotta exchange for the access token!!
-      const credentials = await login(type, refreshed.data.access_token);
-
-      const user = await server.db.user.findFirst({
-        where: {
-          OAuthEmail: credentials.email,
+  try {
+    const refreshed = await axios.post(
+      endpoint,
+      new URLSearchParams(refresh_opts as any),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      });
-
-      if (!user) {
-        next();
-        return;
       }
+    );
 
-      if (user) {
-        const nativeJWT = generateJWT({ id: user.id }, "client");
-        req.headers.authorization = nativeJWT;
-      }
+    //Also gotta exchange for the access token!!
+    const credentials = await login(type, refreshed.data.access_token);
+
+    const user = await server.db.user.findFirst({
+      where: {
+        OAuthEmail: credentials.email,
+      },
+    });
+
+    if (!user) {
       next();
-    } catch (e) {
-      next();
+      return;
     }
+
+    if (user) {
+      const nativeJWT = generateJWT({ id: user.id }, "client");
+      req.headers.authorization = nativeJWT;
+    }
+    next();
+  } catch (e) {
+    next();
   }
 });
 const httpServer = http.createServer(app);
