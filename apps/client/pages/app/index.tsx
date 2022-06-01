@@ -334,7 +334,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                             }
                             key={index}
                           >
-                            {console.log()}
                             {differenceInWeeks(
                               startOfDay(new Date()),
                               startOfDay(new Date(week[week.length - 1].date))

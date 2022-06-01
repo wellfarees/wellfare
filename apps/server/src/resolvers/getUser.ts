@@ -16,7 +16,6 @@ export default {
 
       const dToken = verifyJWT(headers.token, "client");
 
-      console.log(dToken);
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
 
       const id = (dToken as decodedToken).id;

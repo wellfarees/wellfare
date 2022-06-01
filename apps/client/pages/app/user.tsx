@@ -238,6 +238,8 @@ const User = () => {
   useEffect(() => {
     if (uploadProps.data) {
       setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime());
+    } else if (uploadProps.error) {
+      setError(uploadProps.error.graphQLErrors[0].message);
     }
   }, [uploadProps.loading]);
 
@@ -405,9 +407,7 @@ const User = () => {
                         refresh: localStorage.getItem("jwt"),
                       },
                     });
-                  } catch (e) {
-                    console.log("ezpz");
-                  }
+                  } catch (e) {}
 
                   setTimeout(() => {
                     setIsSaved(false);
@@ -468,14 +468,17 @@ const User = () => {
                     Change
                   </label>
                   <input
-                    onChange={({
+                    onChange={async ({
                       target: {
                         validity,
                         files: [file],
                       },
                     }) => {
                       // FIXME: AWS account no longer works (suspension)
-                      validity.valid && uploadPfp({ variables: { file } });
+                      try {
+                        validity.valid &&
+                          (await uploadPfp({ variables: { file } }));
+                      } catch (e) {}
                       if (!isImage(file.type)) {
                         scrollToBottom();
                         setError("File has to have a type of an image!");
