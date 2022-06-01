@@ -1,1 +1,1 @@
-export type SIGNIN_METHODS = "twitter" | "google" | "native";
+export type SIGNIN_METHODS = "facebook" | "google" | "native";

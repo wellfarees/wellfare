@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GOOGLE_AUTH_LINK } from "../../constants";
+import { FACEBOOK_AUTH_LINK, GOOGLE_AUTH_LINK } from "../../constants";
 import Link from "next/dist/client/link";
 
 const Wrapper = styled.div`
@@ -69,10 +69,6 @@ const OAuthMethods: React.FC = () => {
         <span>or</span>
       </div>
       <div className="oAuth-methods">
-        <div className="method">
-          <i className="fab fa-apple"></i>
-          AppleId
-        </div>
         <Link href={GOOGLE_AUTH_LINK}>
           <div className="method">
             <i className="fab fa-google"></i>
