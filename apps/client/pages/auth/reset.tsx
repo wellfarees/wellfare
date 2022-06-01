@@ -141,7 +141,6 @@ const Reset: NextPage = () => {
                 const values = mapRefsIntoValues(res.refs);
 
                 try {
-                  console.log(values.Email);
                   await sendResetEmail({
                     variables: { email: values.Email },
                   });

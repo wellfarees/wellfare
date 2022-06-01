@@ -9,6 +9,7 @@ import path from "path";
 import imagemin from "imagemin";
 import imageminJpegtran from "imagemin-jpegtran";
 import imageminPngquant from "imagemin-pngquant";
+import { ApolloError } from "apollo-server-core";
 
 export default {
   Upload: GraphQLUpload,
@@ -50,17 +51,23 @@ export default {
               )
             )
             .on("close", res)
-        );
+        ).catch;
 
         // compress / minify the image
-        const files = await imagemin([`images/$}${extension}`], {
+        const files = await imagemin([`images/${id}${extension}`], {
           plugins: [
             imageminJpegtran(),
             imageminPngquant({
               quality: [0.4, 0.5],
             }),
           ],
+        }).catch((e) => {
+          return new ApolloError("Could not minify the image.");
         });
+
+        if (!files.length) {
+          return new ApolloError("Could not minify the image.");
+        }
 
         // store in aws s3
         const res = await uploadObject(files[0].data, id, extension);
@@ -81,8 +88,7 @@ export default {
           },
         });
       } catch (e) {
-        console.log(e);
-        throw new Error("Failed to upload avatar.");
+        return new ApolloError("Failed to upload avatar.");
       }
 
       return {
