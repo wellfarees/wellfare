@@ -5,7 +5,7 @@ import { login } from "../utils/oauth/login";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import generateJWT from "../utils/generateJWT";
-import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/sendVerificationEmail";
 import { SIGNIN_METHODS } from "../../../../constants";
 import { ApolloError } from "apollo-server-core";
 
@@ -114,7 +114,7 @@ export default {
               },
             });
 
-            await sendVerificationEmai(
+            await sendVerificationEmail(
               args.email,
               targetUser.information.firstName,
               targetUser.id

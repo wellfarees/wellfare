@@ -1,8 +1,8 @@
-import server from "../server";
 import generateJWT from "./generateJWT";
 import { CLIENT_URL } from "../endpoints";
+import { sendEmail } from "./sendEmail";
 
-export const sendVerificationEmai = async (
+export const sendVerificationEmail = async (
   email: string,
   name: string,
   id: string
@@ -10,16 +10,9 @@ export const sendVerificationEmai = async (
   const verificationJWT = generateJWT({ id }, "verification");
   const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;
 
-  await server.mail.send({
-    from: process.env.EMAIL_ADDRESS!,
-    to: email,
-    subject: "Verify your email",
-    html: `Hi ${name}, here's your verification email! <a href="${verificationURL}">Click here</a> to verify your account.
+  const content = `Hi ${name}, here's your verification email! <a href="${verificationURL}">Click here</a> to verify your account.
           <br /> <br />
-          If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}.
-          <br /> <br />
-          Thanks,
-          <br />
-          Wellfare`,
-  });
+          If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}. </br>`;
+
+  await sendEmail(email, content);
 };
