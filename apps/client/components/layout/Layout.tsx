@@ -11,6 +11,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import Modal from "../../components/Modal/Modal";
 import { withAuthRequired } from "../../components/HOC/withAuthRequired";
 import { generateFontSizesFromBase } from "../../utils/generateFontSizesFromBase";
+import Head from "next/dist/shared/lib/head";
 import ClientOnly from "../ClientOnly";
 
 interface LayoutProps {
@@ -153,14 +154,24 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
         <>{children}</>
       ) : isLoaded ? (
         loggedIn ? (
-          <AuthRoute>{children}</AuthRoute>
+          <>
+            <Head>
+              <title>Wellfare App</title>
+            </Head>
+            <AuthRoute>{children}</AuthRoute>
+          </>
         ) : (
-          <StaticLayoutWrapper>
-            {/* Static sided Layout */}
-            <Navigation />
-            {children}
-            <Footer />
-          </StaticLayoutWrapper>
+          <>
+            <Head>
+              <title>Wellfare</title>
+            </Head>
+            <StaticLayoutWrapper>
+              {/* Static sided Layout */}
+              <Navigation />
+              {children}
+              <Footer />
+            </StaticLayoutWrapper>
+          </>
         )
       ) : null}
       <ThemeProvider theme={themes[userInfo.config.theme]}>

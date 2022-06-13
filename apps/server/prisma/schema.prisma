@@ -10,23 +10,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Subscription {
-  id    String @id @default(cuid())
-  email String
-}
-
 model User {
-  id               String        @id @unique @default(cuid())
-  config           Configuration @relation(fields: [configurationId], references: [id])
+  id               String           @id @unique @default(cuid())
+  config           Configuration    @relation(fields: [configurationId], references: [id])
   records          Record[]
   informationId    String
   affirmations     String?
   configurationId  String
   recaps           Recap[]
   lastIndex        Int?
-  emailLastUpdated DateTime      @default(now())
-  information      Information   @relation(fields: [informationId], references: [id])
+  emailLastUpdated DateTime         @default(now())
+  information      Information      @relation(fields: [informationId], references: [id])
   OAuthEmail       String?
+  Newsletter       NewsletterUser[]
 }
 
 model Information {
@@ -82,6 +78,16 @@ model Recap {
   userId      String
 }
 
-model Newsletter {
-  email String @id @unique
+model NewsletterUser {
+  id         String  @id @unique @default(cuid())
+  email      String?
+  relationId String?
+  User       User?   @relation(fields: [userId], references: [id])
+  userId     String?
+}
+
+model NewsletterIPUsers {
+  id         String     @id @unique @default(cuid())
+  ipv6       String
+  subRecords DateTime[]
 }

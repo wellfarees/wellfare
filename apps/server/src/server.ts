@@ -99,9 +99,12 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
-      context: ({ req }) => ({
-        token: req.headers.authorization,
-      }),
+      context: async ({ req, res }) => {
+        if (req.body.operationName === "addToNewsletter")
+          return { ipv6: req.ip };
+
+        return { token: req.headers.authorization };
+      },
       plugins: [
         ApolloServerPluginDrainHttpServer({
           httpServer,

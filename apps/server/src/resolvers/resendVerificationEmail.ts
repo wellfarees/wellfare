@@ -3,7 +3,7 @@ import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
-import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/sendVerificationEmail";
 
 export default {
   Mutation: {
@@ -25,7 +25,7 @@ export default {
         );
 
       try {
-        await sendVerificationEmai(
+        await sendVerificationEmail(
           data.information.email,
           data.information.firstName,
           id

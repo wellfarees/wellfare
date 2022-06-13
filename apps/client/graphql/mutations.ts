@@ -187,3 +187,19 @@ export const CHANGE_TO_NATIVE = gql`
     }
   }
 `;
+
+export const ADD_EMAIL_TO_NEWSLETTER = gql`
+  mutation addToNewsletter($email: String!) {
+    addEmailToNewsletter(email: $email) {
+      success
+    }
+  }
+`;
+
+export const UNSCUBSCRIBE = gql`
+  mutation Unsubscribe($encodedEmail: String!) {
+    unsubscribe(encodedEmail: $encodedEmail) {
+      email
+    }
+  }
+`;

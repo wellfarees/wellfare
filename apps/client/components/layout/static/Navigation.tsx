@@ -13,7 +13,7 @@ const NavWrapper = styled.div`
   width: 100%;
   z-index: 4;
   background: rgba(255, 255, 255, 0.3);
-  /* backdrop-filter: blur(20px); */
+  backdrop-filter: blur(20px);
 
   ${Container} {
     position: relative;

@@ -23,6 +23,8 @@ import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken
 import oauthLogin from "./oauth/login";
 import oauthSignup from "./oauth/siginup";
 import changeToNative from "./changeToNative";
+import unsubscribe from "./unsubscribe";
+import recordSubbedIPUser from "./recordSubbedIPUser";
 
 const root = gql`
   # Base types
@@ -150,6 +152,10 @@ const root = gql`
     token: String!
     verified: Boolean!
   }
+
+  type Email {
+    email: String!
+  }
 `;
 
 export default [
@@ -178,4 +184,6 @@ export default [
   oauthLogin,
   oauthSignup,
   changeToNative,
+  unsubscribe,
+  recordSubbedIPUser,
 ];

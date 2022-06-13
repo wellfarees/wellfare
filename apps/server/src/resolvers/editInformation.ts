@@ -6,7 +6,7 @@ import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
-import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/sendVerificationEmail";
 import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
 import { getDeprecatedIds } from "../utils/getDeprecatedIds";
 
@@ -120,7 +120,7 @@ export default {
       }
 
       if (updateData.email !== data.information.email) {
-        await sendVerificationEmai(updateData.email, updateData.firstName, id);
+        await sendVerificationEmail(updateData.email, updateData.firstName, id);
       }
 
       return (

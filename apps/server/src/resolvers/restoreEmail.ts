@@ -1,5 +1,5 @@
 import server from "../server";
-import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/sendVerificationEmail";
 
 export default {
   Mutation: {
@@ -39,7 +39,7 @@ export default {
           "The desired email is already in use by another account."
         );
 
-      await sendVerificationEmai(
+      await sendVerificationEmail(
         args.newEmail,
         data.information.firstName,
         data.id

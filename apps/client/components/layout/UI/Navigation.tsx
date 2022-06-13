@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
 import { UserPfp } from "../../Pfp/Pfp";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useRouter } from "next/router";
 import { useActions } from "../../../hooks/useActions";
 
@@ -63,7 +62,6 @@ const ActionPoint = styled.span`
 `;
 
 const Navigation: React.FC = () => {
-  const storage = useTypedSelector((state) => state.localStorage!);
   const router = useRouter();
   const { toggleSidebar } = useActions();
 

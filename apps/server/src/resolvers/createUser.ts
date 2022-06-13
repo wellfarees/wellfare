@@ -4,7 +4,8 @@ import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
 import { client } from "../algolia";
-import { sendVerificationEmai } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { addToNewsletter } from "../utils/addToNewsletter";
 
 export default {
   Mutation: {
@@ -23,8 +24,6 @@ export default {
           },
         },
       });
-
-      console.log(data);
 
       if (data) throw new UserExistsError("Email already exists in database.");
       else {
@@ -58,13 +57,16 @@ export default {
             },
             recaps: undefined,
           },
-
           include: {
             information: true,
             config: true,
             records: true,
+            recaps: true,
           },
         });
+
+        // adding to newsletter
+        addToNewsletter(userData.information.email, userData.id);
 
         const publicAlgoliaKey = client.generateSecuredApiKey(
           process.env.ALGOLIA_SEARCH!,
@@ -74,7 +76,7 @@ export default {
         );
 
         const jwt = generateJWT({ id: userData.id }, "client");
-        await sendVerificationEmai(
+        await sendVerificationEmail(
           userData.information.email,
           userData.information.firstName,
           userData.id

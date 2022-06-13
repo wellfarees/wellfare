@@ -7,6 +7,7 @@ import verifyJWT from "../../utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import { ApolloError } from "apollo-server-core";
 import { SIGNIN_METHODS } from "../../../../../constants";
+import { addToNewsletter } from "../../utils/addToNewsletter";
 
 const endpoint = "https://oauth2.googleapis.com/token";
 const getGoogleTokens = async (code: string): Promise<[string, string]> => {
@@ -165,6 +166,9 @@ export default {
               records: true,
             },
           });
+
+          // adding to newsletter
+          addToNewsletter(userData.information.email, userData.id);
 
           const publicAlgoliaKey = client.generateSecuredApiKey(
             process.env.ALGOLIA_SEARCH!,

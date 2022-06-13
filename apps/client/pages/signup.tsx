@@ -251,7 +251,8 @@ const SignUp = () => {
   useEffect(() => {
     const { error, data } = mutationProps;
     if (error) {
-      setError(error.graphQLErrors[0].message);
+      console.log(JSON.stringify(error, null, 2));
+      // setError(error.graphQLErrors[0].message);
       setSignedUp(false);
       return;
     }

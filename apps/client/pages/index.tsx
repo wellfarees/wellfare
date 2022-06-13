@@ -1,4 +1,4 @@
-import { useState, useRef, memo } from "react";
+import { useState, useRef, memo, useEffect } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
@@ -11,6 +11,9 @@ import { emailRegExp } from "../utils/emailRegExp";
 import Scroller from "../components/Scroller/Scroller";
 import LoadingButton from "../components/Button/Button";
 import { useTypedSelector } from "../hooks/useTypedSelector";
+
+import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
+import { useMutation } from "@apollo/client";
 
 const Showcase = memo(ShowcaseComp);
 
@@ -231,12 +234,29 @@ const Home: NextPage = () => {
   const successfullyMailListed = useRef(false);
   const mailContainer = useRef<HTMLDivElement | null>(null);
   const { jwt } = useTypedSelector((state) => state).user;
+  const [addEmailToNewsletter, { data, error, loading }] = useMutation(
+    ADD_EMAIL_TO_NEWSLETTER
+  );
 
   // const [buttonState, setButtonState] = useState("Subscribe");
   const [emailProgress, setEmailProgress] = useState({
     state: false,
     status: "Subscribe",
   });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+    // if (data && !data.addToEmail.success) {
+    //   setEmailError(
+    //     "We couldn't add you to our mailing list. Please, try once again later,"
+    //   );
+    // }
+    if (error) {
+      setEmailError(error.graphQLErrors[0].message);
+    }
+  }, [loading]);
 
   return (
     <>
@@ -335,7 +355,7 @@ const Home: NextPage = () => {
                       toBeLoading: emailProgress.state,
                     }}
                     blockOnce={true}
-                    onClick={() => {
+                    onClick={async () => {
                       if (successfullyMailListed.current) return;
                       setEmailError("");
 
@@ -355,34 +375,36 @@ const Home: NextPage = () => {
 
                       // registration completion -> SIMULATION
                       // TODO: To be replaced with an actual implementation
-                      let successful = true;
 
-                      setTimeout(() => {
+                      try {
+                        await addEmailToNewsletter({ variables: { email } });
+
+                        setTimeout(() => {
+                          setEmailProgress({
+                            state: false,
+                            status: "Subscribed!",
+                          });
+
+                          if (emailRef.current) {
+                            emailRef.current.disabled = true;
+                          }
+
+                          if (mailContainer.current) {
+                            const btn =
+                              mailContainer.current.querySelector(
+                                ".email-btn"
+                              )!;
+                            btn.classList.add("maillisted");
+                          }
+
+                          successfullyMailListed.current = true;
+                        }, 2000);
+                      } catch (e) {
                         setEmailProgress({
                           state: false,
-                          status: "Subscribed!",
+                          status: "Subscribe",
                         });
-
-                        console.log(mailContainer.current);
-                        if (!successful) {
-                          setEmailError(
-                            "We couldn't add you to our mailing list. Please, try once again later,"
-                          );
-                        }
-
-                        // if successful
-                        if (emailRef.current) {
-                          emailRef.current.disabled = true;
-                        }
-
-                        if (mailContainer.current) {
-                          const btn =
-                            mailContainer.current.querySelector(".email-btn")!;
-                          btn.classList.add("maillisted");
-                        }
-
-                        successfullyMailListed.current = true;
-                      }, 2000);
+                      }
                     }}
                   >
                     {emailProgress.status}
