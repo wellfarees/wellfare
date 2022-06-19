@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Navigation, Footer, TopMenu, Sidebar } from "../";
 import { themes } from "../../styled/themes";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider, GlobalStyleComponent } from "styled-components";
 import { SpringContext } from "react-spring";
 import styled, { createGlobalStyle } from "styled-components";
 import { useEffect, useRef } from "react";
@@ -13,6 +13,7 @@ import { withAuthRequired } from "../../components/HOC/withAuthRequired";
 import { generateFontSizesFromBase } from "../../utils/generateFontSizesFromBase";
 import Head from "next/dist/shared/lib/head";
 import ClientOnly from "../ClientOnly";
+import { store } from "../../redux/store";
 
 interface LayoutProps {
   loggedIn: boolean;
@@ -48,14 +49,13 @@ const StaticLayoutWrapper = styled.div`
   overflow-x: hidden;
 `;
 
-const PrivateRoute: React.FC = ({ children }) => {
-  const router = useRouter();
-  const newDay = router.pathname == "/app/entry";
-  const { user } = useTypedSelector((state) => state);
-  const userInfo = user.info!;
+let UserStyles: React.FC | GlobalStyleComponent<any, any> = () => <></>;
 
+const onStateChange = () => {
+  const userInfo = store.getState().user.info!;
   const fontSizes = generateFontSizesFromBase(userInfo.config.fontSize);
-  const UserStyles = createGlobalStyle`
+
+  UserStyles = createGlobalStyle`
     body {
       background-color: ${(props: any) => props.theme.backgroundColor};
       color: ${(props: any) => props.theme.mainColor};
@@ -85,6 +85,15 @@ const PrivateRoute: React.FC = ({ children }) => {
       font-size: ${fontSizes.base}px !important;
     }
   `;
+};
+
+store.subscribe(onStateChange);
+
+const PrivateRoute: React.FC = ({ children }) => {
+  const router = useRouter();
+  const newDay = router.pathname == "/app/entry";
+  const { user } = useTypedSelector((state) => state);
+  const userInfo = user.info!;
 
   return (
     <ThemeProvider theme={themes[userInfo.config.theme]}>
@@ -144,7 +153,7 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
 
     // hide sidebar on mobile whenever change a path
     toggleSidebar(false);
-  }, [router.pathname]);
+  }, [router.pathname, initModal, setLocalStorage, toggleSidebar]);
 
   return (
     <>

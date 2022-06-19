@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export const useScreenSize = (): null | number => {
   const [size, setSize] = useState<null | number>(null);

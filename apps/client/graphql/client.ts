@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { setContext } from "@apollo/link-context";
 import { SERVER_URL } from "../endpoints";
 import { createUploadLink } from "apollo-upload-client";
 

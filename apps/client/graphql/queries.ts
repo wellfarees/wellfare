@@ -130,6 +130,7 @@ export const USER_FEED_QUERY = gql`
       id
       lastSubmitted
       information {
+        id
         firstName
         pfp
       }

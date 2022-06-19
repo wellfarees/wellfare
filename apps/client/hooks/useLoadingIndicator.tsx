@@ -10,18 +10,17 @@ interface useLoadingIndicatorReturns {
     resume: () => void;
   };
 }
+const SpinnerSpan = styled.span`
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  display: inline-block;
+  border: 3px solid #fff;
+  border-bottom: 3px solid #0bf5f56a;
+  margin-right: 0.7em;
+`;
 
 const useLoadingIndicator = (): useLoadingIndicatorReturns => {
-  const SpinnerSpan = styled.span`
-    width: 15px;
-    height: 15px;
-    border-radius: 100%;
-    display: inline-block;
-    border: 3px solid #fff;
-    border-bottom: 3px solid #0bf5f56a;
-    margin-right: 0.7em;
-  `;
-
   class ApiCreator {
     constructor() {}
 

@@ -9,7 +9,7 @@ export interface EmailsChanged {
 export const countRecentEmailsChanged = (arr: EmailsChanged[]): number => {
   let changed = 0;
 
-  for (let email of arr) {
+  for (const email of arr) {
     if (differenceInHours(email.set, Date.now()) < 24) {
       changed++;
     }

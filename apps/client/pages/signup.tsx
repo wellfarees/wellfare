@@ -268,7 +268,7 @@ const SignUp = () => {
       // redirect after successful registration
       router.push("/app/entry");
     }
-  }, [mutationProps.loading]);
+  }, [mutationProps.loading, mutationProps, router, storeUser]);
 
   return (
     <Wrapper>

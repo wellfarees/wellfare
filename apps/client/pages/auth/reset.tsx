@@ -113,7 +113,7 @@ const Reset: NextPage = () => {
         setResult(error.graphQLErrors[0].message);
       }
     }
-  }, [loading]);
+  }, [loading, data, error]);
 
   return (
     <Wrapper>

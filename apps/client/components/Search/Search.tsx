@@ -168,7 +168,7 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
           </div>
         </div>
         {recapId && (
-          <Link href={`/app/recaps/${recapId}`}>
+          <Link passHref href={`/app/recaps/${recapId}`}>
             <button>Go to recap</button>
           </Link>
         )}

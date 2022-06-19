@@ -255,7 +255,7 @@ const SignIn = () => {
         setError("Could not verify oauth identity, please try again.");
         break;
     }
-  }, []);
+  }, [router.asPath, router.query]);
 
   useEffect(() => {
     const { error, data } = queryProps;
@@ -297,7 +297,15 @@ const SignIn = () => {
         router.push(`/app/${endpoint}`);
       })();
     }
-  }, [queryProps.data, queryProps.loading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    queryProps.data,
+    queryProps.loading,
+    initModal,
+    storeUser,
+    router,
+    queryProps,
+  ]);
 
   return (
     <Wrapper>

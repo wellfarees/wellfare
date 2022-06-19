@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FACEBOOK_AUTH_LINK, GOOGLE_AUTH_LINK } from "../../constants";
+import { GOOGLE_AUTH_LINK } from "../../constants";
 import Link from "next/dist/client/link";
 
 const Wrapper = styled.div`

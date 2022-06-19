@@ -156,7 +156,9 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
     if (getLastPathPiece(router.pathname) === endPoint) {
       indicatePointWithCss(retrievePointText(itemRef));
     }
-  }, [router.pathname, userInfo.config.theme]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.pathname, userInfo.config.theme, endPoint, indicatePointWithCss]);
 
   return (
     <li ref={itemRef} className={active ? "active" : ""}>
@@ -235,13 +237,14 @@ const Sidebar: React.FC = () => {
     } else {
       closeSidebar();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asideToggled]);
 
   useEffect(() => {
     if (sideBar && sideBar.current) {
       sideBar.current.style.height = document.body.clientHeight + "px";
     }
-  }, [document.body.clientHeight]);
+  }, []);
 
   return (
     <Wrapper>
@@ -253,21 +256,21 @@ const Sidebar: React.FC = () => {
       <SidebarEl ref={sideBar} as={animated.aside} style={sidebarStyles}>
         <ul>
           <NavPoint endPoint="app" active={true}>
-            <Link href="/app/">
+            <Link passHref href="/app/">
               <span className="home">
                 <i className="fas fa-home"></i>Home
               </span>
             </Link>
           </NavPoint>
           <NavPoint endPoint="affirmations">
-            <Link href="/app/affirmations">
+            <Link passHref href="/app/affirmations">
               <span>
                 <i className="fas fa-brain"></i>Affirmations
               </span>
             </Link>
           </NavPoint>
           <NavPoint endPoint="config">
-            <Link href="/app/config">
+            <Link passHref href="/app/config">
               <span>
                 <i className="fas fa-sliders-h"></i>
                 Design configuration
@@ -275,7 +278,7 @@ const Sidebar: React.FC = () => {
             </Link>
           </NavPoint>
           <NavPoint endPoint="recaps">
-            <Link href="/app/recaps">
+            <Link passHref href="/app/recaps">
               <span>
                 <i className="fas fa-archive"></i>Weekly recap archive
               </span>

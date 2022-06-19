@@ -47,8 +47,7 @@ const Wrapper = styled.div`
 
 const Unsub: React.FC = () => {
   const router = useRouter();
-  const [unsubscribe, { data, error, loading, called }] =
-    useMutation(UNSCUBSCRIBE);
+  const [unsubscribe, { data, loading, called }] = useMutation(UNSCUBSCRIBE);
 
   useEffect(() => {
     (async () => {
@@ -63,7 +62,7 @@ const Unsub: React.FC = () => {
         } catch (e) {}
       }
     })();
-  }, [router.query]);
+  }, [router.query, called, unsubscribe]);
 
   return (
     <Wrapper>

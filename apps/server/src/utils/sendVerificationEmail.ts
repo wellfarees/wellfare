@@ -10,7 +10,7 @@ export const sendVerificationEmail = async (
   const verificationJWT = generateJWT({ id }, "verification");
   const verificationURL = `${CLIENT_URL}auth/verify?token=${verificationJWT}`;
 
-  const content = `Hi ${name}, here's your verification email! <a href="${verificationURL}">Click here</a> to verify your account.
+  const content = `Hi ${name}, here is your verification email! <a href="${verificationURL}">Click here</a> to verify your account.
           <br /> <br />
           If you cannot click on the URL, please manually paste this into your browser: ${verificationURL}. </br>`;
 

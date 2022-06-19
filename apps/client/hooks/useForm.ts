@@ -22,8 +22,7 @@ interface SubmitResult {
 }
 
 const useForm = (): useFormReturned => {
-  const [inputRef, setInputRef] =
-    useState<MutableRefObject<HTMLInputElement>>();
+  const [_, setInputRef] = useState<MutableRefObject<HTMLInputElement>>();
   const refs: HTMLInputElement[] = [];
   const register = (
     name: string
@@ -62,10 +61,7 @@ const useForm = (): useFormReturned => {
             ref,
           });
       } else if (ref.name === "password") {
-        let passThrough = true;
-
         if (ref.value.length < 5) {
-          passThrough = false;
           errors.push({
             type: "short_password_5",
             ref,

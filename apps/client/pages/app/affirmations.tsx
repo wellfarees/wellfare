@@ -79,7 +79,7 @@ const Affirmations: NextPage = () => {
   const [state, setState] = useState(false);
   const [buttonsSwitched, switchButtons] = useState(false);
   const [setAffirmations] = useMutation(EDIT_AFFIRMATIONS);
-  const { loading, data, error } = useQuery(AFFIRMATIONS_QUERY, {
+  const { loading, data } = useQuery(AFFIRMATIONS_QUERY, {
     fetchPolicy: "network-only",
   });
 

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import { GlowingBLue } from "../styled/reusable";
 import Link from "next/link";
+import Image from "next/image";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -77,7 +78,8 @@ const Wrapper = styled.main`
     }
   }
 
-  & > img {
+  .desktop-illustration {
+    height: 100%;
     width: 55%;
     position: absolute;
     right: -7em;
@@ -86,13 +88,18 @@ const Wrapper = styled.main`
     z-index: 0;
   }
 
-  @media only screen and (max-width: 768px) {
+  .mobile_ill_container {
+    margin: 4em 0 -2em 0;
+    display: none !important;
+  }
+
+  @media only screen and (max-width: 769px) {
     .info {
       max-width: 100% !important;
     }
 
-    .desktop_illustration {
-      display: none;
+    .desktop-img {
+      display: none !important;
     }
 
     ${Container} {
@@ -105,7 +112,7 @@ const Wrapper = styled.main`
       margin: 4em 0 !important;
     }
 
-    .mobile_illustration {
+    .mobile_ill_container {
       display: none !important;
     }
 
@@ -116,9 +123,11 @@ const Wrapper = styled.main`
 
   @media only screen and (max-width: 424px) {
     .mobile_illustration {
-      display: block !important;
       width: 250px;
-      margin-top: 7em;
+    }
+
+    .mobile_ill_container {
+      display: block !important;
     }
 
     button {
@@ -144,25 +153,23 @@ const Custom404: React.FC = () => {
     <Wrapper>
       <Container>
         <div className="info">
-          <img
-            className="mobile_illustration"
-            src="/img/404_mobile-svg.svg"
-            alt="404"
-          />
+          <div className="mobile_ill_container">
+            <Image
+              alt="404"
+              className="mobile_illustration"
+              height={500}
+              width={500}
+              src="/img/404_mobile-svg.svg"
+            />
+          </div>
 
           <h1>
             <p>OOPS...</p>Couldn&apos;t find anything here.
           </h1>
 
           <p className="description">
-            Seems like the page you’re looking for doesn’t exist.
+            Seems like the page you are looking for does not exist.
           </p>
-
-          {/* TODO: If user is logged in then show different endpoints such as: 
-            1) Feed
-            2) Affirmations
-            3) Theme Config
-          */}
 
           <div className="redirection">
             <h3>You might find these quite useful:</h3>
@@ -178,17 +185,19 @@ const Custom404: React.FC = () => {
               </li>
             </ul>
           </div>
-          <Link href="/">
-            {/* TODO: Replace with *back to feed* if user is logged in */}
+          <Link href="/" passHref>
             <button>Back home</button>
           </Link>
         </div>
       </Container>
-      <img
-        className="desktop_illustration"
-        src="/img/404_desktop-svg.svg"
-        alt="404"
-      />
+      <div className="desktop-illustration">
+        <Image
+          alt="404"
+          className="desktop-img"
+          src={"/img/404_desktop-svg.svg"}
+          layout="fill"
+        />
+      </div>
     </Wrapper>
   );
 };

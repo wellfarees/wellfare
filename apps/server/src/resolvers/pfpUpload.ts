@@ -38,7 +38,7 @@ export default {
       try {
         // delete the previous avatar
         if (data.information.pfp) {
-          const targetFilename = /([^\/]+$)/.exec(data.information.pfp)[0];
+          const targetFilename = /([^/]+$)/.exec(data.information.pfp)[0];
           await deleteObject(targetFilename);
         }
 
@@ -61,7 +61,7 @@ export default {
               quality: [0.4, 0.5],
             }),
           ],
-        }).catch((e) => {
+        }).catch(() => {
           return new ApolloError("Could not minify the image.");
         });
 

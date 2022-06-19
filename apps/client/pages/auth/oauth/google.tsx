@@ -27,7 +27,7 @@ const Main = styled.main`
 const GoogleOauth: React.FC = () => {
   const router = useRouter();
 
-  const { setPfp, saveConfig, saveToken } = useActions();
+  const { setPfp, saveConfig } = useActions();
 
   const [login, OAuthProps] = useMutation<{
     oAuthLogin: {
@@ -59,7 +59,7 @@ const GoogleOauth: React.FC = () => {
         });
       } catch (e) {}
     })();
-  }, [router.query]);
+  }, [router.query, login]);
 
   useEffect(() => {
     if (OAuthProps.error) {
@@ -91,7 +91,7 @@ const GoogleOauth: React.FC = () => {
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       router.push("/app");
     }
-  }, [OAuthProps.loading]);
+  }, [OAuthProps.error, OAuthProps.data, router, saveConfig, setPfp]);
 
   return (
     <Main>

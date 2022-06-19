@@ -10,15 +10,19 @@ import client from "../graphql/client";
 import { ApolloQueryResult } from "apollo-client";
 import Fade from "react-reveal/Fade";
 
+const Wrapper = styled.div`
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
 const Pfp: React.FC<{ url: string }> = ({ url }) => {
-  console.log(url);
-  const Wrapper = styled.div`
-    background-image: url(${url}) !important;
-    background-size: cover;
-    background-repeat: no-repeat;
-  `;
-
-  return <Wrapper className="pfp"></Wrapper>;
+  return (
+    <Wrapper
+      style={{
+        backgroundImage: `url(${url})`,
+      }}
+      className="pfp"
+    ></Wrapper>
+  );
 };
 
 const AboutInfo = styled.main`

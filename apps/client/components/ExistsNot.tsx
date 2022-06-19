@@ -30,7 +30,8 @@ const ExistsNot: React.FC<ExistsNotProps> = ({ name }) => {
     <Wrapper>
       <h1>This {name} does not exist.</h1>
       <p>
-        The resource you're trying to access could not be found in out database.
+        The resource you are trying to access could not be found in out
+        database.
       </p>
     </Wrapper>
   );

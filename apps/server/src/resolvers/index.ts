@@ -17,13 +17,10 @@ import forgetPassword from "./resetPassword";
 import verifyJWT from "./verifyJWT";
 import changePassword from "./changePassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
-import getAccessToken from "./getAccessToken";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 import oAauthLogin from "./oauth/login";
-import oAauthSignup from "./oauth/signup";
 import changeToNative from "./changeToNative";
 import unsubscribe from "./unsubscribe";
-import recordSubbedIPUser from "./recordSubbedIPUser";
 
 const Query = {
   ...ping.Query,
@@ -34,7 +31,6 @@ const Query = {
   ...login.Query,
   ...verifyJWT.Query,
   ...getUserInformationFromEmailToken.Query,
-  ...getAccessToken.Query,
 };
 
 const Mutation = {
@@ -50,11 +46,9 @@ const Mutation = {
   ...changePassword.Mutation,
   ...addEmailToNewsletter.Mutation,
   ...pfpUpload.Mutation,
-  ...oAauthSignup.Mutation,
   ...oAauthLogin.Mutation,
   ...changeToNative.Mutation,
   ...unsubscribe.Mutation,
-  ...recordSubbedIPUser.Mutation,
 };
 
 const Upload = pfpUpload.Upload;

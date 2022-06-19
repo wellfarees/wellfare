@@ -130,7 +130,7 @@ const Button: React.FC<ButtonProps> = ({
         spinnerApi.stop();
       }
     }
-  }, [withLoading?.toBeLoading]);
+  }, [withLoading?.toBeLoading, blockOnce, spinnerApi, withLoading]);
 
   return (
     <Wrapper className="loader-wrapper" {...props}>

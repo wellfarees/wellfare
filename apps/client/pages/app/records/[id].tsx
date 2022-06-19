@@ -43,7 +43,7 @@ const RecordPage: NextPage<{ isMobile: boolean }> = ({ isMobile }) => {
       router.push("/404");
       return;
     }
-  }, [size]);
+  }, [size, router]);
 
   return (
     <Wrapper>

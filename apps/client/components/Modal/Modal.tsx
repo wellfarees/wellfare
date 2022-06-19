@@ -127,6 +127,7 @@ const Modal: React.FC<{ state: boolean }> = ({ children, state }) => {
   useEffect(() => {
     if (state) openModal();
     else closeModal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   useEffect(() => {
@@ -134,6 +135,7 @@ const Modal: React.FC<{ state: boolean }> = ({ children, state }) => {
       closeModal();
       initModal(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]);
 
   return (

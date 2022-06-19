@@ -6,22 +6,25 @@ interface PfpProps {
   url: string;
 }
 
-const Pfp: React.FC<PfpProps> = ({ url }) => {
-  const PfpEl = styled.div`
-    width: 4em;
-    height: 4em;
-    border-radius: 100%;
-    cursor: pointer;
-    background-image: url(${url});
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  `;
+const PfpEl = styled.div`
+  width: 4em;
+  height: 4em;
+  border-radius: 100%;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 
+const Pfp: React.FC<PfpProps> = ({ url }) => {
   return (
     <div className="pfp">
-      <Link href="/app/user">
-        <PfpEl></PfpEl>
+      <Link passHref href="/app/user">
+        <PfpEl
+          style={{
+            backgroundImage: `url(${url})`,
+          }}
+        ></PfpEl>
       </Link>
     </div>
   );
