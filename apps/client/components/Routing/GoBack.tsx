@@ -31,7 +31,7 @@ const GoBack: React.FC = () => {
     <>
       {size ? (
         size < 1024 ? null : (
-          <Link href="/app">
+          <Link passHref href="/app">
             <Wrapper>
               <p>Go back</p>
               <span></span>

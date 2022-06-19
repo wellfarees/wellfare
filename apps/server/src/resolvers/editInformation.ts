@@ -78,8 +78,7 @@ export default {
         throw new Error("Email already in use.");
       }
 
-      let currentEmailsUsed = data.information.emailsUsed;
-
+      const currentEmailsUsed = data.information.emailsUsed;
       const recentEmailsChanged = countRecentEmailsChanged(currentEmailsUsed);
 
       if (

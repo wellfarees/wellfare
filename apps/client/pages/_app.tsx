@@ -57,12 +57,9 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
     } else {
       getConfig();
     }
-  }, [router.pathname]);
+  }, [router.pathname, getConfig, getOauthUser]);
 
   useEffect(() => {
-    // const serviceType = localStorage.getItem("sync-type");
-    // if (!router.pathname.includes("app") || serviceType == "native") return;
-
     const jwt = localStorage.getItem("jwt");
 
     if (!jwt) {
@@ -77,14 +74,13 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
         reducedMotion: data.getUser.config.reducedMotion,
         theme: data.getUser.config.darkMode ? "dark" : "light",
       });
-      console.log(data.getUser.information.pfp);
       setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
     }
     if (error) {
       console.error(error);
     }
-  }, [loading, data, error, router.pathname]);
+  }, [loading, data, error, router.pathname, saveToken, saveConfig, setPfp]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -110,7 +106,13 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
     if (oAuthUserProps.error) {
       console.log(JSON.stringify(oAuthUserProps.error, null, 2));
     }
-  }, [oAuthUserProps.loading]);
+  }, [
+    saveConfig,
+    saveToken,
+    setPfp,
+    oAuthUserProps.error,
+    oAuthUserProps.data,
+  ]);
 
   return ready ? <>{children}</> : <></>;
 };

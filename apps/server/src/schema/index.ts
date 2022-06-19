@@ -18,13 +18,10 @@ import pfpUpload from "./pfpUpload";
 import verifyJWT from "./verifyJWT";
 import changePassword from "./changePassword";
 import addEmailToNewsletter from "./addEmailToNewsletter";
-import getAcessToken from "./getAcessToken";
 import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken";
 import oauthLogin from "./oauth/login";
-import oauthSignup from "./oauth/siginup";
 import changeToNative from "./changeToNative";
 import unsubscribe from "./unsubscribe";
-import recordSubbedIPUser from "./recordSubbedIPUser";
 
 const root = gql`
   # Base types
@@ -177,13 +174,10 @@ export default [
   restoreEmail,
   changePassword,
   verifyJWT,
-  getAcessToken,
   pfpUpload,
   addEmailToNewsletter,
   getUserInformationFromEmailToken,
   oauthLogin,
-  oauthSignup,
   changeToNative,
   unsubscribe,
-  recordSubbedIPUser,
 ];

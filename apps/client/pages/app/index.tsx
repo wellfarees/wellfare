@@ -1,4 +1,4 @@
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage } from "next";
 import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import Link from "next/link";
@@ -200,7 +200,7 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading, error } = useQuery(USER_FEED_QUERY, {
+  const { data, loading } = useQuery(USER_FEED_QUERY, {
     fetchPolicy: "network-only",
   });
 
@@ -282,7 +282,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               (data.getUser.lastSubmitted >= 24 ||
               data.getUser.lastSubmitted === null ? (
                 <div className="journal-cta">
-                  <Link href="/app/entry">
+                  <Link href="/app/entry" passHref>
                     <h4>
                       Ready to journal another day?
                       <i className="fas fa-pencil-alt"></i>
@@ -292,7 +292,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               ) : null)}
             <br />
             <div className="affirmations-cta">
-              <Link href="/app/affirmations">
+              <Link href="/app/affirmations" passHref>
                 <span>
                   Read your affirmations
                   <i className="fas fa-arrow-right"></i>
@@ -366,7 +366,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                 <h1>
                   <i className="far fa-frown-open"></i>Hmm...
                 </h1>
-                <h3>We couldn't find any records</h3>
+                <h3>We could not find any records</h3>
                 <p>Try logging on and journaling more often</p>
               </NoRecordsFound>
             )

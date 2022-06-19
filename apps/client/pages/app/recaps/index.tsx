@@ -153,7 +153,7 @@ interface ReceivedRecap {
 }
 
 const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
-  const { loading, error, data } = useQuery<ReceivedRecap>(RECAP_LIST_QUERY);
+  const { loading, data } = useQuery<ReceivedRecap>(RECAP_LIST_QUERY);
 
   return (
     <Wrapper>
@@ -175,8 +175,8 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
                   const emojis = records.map((record) => record.emoji);
 
                   return (
-                    <Link href={`/app/recaps/${id}`}>
-                      <div className="recap-card" key={index}>
+                    <Link passHref href={`/app/recaps/${id}`} key={index}>
+                      <div className="recap-card">
                         <h3 className="watermark">{records.length}</h3>
                         <div className="content">
                           <p className="period">
@@ -215,7 +215,7 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
                 Your weekly recaps will go here once you start journaling more
                 often
               </p>
-              <Link href="/app">
+              <Link href="/app" passHref>
                 <button className="return-btn">Return to feed</button>
               </Link>
             </div>

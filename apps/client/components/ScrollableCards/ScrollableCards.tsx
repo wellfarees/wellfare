@@ -48,7 +48,7 @@ const ScrollableCards: React.FC<ScrollableCardsProps> = ({
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [changeInterval]);
 
   useEffect(() => {
     scrollerAPI.start({ x: -scrollBy + "px" });
@@ -56,7 +56,7 @@ const ScrollableCards: React.FC<ScrollableCardsProps> = ({
     return () => {
       scrollerAPI.stop();
     };
-  }, [scrollBy]);
+  }, [scrollBy, scrollerAPI]);
   return (
     <div className="scrollable-container">
       <ScrollerContainer

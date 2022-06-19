@@ -117,7 +117,7 @@ const Restore: NextPage = () => {
       <Container>
         <div className="submission-block">
           <header>
-            <h3>Let's get back to it.</h3>
+            <h3>Let&apos;s get back to it.</h3>
             <p className="descr">
               Enter the email that was last associated with your account and
               either reconfirm it or connect another email.
@@ -151,7 +151,7 @@ const Restore: NextPage = () => {
 
                   setResult("");
                   setSuccess(
-                    `You've been sent a confirmation details to the address <b>${values.Email}</b>. Confirm the email before trying to sign in again.`
+                    `You have been sent a confirmation details to the address <b>${values.Email}</b>. Confirm the email before trying to sign in again.`
                   );
                 } catch (e) {}
               }

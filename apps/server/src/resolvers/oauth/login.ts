@@ -19,35 +19,31 @@ const getGoogleTokens = async (code: string): Promise<[string, string]> => {
     redirect_uri: "http://localhost:3000/auth/oauth/google",
   };
 
-  try {
-    const res = await axios.post(endpoint, new URLSearchParams(opts), {
+  const res = await axios.post(endpoint, new URLSearchParams(opts), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+
+  const refresh_token = res.data.refresh_token;
+  const refresh_opts = {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    grant_type: "refresh_token",
+    refresh_token: refresh_token,
+  };
+
+  const refreshed = await axios.post(
+    endpoint,
+    new URLSearchParams(refresh_opts),
+    {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-    });
+    }
+  );
 
-    const refresh_token = res.data.refresh_token;
-    const refresh_opts = {
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      grant_type: "refresh_token",
-      refresh_token: refresh_token,
-    };
-
-    const refreshed = await axios.post(
-      endpoint,
-      new URLSearchParams(refresh_opts),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    return [refresh_token, refreshed.data.access_token];
-  } catch (e) {
-    throw e;
-  }
+  return [refresh_token, refreshed.data.access_token];
 };
 
 export default {
@@ -66,7 +62,7 @@ export default {
           args.type == "code"
             ? await getGoogleTokens(args.token)
             : [null, null];
-        let initialRefreshToken =
+        const initialRefreshToken =
           args.type == "code" ? initialGoogleTokens[0] : args.token;
 
         let [pureRefreshToken, pureAccessToken] = initialGoogleTokens;

@@ -21,7 +21,7 @@ export default {
       }
     ) => {
       switch (args.service) {
-        case "google":
+        case "google": {
           const endpoint = "https://oauth2.googleapis.com/token";
           const decoded_refresh = verifyJWT(
             args.refresh,
@@ -37,7 +37,7 @@ export default {
 
           const refreshed = await axios.post(
             endpoint,
-            new URLSearchParams(refresh_opts as any),
+            new URLSearchParams(refresh_opts),
             {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -149,6 +149,7 @@ export default {
             token: generateJWT({ id: targetUser.id }, "client"),
             verified: isFinallyVerified,
           };
+        }
       }
     },
   },

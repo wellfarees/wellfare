@@ -54,7 +54,7 @@ app.use(async (req, res, next) => {
   try {
     const refreshed = await axios.post(
       endpoint,
-      new URLSearchParams(refresh_opts as any),
+      new URLSearchParams(refresh_opts),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -99,7 +99,7 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
-      context: async ({ req, res }) => {
+      context: async ({ req }) => {
         if (req.body.operationName === "addToNewsletter")
           return { ipv6: req.ip };
 

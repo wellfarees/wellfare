@@ -14,11 +14,7 @@ import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
 import { useRouter } from "next/router";
 import { VALID_JWT } from "../../graphql/queries";
 import { CHANGE_PASSWORD } from "../../graphql/mutations";
-import { useQuery } from "@apollo/client";
-
-import { useMutation } from "@apollo/client";
-import { useEffect } from "react";
-// FIXME: WHY IS THE MUTATION CALL NOT IMPLEMENTED???
+import { useQuery, useMutation } from "@apollo/client";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -187,9 +183,9 @@ const PasswordReset: NextPage = () => {
           className="submission-block"
         >
           <header>
-            <h3>We got your back, let's reset the password</h3>
+            <h3>We got your back, let&apos;s reset the password</h3>
             <p className="descr">
-              Here's your chance to regain access to your personal account.
+              Here is your chance to regain access to your personal account.
               Catch it!
             </p>
           </header>
@@ -270,7 +266,7 @@ const PasswordReset: NextPage = () => {
               make sure you do not use links from unverified sources.
             </p>
           </div>
-          <Link href="/">
+          <Link href="/" passHref>
             <span>Return home</span>
           </Link>
         </div>

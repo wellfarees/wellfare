@@ -42,6 +42,7 @@ const Hero = styled.section`
       line-height: 1.1;
       background-image: -webkit-linear-gradient(45deg, #117ee3, #00f0ff);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -234,7 +235,7 @@ const Home: NextPage = () => {
   const successfullyMailListed = useRef(false);
   const mailContainer = useRef<HTMLDivElement | null>(null);
   const { jwt } = useTypedSelector((state) => state).user;
-  const [addEmailToNewsletter, { data, error, loading }] = useMutation(
+  const [addEmailToNewsletter, { error, loading }] = useMutation(
     ADD_EMAIL_TO_NEWSLETTER
   );
 
@@ -245,18 +246,10 @@ const Home: NextPage = () => {
   });
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    // if (data && !data.addToEmail.success) {
-    //   setEmailError(
-    //     "We couldn't add you to our mailing list. Please, try once again later,"
-    //   );
-    // }
     if (error) {
       setEmailError(error.graphQLErrors[0].message);
     }
-  }, [loading]);
+  }, [loading, error]);
 
   return (
     <>
@@ -280,7 +273,7 @@ const Home: NextPage = () => {
                 </p>
               </Fade>
               <Fade bottom>
-                <Link href={jwt ? "/app" : "/signup"}>
+                <Link passHref href={jwt ? "/app" : "/signup"}>
                   <Button>Get Started</Button>
                 </Link>
               </Fade>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { animated } from "react-spring";
 import { Container } from "../../../styled/reusable";
@@ -146,7 +146,7 @@ const Navigation: React.FC = () => {
 
       <Container>
         <Nav>
-          <Link href="/">
+          <Link passHref href="/">
             <span className="logo">Wellfare™</span>
           </Link>
 

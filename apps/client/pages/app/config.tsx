@@ -193,7 +193,7 @@ const Wrapper = styled.div`
 const Conf: NextPage = () => {
   const { saveConfig } = useActions();
   const { user } = useTypedSelector((state) => state);
-  const [mutateAppearance, { data, loading }] = useMutation(EDIT_USER_CONFIG);
+  const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
 
   const mutateSpecificValue = (mutation: { [key: string]: any }) => {
     mutateAppearance({
@@ -207,7 +207,7 @@ const Conf: NextPage = () => {
     if (data) {
       saveConfig(transformFetchedConfig(data.editAppearance.config));
     }
-  }, [data, loading]);
+  }, [data, saveConfig]);
 
   return (
     <Wrapper>

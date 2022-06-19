@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { fontSizes } from "../../config/userConfig";
 import { animated, useSpring } from "react-spring";
@@ -83,7 +83,7 @@ const WatermarkInput: React.FC<InputProps> = ({
     setTimeout(() => {
       areaRef.current?.focus();
     }, 1);
-  }, []);
+  }, [toFocus]);
 
   useEffect(() => {
     const OnInput = () => {
@@ -106,11 +106,13 @@ const WatermarkInput: React.FC<InputProps> = ({
     if (areaRef !== null && areaRef.current !== null)
       areaRef.current.addEventListener("input", OnInput, false);
 
+    let areaRefCleanup = areaRef;
+
     return () => {
-      if (areaRef !== null && areaRef.current !== null)
+      if (areaRefCleanup !== null && areaRefCleanup.current !== null)
         areaRef!.current.removeEventListener("input", OnInput, false);
     };
-  }, [show]);
+  }, [show, main, setAreaRef]);
 
   useEffect(() => {
     if (!isLocked && areaRef.current) {

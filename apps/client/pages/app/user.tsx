@@ -228,7 +228,7 @@ const User = () => {
   }>(UPLOAD_PFP);
 
   useEffect(() => {
-    setInProgress(!inProgress);
+    setInProgress((state) => !state);
   }, [isSaved]);
 
   useEffect(() => {
@@ -241,7 +241,7 @@ const User = () => {
     } else if (uploadProps.error) {
       setError(uploadProps.error.graphQLErrors[0].message);
     }
-  }, [uploadProps.loading]);
+  }, [setPfp, uploadProps.data, uploadProps.error]);
 
   const isImage = (type: string): boolean => {
     var ext = type.split("/")[1];
@@ -294,10 +294,9 @@ const User = () => {
 
   useEffect(() => {
     if (mutationProps.error) {
-      // console.log(JSON.stringify(mutationProps.error, null, 2));
       setError(mutationProps.error.graphQLErrors[0].message as string);
     }
-  }, [mutationProps.loading]);
+  }, [mutationProps.error]);
 
   useEffect(() => {
     if (localStorage.getItem("sync-type") == "native") {
@@ -314,7 +313,7 @@ const User = () => {
         setError(changeResult.error.graphQLErrors[0].message);
       }
     }
-  }, [changeResult.loading]);
+  }, [changeResult.data, changeResult.error]);
 
   return (
     <Wrapper>

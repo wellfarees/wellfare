@@ -34,7 +34,7 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
         console.log(JSON.stringify(error, null, 2));
         router.push("/signin");
       }
-    }, [loading]);
+    }, [loading, data, error, router]);
 
     return loading || !verified ? <></> : <ChildComponent {...props} />;
   };

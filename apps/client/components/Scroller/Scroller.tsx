@@ -21,7 +21,6 @@ const Wrapper = styled.div`
 const Scroller: React.FC = ({ children }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const lastPosition = useRef(0);
   const prevOffset = useRef(0);
 
   const [styles, api] = useSpring(() => {
@@ -46,8 +45,8 @@ const Scroller: React.FC = ({ children }) => {
 
   // Variables for velocity
   let touchStart = 0;
-  let startTime = 0;
-  let endTime = 0;
+  // let startTime = 0;
+  // let endTime = 0;
   let touchEnd = 0;
 
   const startDragging = (e: TouchEvent<HTMLDivElement>): void => {
@@ -57,7 +56,7 @@ const Scroller: React.FC = ({ children }) => {
       )[container.current.querySelectorAll(".inner-container > *").length - 1]
         .clientWidth;
 
-      endTime = performance.now();
+      // endTime = performance.now();
 
       const deltaX = touchStart - e.touches[0].clientX;
 
@@ -78,10 +77,9 @@ const Scroller: React.FC = ({ children }) => {
       });
 
       // TODO: Add velocity into account when calculating offset by which to move the scroller container
-
-      const velocity = Math.round(
-        Math.abs(deltaX / ((endTime - startTime) / 1000))
-      ); // pixels per second (px/s)
+      // const velocity = Math.round(
+      //   Math.abs(deltaX / ((endTime - startTime) / 1000))
+      // ); // pixels per second (px/s)
     }
   };
 
@@ -94,7 +92,7 @@ const Scroller: React.FC = ({ children }) => {
     let deltaX = window.innerWidth - e.touches[0].clientX;
     touchStart = window.innerWidth - deltaX;
 
-    startTime = performance.now();
+    // startTime = performance.now();
     window.addEventListener("touchmove", startDragging as any);
     window.addEventListener("touchend", stopDragging as any);
   };

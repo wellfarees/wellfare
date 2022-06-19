@@ -322,9 +322,7 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
-  const [addRecord] = useMutation(ADD_RECORD, {
-    refetchQueries: ["GetUserFeed"],
-  });
+  const [addRecord] = useMutation(ADD_RECORD);
   const userQueryProps = useQuery(GET_FIRST_NAME);
   const [getLastSubmitted, { data, loading }] = useLazyQuery(
     GET_LAST_SUBMITTED,
@@ -349,7 +347,7 @@ const Entry: NextPage = () => {
 
   useEffect(() => {
     getLastSubmitted();
-  }, []);
+  }, [getLastSubmitted]);
 
   const startDragging = (e: TouchEvent<HTMLDivElement>): void => {
     if (!modalRef || !modalRef.current) return;
@@ -412,6 +410,7 @@ const Entry: NextPage = () => {
     closeModal();
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
 
   // Spring styles for modal
@@ -577,7 +576,7 @@ const Entry: NextPage = () => {
           data.getUser.lastSubmitted < 24 ? (
             <NotAllowed>
               <div className="info">
-                <h2>You've already journaled today!</h2>
+                <h2>You have already journaled today!</h2>
                 <p>
                   You can add another entry in{" "}
                   <b>
@@ -587,8 +586,10 @@ const Entry: NextPage = () => {
                   </b>
                   .
                 </p>
-                <Link href="/app">
-                  <Button>Moodboard</Button>
+                <Link href="/app" passHref>
+                  <div>
+                    <Button>Moodboard</Button>
+                  </div>
                 </Link>
               </div>
             </NotAllowed>
@@ -724,7 +725,7 @@ const Entry: NextPage = () => {
               <animated.div
                 style={isMobile ? mobileModalStyles : modalStyles}
                 className="modal"
-                ref={modalRef}
+                // ref={modalRef}
                 onTouchStart={initDrag}
               >
                 <div className="draggable" onTouchStart={initDrag}></div>

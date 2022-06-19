@@ -73,7 +73,7 @@ const LabeledInput: React.FC<InputProps> = ({
   useEffect(() => {
     const setter = setInputRef!;
     setter(inputRef);
-  }, []);
+  }, [inputRef, setInputRef]);
 
   const [labelStyles, api] = useSpring(() => {
     return {
@@ -126,6 +126,7 @@ const LabeledInput: React.FC<InputProps> = ({
     if (!defaultValue) return;
 
     showLabel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   return (

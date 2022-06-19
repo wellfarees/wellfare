@@ -7,7 +7,7 @@ export const login = async (
   token: string
 ): Promise<User> => {
   switch (service) {
-    case "google":
+    case "google": {
       const res = await axios.get<{
         email: string;
         given_name: string;
@@ -21,5 +21,6 @@ export const login = async (
         lastName: res.data.family_name,
         pfp: res.data.picture,
       };
+    }
   }
 };

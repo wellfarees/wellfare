@@ -92,7 +92,7 @@ const Verify: NextPage = () => {
         } catch (e) {}
       }
     })();
-  }, [token]);
+  }, [token, verifyUser]);
 
   return (
     <Wrapper>
@@ -111,7 +111,7 @@ const Verify: NextPage = () => {
                 </p>
                 <p>
                   You may now close this tab and head back over to{" "}
-                  <Link href="/">
+                  <Link href="/" passHref>
                     <span>Wellfare</span>
                   </Link>
                   .
@@ -130,7 +130,7 @@ const Verify: NextPage = () => {
                   sources.
                 </p>
               </div>
-              <Link href="/">
+              <Link href="/" passHref>
                 <span>Return home</span>
               </Link>
             </div>

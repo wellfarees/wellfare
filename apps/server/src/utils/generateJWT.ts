@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 
 export default function generateJWT(
-  payload: { id: String },
+  payload: { id: string },
   type: "verification" | "client" | "password"
 ) {
   if (

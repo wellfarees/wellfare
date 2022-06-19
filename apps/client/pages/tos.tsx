@@ -46,7 +46,7 @@ const TOS: NextPage<{ text: string }> = ({ text }) => {
     if (tosContainer.current) {
       tosContainer.current.innerHTML = text;
     }
-  }, []);
+  }, [text]);
 
   return (
     <Wrapper>
