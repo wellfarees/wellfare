@@ -19,8 +19,14 @@ const Main = styled.main`
   }
 
   p {
-    font-size: 1.7rem;
-    margin-top: 1em;
+    font-size: 1.6rem;
+    margin-top: 0.7em;
+  }
+
+  @media only screen and (max-width: 600px) {
+    h2 {
+      font-size: 8vw;
+    }
   }
 `;
 
@@ -82,7 +88,6 @@ const GoogleOauth: React.FC = () => {
       );
 
       const user = OAuthProps.data.oAuthLogin.user;
-      // saveToken(localStorage.getItem("jwt") as string);
       saveConfig({
         fontSize: user.config.fontSize,
         reducedMotion: user.config.reducedMotion,
@@ -97,7 +102,7 @@ const GoogleOauth: React.FC = () => {
     <Main>
       <Container>
         <h2>Redirecting...</h2>
-        <p>This will only take a second or two</p>
+        <p>This will only take a second or two.</p>
       </Container>
     </Main>
   );
