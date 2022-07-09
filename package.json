@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "heroku-prebuild": "cd app && npm install && npm run build && cd .. && cd api && npm install",
+    "heroku-prebuild": "cd apps/server && npm install && npm run build && cd .. && cd api && npm install",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
