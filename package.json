@@ -7,8 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "backend-only-build": "NODE_OPTIONS=--openssl-legacy-provider && cd ./apps/server && yarn build",
-    "build": "turbo run build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider turbo run build ",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
