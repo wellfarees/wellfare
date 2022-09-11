@@ -66,5 +66,8 @@
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-pngquant": "^9.0.2",
     "jsonwebtoken": "^8.5.1"
+  },
+  "engines": {
+    "node": "16.13.2"
   }
 }
