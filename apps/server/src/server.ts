@@ -17,7 +17,7 @@ import generateJWT from "./utils/generateJWT";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
-import { SIGNIN_METHODS } from "../../../constants";
+import { SIGNIN_METHODS } from "./constants";
 
 const app = express();
 app.use(graphqlUploadExpress());
