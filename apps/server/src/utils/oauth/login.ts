@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SIGNIN_METHODS } from "../../../../../constants";
+import { SIGNIN_METHODS } from "../../constants";
 import { User } from "./types";
 
 export const login = async (

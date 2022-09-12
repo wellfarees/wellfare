@@ -6,7 +6,7 @@ import generateJWT from "../../utils/generateJWT";
 import verifyJWT from "../../utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import { ApolloError } from "apollo-server-core";
-import { SIGNIN_METHODS } from "../../../../../constants";
+import { SIGNIN_METHODS } from "../../constants";
 import { addToNewsletter } from "../../utils/addToNewsletter";
 
 const endpoint = "https://oauth2.googleapis.com/token";
