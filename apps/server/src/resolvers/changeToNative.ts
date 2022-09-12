@@ -6,7 +6,7 @@ import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import generateJWT from "../utils/generateJWT";
 import { sendVerificationEmail } from "../utils/sendVerificationEmail";
-import { SIGNIN_METHODS } from "../../../../constants";
+import { SIGNIN_METHODS } from "../constants";
 import { ApolloError } from "apollo-server-core";
 
 export default {
