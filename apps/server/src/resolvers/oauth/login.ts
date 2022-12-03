@@ -189,6 +189,7 @@ export default {
 
         return { user, publicAlgoliaKey, oAuthRefresh: encoded_refresh };
       } catch (e) {
+        console.log(e);
         return new ApolloError("oAuth failed", "INVALID_OAUTH");
       }
     },
