@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "HTTPS=true next dev",
-    "build": "yarn install && next build",
+    "build": "yarn install --production=false && next build",
     "start": "next start",
     "lint": "next lint"
   },
