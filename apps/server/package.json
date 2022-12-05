@@ -2,7 +2,7 @@
   "name": "wellfare-backend",
   "version": "0.1.0",
   "description": "Backend for Wellfare.",
-  "main": "dist/apps/src/main.js",
+  "main": "dist/apps/server/src/main.js",
   "scripts": {
     "check-types": "tsc --noemit",
     "setup": "yarn && prisma generate && tsc",
