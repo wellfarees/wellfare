@@ -122,8 +122,9 @@ class Server extends ApolloServer {
   async listen() {
     await this.start();
     this.applyMiddleware({ app, path: "/" });
-    await new Promise<void>((resolve) => app.listen(4000, resolve));
-    return 4000;
+    const port = process.env.PORT || 4000;
+    await new Promise<void>((resolve) => app.listen(port, resolve));
+    return port;
   }
 
   async initCron() {
