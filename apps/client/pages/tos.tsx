@@ -71,7 +71,8 @@ export default TOS;
 export const getStaticProps: GetStaticProps = async () => {
   let text = "Failed to fetch Wellfare TOS";
   try {
-    text = await staticFileFetch(CLIENT_URL);
+    // TODO: Change to actual url when deploying the whole app
+    text = await staticFileFetch(`${CLIENT_URL}/tos.txt`);
   } catch (e) {
   } finally {
     return {
