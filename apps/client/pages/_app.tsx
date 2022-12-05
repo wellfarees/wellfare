@@ -24,7 +24,7 @@ const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
 >(undefined!);
 
-const ReduxMiddleComponent: React.FC = ({ children }) => {
+const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
   const { saveToken, saveConfig, setPfp } = useActions();

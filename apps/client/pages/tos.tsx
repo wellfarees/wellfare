@@ -72,7 +72,12 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     // TODO: Change to actual url when deploying the whole app
 <<<<<<< HEAD
+<<<<<<< HEAD
     text = await staticFileFetch(`${CLIENT_URL}/tos.txt`);
+=======
+    const currentUrl = "http://localhost:3000/tos.txt";
+    text = await staticFileFetch(currentUrl);
+>>>>>>> parent of 399e194... add production urls to client
 =======
     const currentUrl = "http://localhost:3000/tos.txt";
     text = await staticFileFetch(currentUrl);
