@@ -7,5 +7,3 @@ export const SERVER_URL = development
 export const CLIENT_URL = development
   ? "http://localhost:3000"
   : "https://development.dc2dwwp55mwts.amplifyapp.com";
-
-console.log(CLIENT_URL);
