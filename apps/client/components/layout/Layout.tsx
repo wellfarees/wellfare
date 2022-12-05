@@ -18,6 +18,7 @@ import { store } from "../../redux/store";
 interface LayoutProps {
   loggedIn: boolean;
   isLoaded: boolean;
+  children: any;
 }
 
 const MainContainer = styled.main`
@@ -89,7 +90,7 @@ const onStateChange = () => {
 
 store.subscribe(onStateChange);
 
-const PrivateRoute: React.FC = ({ children }) => {
+const PrivateRoute: React.FC<any> = ({ children }) => {
   const router = useRouter();
   const newDay = router.pathname == "/app/entry";
   const { user } = useTypedSelector((state) => state);
