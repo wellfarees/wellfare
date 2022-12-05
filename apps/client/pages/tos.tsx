@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import Fade from "react-reveal/Fade";
 import { GetStaticProps, NextPage } from "next";
-import { CLIENT_URL } from "../endpoints";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -72,7 +71,12 @@ export const getStaticProps: GetStaticProps = async () => {
   let text = "Failed to fetch Wellfare TOS";
   try {
     // TODO: Change to actual url when deploying the whole app
+<<<<<<< HEAD
     text = await staticFileFetch(`${CLIENT_URL}/tos.txt`);
+=======
+    const currentUrl = "http://localhost:3000/tos.txt";
+    text = await staticFileFetch(currentUrl);
+>>>>>>> parent of 399e194... add production urls to client
   } catch (e) {
   } finally {
     return {
