@@ -8,6 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { ApolloError } from "apollo-server-core";
 import { SIGNIN_METHODS } from "../../constants";
 import { addToNewsletter } from "../../utils/addToNewsletter";
+import { CLIENT_URL } from "../../endpoints";
 
 const endpoint = "https://oauth2.googleapis.com/token";
 const getGoogleTokens = async (code: string): Promise<[string, string]> => {
@@ -16,7 +17,7 @@ const getGoogleTokens = async (code: string): Promise<[string, string]> => {
     code: code,
     client_id: process.env.GOOGLE_CLIENT_ID,
     client_secret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect_uri: "http://localhost:3000/auth/oauth/google",
+    redirect_uri: `${CLIENT_URL}/auth/oauth/google`,
   };
 
   const res = await axios.post(endpoint, new URLSearchParams(opts), {
