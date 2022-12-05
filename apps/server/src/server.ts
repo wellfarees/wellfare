@@ -122,10 +122,8 @@ class Server extends ApolloServer {
   async listen() {
     await this.start();
     this.applyMiddleware({ app, path: "/" });
-    await new Promise<void>((resolve) =>
-      httpServer.listen({ port: 4000 }, resolve)
-    );
-    return `http://localhost:4000${server.graphqlPath}`;
+    await new Promise<void>((resolve) => app.listen(4000, resolve));
+    return 4000;
   }
 
   async initCron() {
