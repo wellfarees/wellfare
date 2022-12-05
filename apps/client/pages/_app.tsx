@@ -8,7 +8,7 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { ApolloProvider, useLazyQuery, useMutation } from "@apollo/client";
 import client from "../graphql/client";
 import Layout from "../components/layout/Layout";
