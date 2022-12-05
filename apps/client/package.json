@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.40",
-    "@types/react": "17.0.18",
+    "@types/react": "^18.0.26",
     "@types/react-hammerjs": "^1.0.2",
     "@types/react-instantsearch-dom": "^6.12.1",
     "@types/styled-components": "^5.1.12",
