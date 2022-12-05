@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Container } from "../styled/reusable";
 import Fade from "react-reveal/Fade";
 import { GetStaticProps, NextPage } from "next";
+import { CLIENT_URL } from "../endpoints";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -70,9 +71,7 @@ export default TOS;
 export const getStaticProps: GetStaticProps = async () => {
   let text = "Failed to fetch Wellfare TOS";
   try {
-    // TODO: Change to actual url when deploying the whole app
-    const currentUrl = "http://localhost:3000/tos.txt";
-    text = await staticFileFetch(currentUrl);
+    text = await staticFileFetch(CLIENT_URL);
   } catch (e) {
   } finally {
     return {
