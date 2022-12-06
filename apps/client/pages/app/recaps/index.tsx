@@ -175,7 +175,11 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
                   const emojis = records.map((record) => record.emoji);
 
                   return (
-                    <Link passHref href={`/app/recaps/${id}`} key={index}>
+                    <Link
+                      passHref
+                      href={`/app/recaps/recap?id=${id}`}
+                      key={index}
+                    >
                       <div className="recap-card">
                         <h3 className="watermark">{records.length}</h3>
                         <div className="content">
