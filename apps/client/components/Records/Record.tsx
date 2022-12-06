@@ -80,7 +80,7 @@ const Record: React.FC<RecordProps> = ({
         }
 
         // TODO: redirect to the record with the appropriate (fetched) id
-        router.push(`/app/records/${id}`);
+        router.push(`/app/records?id=${id}`);
       }}
     >
       <span className="date">{dateString}</span>
