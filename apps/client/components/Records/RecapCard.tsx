@@ -75,7 +75,7 @@ const RecapCard: React.FC<{ records: number; id: number }> = ({
           You&apos;ve got <b>{records} new records</b> this week.
         </p>
 
-        <Link passHref href={`/app/recaps/${id}`}>
+        <Link passHref href={`/app/recaps/recap?id=${id}`}>
           <span className="cta">
             Let&apos;s check it out <i className="fas fa-arrow-right"></i>
           </span>
