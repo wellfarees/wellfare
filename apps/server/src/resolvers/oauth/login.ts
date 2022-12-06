@@ -190,6 +190,8 @@ export default {
 
         return { user, publicAlgoliaKey, oAuthRefresh: encoded_refresh };
       } catch (e) {
+        console.log(e);
+        console.log(`${CLIENT_URL}/auth/oauth/google`);
         return new ApolloError("oAuth failed", "INVALID_OAUTH");
       }
     },
