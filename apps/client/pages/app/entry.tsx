@@ -144,7 +144,7 @@ const Wrapper = styled.main`
       text-decoration: underline;
     }
 
-    @media only screen and (max-width: 425px) {
+    @media only screen and (max-width: 450px) {
       width: 100%;
 
       .btns {
@@ -165,7 +165,7 @@ const EmojiWrapper = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -173,7 +173,7 @@ const EmojiWrapper = styled.div`
   display: none;
 
   .overlay {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: rgba(0, 0, 0, 0.6);
     position: absolute;
@@ -238,7 +238,7 @@ const EmojiWrapper = styled.div`
     }
   }
 
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 450px) {
     .draggable {
       display: inline-block !important;
       width: 80px;
@@ -249,7 +249,7 @@ const EmojiWrapper = styled.div`
     }
 
     .modal {
-      width: 100vw;
+      width: 100%;
       position: fixed;
       left: 0;
       bottom: 0;
@@ -547,12 +547,13 @@ const Entry: NextPage = () => {
     });
   };
 
-  useEffect(() => {
-    setIssMobile(document.body.offsetWidth <= 425);
+  const resizeFn = () => {
+    setIssMobile(document.body.offsetWidth <= 450);
+    console.log(document.body.offsetWidth);
+  };
 
-    const resizeFn = () => {
-      setIssMobile(document.body.offsetWidth <= 425);
-    };
+  useEffect(() => {
+    setIssMobile(document.body.offsetWidth <= 450);
 
     window.addEventListener("resize", resizeFn);
 
