@@ -7,6 +7,7 @@ export const uploadObject = async (
   uid: string,
   extension: string
 ): Promise<ManagedUpload.SendData> => {
+  console.log(bucketName);
   return s3
     .upload({
       Bucket: bucketName,
@@ -21,6 +22,44 @@ export const deleteObject = async (filename: string) => {
     .deleteObject({
       Bucket: bucketName,
       Key: filename,
+    })
+    .promise();
+};
+
+export const deleteByPrefix = async (prefix: string) => {
+  // Set up the parameters for listObjectsV2
+  const params = {
+    Bucket: bucketName,
+    Prefix: `images/${prefix}`,
+  };
+
+  // Call listObjectsV2 to get a list of objects matching the prefix
+  return await s3
+    .listObjectsV2(params, (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        // Create an array of objects to delete
+        const deleteParams = {
+          Bucket: bucketName,
+          Delete: {
+            Objects: data.Contents.map((object) => {
+              console.log(object.Key);
+              return { Key: object.Key };
+            }),
+          },
+        };
+
+        // Call deleteObjects to delete the objects
+        s3.deleteObjects(deleteParams, (err, data) => {
+          if (err) {
+            // Handle error
+            console.error(err);
+          } else {
+            console.log(`Successfully deleted ${data.Deleted.length} objects`);
+          }
+        });
+      }
     })
     .promise();
 };
