@@ -155,7 +155,7 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
             }
 
             // TODO: redirect to the record with the appropriate (fetched) id
-            router.push(`/app/records/${id}`);
+            router.push(`/app/records?id=${id}`);
           }}
         >
           <p className="emoji">{emoji}</p>
@@ -168,7 +168,7 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
           </div>
         </div>
         {recapId && (
-          <Link passHref href={`/app/recaps/${recapId}`}>
+          <Link passHref href={`/app/recaps/recap?id=${recapId}`}>
             <button>Go to recap</button>
           </Link>
         )}
