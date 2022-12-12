@@ -251,7 +251,6 @@ const SignUp = () => {
   useEffect(() => {
     const { error, data } = mutationProps;
     if (error) {
-      console.log(JSON.stringify(error, null, 2));
       // setError(error.graphQLErrors[0].message);
       setSignedUp(false);
       return;
@@ -269,6 +268,12 @@ const SignUp = () => {
       router.push("/app/entry");
     }
   }, [mutationProps.loading, mutationProps, router, storeUser]);
+
+  useEffect(() => {
+    if (!mutationProps.loading) {
+      if (mutationProps.error) setError(mutationProps.error.message);
+    }
+  }, [mutationProps.loading, mutationProps.error]);
 
   return (
     <Wrapper>
