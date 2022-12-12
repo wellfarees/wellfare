@@ -473,17 +473,8 @@ const User = () => {
                         files: [file],
                       },
                     }) => {
-                      // FIXME: AWS account no longer works (suspension)
-                      try {
-                        validity.valid &&
-                          (await uploadPfp({ variables: { file } }));
-                      } catch (e) {}
-                      if (!isImage(file.type)) {
-                        scrollToBottom();
-                        setError("File has to have a type of an image!");
-                        return;
-                      }
-
+                      setError("");
+                      setIsSaved(false);
                       const fileSizeInMb = parseInt(
                         (file.size / (1024 * 1024)).toFixed(2)
                       );
@@ -497,7 +488,16 @@ const User = () => {
                         return;
                       }
 
-                      setError("");
+                      try {
+                        validity.valid &&
+                          (await uploadPfp({ variables: { file } }));
+                        setError("");
+                      } catch (e) {}
+                      if (!isImage(file.type)) {
+                        scrollToBottom();
+                        setError("File has to have a type of an image!");
+                        return;
+                      }
                     }}
                     type="file"
                     id="pfp-file"

@@ -1,5 +1,5 @@
 import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { uploadObject, deleteObject } from "../utils/s3/methods";
+import { uploadObject, deleteByPrefix } from "../utils/s3/methods";
 import verifyJWT from "../utils/verifyJWT";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import { decodedToken } from "../types/jwt";
@@ -35,12 +35,10 @@ export default {
       const stream = createReadStream();
 
       let imageLocation = "";
+
       try {
-        // delete the previous avatar
-        if (data.information.pfp) {
-          const targetFilename = /([^/]+$)/.exec(data.information.pfp)[0];
-          await deleteObject(targetFilename);
-        }
+        // delete all previous user profile pictures with extensions that may vary
+        if (data.information.pfp) await deleteByPrefix(id);
 
         // save the image file locally
         await new Promise((res) =>
@@ -51,7 +49,7 @@ export default {
               )
             )
             .on("close", res)
-        ).catch;
+        ).catch();
 
         // compress / minify the image
         const files = await imagemin([`images/${id}${extension}`], {
@@ -70,7 +68,12 @@ export default {
         }
 
         // store in aws s3
-        const res = await uploadObject(files[0].data, id, extension);
+        const res = await uploadObject(
+          files[0].data,
+          `images/${id}`,
+          extension
+        );
+
         imageLocation = res.Location;
 
         // delete the local file
@@ -88,7 +91,7 @@ export default {
           },
         });
       } catch (e) {
-        return new ApolloError("Failed to upload avatar.");
+        return new ApolloError("Failed to upload the profile picture.");
       }
 
       return {
