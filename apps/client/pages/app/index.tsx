@@ -326,7 +326,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                   >
                     {splitIntoWeeks(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
-                        console.log(week);
                         const weeksAgo = differenceInWeeks(
                           startOfDay(new Date()),
                           startOfDay(new Date(week[week.length - 1].date)),
