@@ -7,7 +7,6 @@ import { CronJob } from "cron";
 import { resolve } from "path";
 import { sync } from "glob";
 import { Cron } from "./types/cron";
-import * as dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
@@ -112,7 +111,6 @@ class Server extends ApolloServer {
       ],
     });
 
-    dotenv.config();
     this.db = new PrismaClient();
     this.mail = mail;
     this.mail.setApiKey(process.env.SENDGRID_API_KEY!);
