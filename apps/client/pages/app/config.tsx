@@ -198,11 +198,11 @@ const Conf: NextPage = () => {
   const mutateSpecificValue = (mutation: { [key: string]: any }) => {
     mutateAppearance({
       variables: mutation,
-      refetchQueries: ["getUser", "login"],
+      refetchQueries: ["GetUser"],
     });
   };
 
-  // TODO: Solve the reactive reduced motion problem by calling the mutation on component's unmounting lifecycle (useEffect cleanup function)
+  // TODO: Solve the reactive reduced motion problem by calling the reduce-motion mutation on component's unmounting lifecycle (useEffect cleanup function)
   useEffect(() => {
     if (data) {
       saveConfig(transformFetchedConfig(data.editAppearance.config));
