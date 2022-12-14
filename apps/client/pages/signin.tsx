@@ -292,7 +292,6 @@ const SignIn = () => {
           query: GET_LAST_SUBMITTED,
           fetchPolicy: "network-only",
         });
-        console.log(lastSubmitted);
 
         const endpoint = lastSubmitted > 24 ? "entry" : "";
         router.push(`/app/${endpoint}`);
