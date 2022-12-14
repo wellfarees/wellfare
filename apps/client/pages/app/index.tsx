@@ -105,7 +105,7 @@ const Wrapper = styled.main`
     margin-top: -2em;
 
     .records {
-      margin-top: 4em;
+      margin-top: 3em;
 
       & > div {
         & > div > div {
@@ -120,6 +120,7 @@ const Wrapper = styled.main`
       p.time {
         font-weight: bold;
         margin-top: 0 !important;
+        margin-bottom: 1em;
       }
     }
 
@@ -325,6 +326,12 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                   >
                     {splitIntoWeeks(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
+                        console.log(week);
+                        const weeksAgo = differenceInWeeks(
+                          startOfDay(new Date()),
+                          startOfDay(new Date(week[week.length - 1].date)),
+                          { roundingMethod: "round" }
+                        );
                         return (
                           <div
                             className={
@@ -337,15 +344,11 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                             {differenceInWeeks(
                               startOfDay(new Date()),
                               startOfDay(new Date(week[week.length - 1].date))
-                            ) == 0 ? null : (
+                            ) == 0 ? (
+                              <p className="time"></p>
+                            ) : (
                               <p className="time">
-                                {differenceInWeeks(
-                                  startOfDay(new Date()),
-                                  startOfDay(
-                                    new Date(week[week.length - 1].date)
-                                  )
-                                )}{" "}
-                                weeks ago
+                                {weeksAgo} week{weeksAgo > 1 && "s"} ago
                               </p>
                             )}
 
