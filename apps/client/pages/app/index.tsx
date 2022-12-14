@@ -102,8 +102,6 @@ const Wrapper = styled.main`
   }
 
   .records-container {
-    margin-top: -2em;
-
     .records {
       margin-top: 3em;
 
