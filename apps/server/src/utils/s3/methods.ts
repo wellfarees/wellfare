@@ -7,10 +7,9 @@ export const uploadObject = async (
   uid: string,
   extension: string
 ): Promise<ManagedUpload.SendData> => {
-  console.log(bucketName);
   return s3
     .upload({
-      Bucket: "wellfare-storage",
+      Bucket: bucketName,
       Body: body,
       Key: uid + extension,
     })
@@ -20,7 +19,7 @@ export const uploadObject = async (
 export const deleteObject = async (filename: string) => {
   return await s3
     .deleteObject({
-      Bucket: "wellfare-storage",
+      Bucket: bucketName,
       Key: filename,
     })
     .promise();
@@ -29,7 +28,7 @@ export const deleteObject = async (filename: string) => {
 export const deleteByPrefix = async (prefix: string) => {
   // Set up the parameters for listObjectsV2
   const params = {
-    Bucket: "wellfare-storage",
+    Bucket: bucketName,
     Prefix: `images/${prefix}`,
   };
 
@@ -41,7 +40,7 @@ export const deleteByPrefix = async (prefix: string) => {
       } else {
         // Create an array of objects to delete
         const deleteParams = {
-          Bucket: "wellfare-storage",
+          Bucket: bucketName,
           Delete: {
             Objects: data.Contents.map((object) => {
               console.log(object.Key);
