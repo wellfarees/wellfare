@@ -11,6 +11,7 @@ import React from "react";
 import { mapRecordsToJsx } from "../../../utils/mapRecordsToJsx";
 import { RecordsData } from "../../../components/Records/RecordTypes";
 import ExistsNot from "../../../components/ExistsNot";
+import { MasonryGrid } from "@egjs/react-grid";
 
 import { useQuery } from "@apollo/client";
 import { GET_RECAP } from "../../../graphql/queries";
@@ -63,9 +64,9 @@ const Wrapper = styled.div`
     }
 
     .records {
-      display: grid;
+      /* display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-gap: 4em;
+      grid-gap: 4em; */
     }
   }
 
@@ -76,6 +77,10 @@ const Wrapper = styled.div`
 
     .records {
       grid-template-columns: 1fr !important;
+    }
+
+    .record {
+      margin-right: 2em !Impo;
     }
   }
 `;
@@ -139,25 +144,28 @@ const Recap: NextPage = () => {
             <p className="label">
               <b>Your records</b>
             </p>
-
             <div className="records">
-              {size ? (
-                size < 768 ? (
-                  <Scroller>{mapRecordsToJsx(data.getRecap.records)}</Scroller>
-                ) : (
-                  <>
-                    {mapRecordsToJsx(data.getRecap.records).map(
-                      (record, index) => {
-                        return (
-                          <div key={index}>
-                            <AdaptiveAnimation>{record}</AdaptiveAnimation>
-                          </div>
-                        );
-                      }
-                    )}
-                  </>
-                )
-              ) : null}
+              <MasonryGrid column={2} align="start" gap={40} columnSize={300}>
+                {size ? (
+                  size < 768 ? (
+                    <Scroller>
+                      {mapRecordsToJsx(data.getRecap.records)}
+                    </Scroller>
+                  ) : (
+                    <>
+                      {mapRecordsToJsx(data.getRecap.records).map(
+                        (record, index) => {
+                          return (
+                            <div key={index}>
+                              <AdaptiveAnimation>{record}</AdaptiveAnimation>
+                            </div>
+                          );
+                        }
+                      )}
+                    </>
+                  )
+                ) : null}
+              </MasonryGrid>
             </div>
           </div>
         </ShrankContainer>

@@ -13,6 +13,7 @@ const Card = styled.div`
   position: relative;
   border-radius: 20px;
   padding: 3em;
+  margin-bottom: -2em !important;
 
   .contents {
     position: relative;
