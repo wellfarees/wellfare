@@ -74,6 +74,10 @@ const Wrapper = styled.main`
     max-width: 100%;
   }
 
+  .summarizedEmoji {
+    font-size: 2rem !important;
+  }
+
   .details {
     margin-top: 2.5em;
     display: flex;
@@ -144,13 +148,14 @@ const Wrapper = styled.main`
       text-decoration: underline;
     }
 
-    @media only screen and (max-width: 450px) {
+    @media only screen and (max-width: 515px) {
       width: 100%;
 
       .btns {
         flex-direction: column;
         width: 100%;
         gap: 4em;
+        align-items: flex-start;
 
         button {
           width: 100%;
@@ -171,6 +176,16 @@ const EmojiWrapper = styled.div`
   align-items: center;
   justify-content: center;
   display: none;
+
+  .emoji {
+    font-size: 2rem !important;
+  }
+
+  @media only screen and (max-width: 450px) {
+    .emoji {
+      font-size: 1.9rem !important;
+    }
+  }
 
   .overlay {
     width: 100%;
@@ -651,7 +666,9 @@ const Entry: NextPage = () => {
                       {currentEmoji
                         ? `Report summarized with`
                         : `Summarize your day with an emoji`}
-                      {currentEmoji && <span>{currentEmoji}</span>}
+                      {currentEmoji && (
+                        <span className="summarizedEmoji">{currentEmoji}</span>
+                      )}
                     </p>
                   ) : null}
                 </div>

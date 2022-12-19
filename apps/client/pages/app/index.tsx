@@ -6,7 +6,13 @@ import RecapCard from "../../components/Records/RecapCard";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
-import { differenceInWeeks, isSameWeek, startOfDay } from "date-fns";
+import {
+  differenceInWeeks,
+  isSameWeek,
+  startOfDay,
+  differenceInCalendarDays,
+  subDays,
+} from "date-fns";
 import { MasonryGrid } from "@egjs/react-grid";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRecap } from "../../hooks/useRecap";
@@ -238,7 +244,12 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
         return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
       }
 
-      if (isSameWeek(dateLeft.date, dateRight.date)) {
+      if (
+        isSameWeek(startOfDay(dateLeft.date), startOfDay(dateRight.date), {
+          weekStartsOn: 1,
+        }) &&
+        differenceInCalendarDays(dateLeft.date, subDays(dateRight.date, 1)) < 7
+      ) {
         if (!weeksArr[weekIndex]) {
           weeks.push([dateLeft]);
         } else {
@@ -325,23 +336,24 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                     {splitIntoWeeks(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
                         const weeksAgo = differenceInWeeks(
-                          startOfDay(new Date()),
-                          startOfDay(new Date(week[week.length - 1].date)),
-                          { roundingMethod: "round" }
+                          new Date(),
+                          new Date(week[week.length - 1].date),
+                          { roundingMethod: "ceil" }
                         );
                         return (
                           <div
                             className={
-                              isSameWeek(Date.now(), week[week.length - 1].date)
+                              isSameWeek(
+                                Date.now(),
+                                week[week.length - 1].date,
+                                { weekStartsOn: 1 }
+                              )
                                 ? "current"
                                 : undefined
                             }
                             key={index}
                           >
-                            {differenceInWeeks(
-                              startOfDay(new Date()),
-                              startOfDay(new Date(week[week.length - 1].date))
-                            ) == 0 ? (
+                            {weeksAgo == 0 ? (
                               <p className="time"></p>
                             ) : (
                               <p className="time">
