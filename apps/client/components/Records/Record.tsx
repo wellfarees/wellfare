@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   align-items: flex-start;
   gap: 1em;
   padding: 3em;
-  max-width: 400px;
+  max-width: 300px;
   border-radius: 20px;
   position: relative;
   cursor: pointer;
@@ -51,6 +51,10 @@ const Wrapper = styled.div`
     color: ${(props: any) => props.theme.shadedColor};
     line-height: 1.5em;
   }
+
+  .emoji {
+    font-size: 2rem !important;
+  }
 `;
 
 const Record: React.FC<RecordProps> = ({
@@ -63,6 +67,7 @@ const Record: React.FC<RecordProps> = ({
 
   return (
     <Wrapper
+      className="record"
       onClick={() => {
         const RecordContent = (
           <DetailedRecord
@@ -89,7 +94,10 @@ const Record: React.FC<RecordProps> = ({
         <span className="emoji">{emoji}</span>
         <h4 className="feelings">{feelings}</h4>
       </div>
-      <p className="description">{unease}</p>
+      <p className="description">
+        {unease.split(" ").slice(0, 15).join(" ")}{" "}
+        {unease.split(" ").length >= 15 ? "..." : null}
+      </p>
     </Wrapper>
   );
 };

@@ -228,6 +228,11 @@ const User = () => {
   }>(UPLOAD_PFP);
 
   useEffect(() => {
+    if (uploadProps.loading) {
+    }
+  }, [uploadProps.loading]);
+
+  useEffect(() => {
     setInProgress((state) => !state);
   }, [isSaved]);
 
