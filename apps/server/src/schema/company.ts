@@ -5,6 +5,7 @@ export default gql`
     name: String!
     roles: [String]!
     image: String!
+    url: String!
   }
 
   type Roles {
