@@ -2,6 +2,7 @@ import EmailAlreadyExistsError from "../errors/EmailAlreadyExistsError";
 import server from "../server";
 import differenceInHours from "date-fns/differenceInHours";
 import { ApolloError } from "apollo-server-core";
+import { sendEmail } from "../utils/email/sendEmail";
 
 export default {
   Mutation: {
@@ -67,6 +68,9 @@ export default {
             email: args.email,
           },
         });
+
+        await sendEmail(args.email, { type: "newsletter" });
+
         return {
           success: true,
         };

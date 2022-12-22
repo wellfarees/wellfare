@@ -4,7 +4,7 @@ import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
 import { client } from "../algolia";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { addToNewsletter } from "../utils/addToNewsletter";
 
 export default {

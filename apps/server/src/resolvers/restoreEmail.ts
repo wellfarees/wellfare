@@ -1,5 +1,5 @@
 import server from "../server";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 
 export default {
   Mutation: {
