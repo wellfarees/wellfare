@@ -6,7 +6,7 @@ import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
 import { getDeprecatedIds } from "../utils/getDeprecatedIds";
 

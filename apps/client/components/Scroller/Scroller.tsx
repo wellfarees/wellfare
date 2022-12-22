@@ -42,6 +42,16 @@ const Scroller: React.FC = ({ children }) => {
       );
     }
   }, []);
+  // useEffect(() => {
+  //   let i = 1;
+  //   setInterval(() => {
+  //     api.start({
+  //       left: -i + 230,
+  //     });
+
+  //     i += 230;
+  //   }, 500);
+  // }, []);
 
   // Variables for velocity
   let touchStart = 0;

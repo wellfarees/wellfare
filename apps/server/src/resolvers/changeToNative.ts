@@ -5,7 +5,7 @@ import { login } from "../utils/oauth/login";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import generateJWT from "../utils/generateJWT";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { SIGNIN_METHODS } from "../constants";
 import { ApolloError } from "apollo-server-core";
 

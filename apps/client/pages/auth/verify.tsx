@@ -101,7 +101,7 @@ const Verify: NextPage = () => {
           {!loading && data ? (
             <div className="success">
               <h1>
-                You have been <b>successful</b> verified
+                You have been <b>successfully</b> verified
               </h1>
               <div className="descr">
                 <p>

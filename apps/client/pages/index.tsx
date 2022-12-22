@@ -268,8 +268,8 @@ const Home: NextPage = () => {
               </Fade>
               <Fade bottom>
                 <p className="subtitle">
-                  Ever felt lost and emotionally burnt out? Cut it! Organize
-                  yourself and your mental state using <b>Wellfare</b>.
+                  Feeling overwhelmed and drained? Take control of your mental
+                  well-being and get back on track with <b>Wellfare</b>.
                 </p>
               </Fade>
               <Fade bottom>
@@ -281,32 +281,24 @@ const Home: NextPage = () => {
           </Container>
           <Scroller>
             <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+              title="What makes you tik?"
+              description="Find your affirmation to keep going."
             />
             <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+              title="Let it go."
+              description="Write down what makes you uneasy and feel relieved."
             />
             <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+              title="Be mindfull."
+              description="Practice gratitude, it goes a long way."
             />
             <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+              title="Summarizing is cool."
+              description="Track and visualize your emotional growth with emojis."
             />
             <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
-            />
-            <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
-            />
-            <Card
-              title="Journal your feelings"
-              description="How you feelings? is eveything ok? Well. it’s time to journal that"
+              title="Take control."
+              description="Make a habit of journaling, even if it is just your feelings."
             />
           </Scroller>
         </Hero>
