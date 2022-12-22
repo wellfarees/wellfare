@@ -3,6 +3,7 @@ import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
+import Button from "../../components/Button/Button";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
@@ -54,14 +55,8 @@ const Wrapper = styled.main`
     margin-top: 5em;
     margin-bottom: 8em;
 
-    .journal-cta h4 {
-      color: ${(props: any) => props.theme.watermark};
-      transition: 0.3s;
-      padding: 0.5em 0 1em 0;
-
-      &:hover {
-        filter: brightness(90%);
-      }
+    .journal-cta {
+      padding: 1.5em 0 2.5em 0;
     }
 
     div.affirmations-cta {
@@ -155,11 +150,13 @@ const Wrapper = styled.main`
 
   @media only screen and (max-width: 425px) {
     .journal-cta {
-      h4 {
-        line-height: 1.5;
-        margin-bottom: 0.5em;
-        max-width: 80%;
-      }
+      line-height: 1.5;
+      margin-bottom: 0.5em;
+      max-width: 100% !important;
+    }
+
+    button {
+      padding: 0.8em 0.5em !important;
     }
 
     main {
@@ -293,10 +290,10 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               data.getUser.lastSubmitted === null ? (
                 <div className="journal-cta">
                   <Link href="/app/entry" passHref>
-                    <h4>
-                      Ready to journal another day?
+                    <Button>Add new record</Button>
+                    {/* <h4>
                       <i className="fas fa-pencil-alt"></i>
-                    </h4>
+                    </h4> */}
                   </Link>
                 </div>
               ) : null)}
