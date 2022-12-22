@@ -153,6 +153,10 @@ const Wrapper = styled.div`
         border: 1px solid ${(props) => props.theme.watermark};
       }
     }
+    .toggler.react-toggle--checked .react-toggle-track {
+      background: linear-gradient(180deg, #60b2ff 0%, #0889ff 100%) !important;
+      border: none !important;
+    }
 
     .toggler.react-toggle--checked {
       .react-toggle-thumb {
