@@ -44,15 +44,18 @@ const flexCentered = css`
 export const GlowingBLue = css`
   color: #fafafa !important;
   padding: 0.7em 4em;
-  background: #117ee3;
-  box-shadow: 0px 0px 7px 1px rgba(48, 89, 232, 0.65);
-  border-radius: 5px;
+  /* background: #117ee3; */
+  /* box-shadow: 0px 0px 7px 1px rgba(48, 89, 232, 0.65); */
+  /* border-radius: 5px; */
   display: inline-block;
   transition: 0.5s all;
   outline: none;
   border: none;
   display: inline-block;
   font-size: ${fontSizes.base}px;
+
+  background: linear-gradient(180deg, #60b2ff 0%, #0889ff 100%);
+  border-radius: 6px;
 
   @media only screen and (max-width: 425px) {
     padding: 1em 4em;
@@ -63,7 +66,7 @@ export const GlowingBLue = css`
 
   &:hover {
     cursor: pointer;
-    background: #2b95f8 !important;
+    box-shadow: 0px 0px 10px 4px rgba(17, 126, 227, 0.2);
   }
 `;
 
