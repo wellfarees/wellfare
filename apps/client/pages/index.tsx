@@ -282,7 +282,7 @@ const Home: NextPage = () => {
           <Scroller>
             <Card
               title="What makes you tik?"
-              description="Find your affirmation to keep going."
+              description="Find your affirmations to keep going."
             />
             <Card
               title="Let it go."

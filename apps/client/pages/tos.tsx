@@ -32,10 +32,15 @@ const Wrapper = styled.div`
       font-size: 1.6rem;
       line-height: 1.3;
       margin-top: 0.8em;
+      word-wrap: break-word;
     }
 
-    h1 {
+    h2 {
       margin-top: 2em;
+    }
+
+    p.contacts {
+      margin-top: 3em;
     }
   }
 `;

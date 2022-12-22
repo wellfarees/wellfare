@@ -36,6 +36,7 @@ const Wrapper = styled.div`
     position: relative;
     cursor: pointer;
     transition: 0.3s;
+    min-width: 250px;
 
     &:hover {
       background: ${(props) => props.theme.recapHover};
