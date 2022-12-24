@@ -6,7 +6,8 @@
         [
           "babel-plugin-styled-components",
           { "ssr": true, "displayName": true, "preprocess": false }
-        ]
+        ],
+        ["@babel/plugin-proposal-export-namespace-from"]
       ]
     },
     "production": {
@@ -14,7 +15,8 @@
         [
           "babel-plugin-styled-components",
           { "ssr": true, "displayName": true, "preprocess": false }
-        ]
+        ],
+        ["@babel/plugin-proposal-export-namespace-from"]
       ],
       "presets": ["next/babel"]
     },
@@ -26,6 +28,7 @@
     [
       "babel-plugin-styled-components",
       { "ssr": true, "displayName": true, "preprocess": false }
-    ]
+    ],
+    ["@babel/plugin-proposal-export-namespace-from"]
   ]
 }
