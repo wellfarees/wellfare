@@ -5,7 +5,7 @@
   "main": "./dist/src/main.js",
   "scripts": {
     "check-types": "tsc --noemit",
-    "setup": "yarn && prisma generate && tsc",
+    "setup": "npm install && prisma generate && tsc",
     "build": "tsc",
     "start": "node .",
     "dev": "nodemon src/main.ts",

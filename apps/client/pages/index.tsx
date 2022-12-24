@@ -11,6 +11,7 @@ import { emailRegExp } from "../utils/emailRegExp";
 import Scroller from "../components/Scroller/Scroller";
 import LoadingButton from "../components/Button/Button";
 import { useTypedSelector } from "../hooks/useTypedSelector";
+import { GlowingBLue } from "../styled/reusable";
 
 import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
@@ -166,10 +167,7 @@ const MailSection = styled.section`
 
     .email-btn {
       color: #fafafa;
-      padding: 0.4em 2em;
       font-size: 1.4rem;
-      background: #117ee3;
-      box-shadow: 0px 0px 7px 1px rgba(48, 89, 232, 0.65);
       border-radius: 3px;
       margin-top: 0.1em;
       display: inline-flex;
@@ -180,10 +178,11 @@ const MailSection = styled.section`
       justify-content: center;
       align-items: center;
       transition: 0.3s all;
+      ${GlowingBLue}
+      padding: 0.4em 2em;
 
       &:hover {
         cursor: pointer;
-        background: #2b95f8;
       }
     }
 
