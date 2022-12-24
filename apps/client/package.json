@@ -23,7 +23,7 @@
     "apollo-upload-client": "^17.0.0",
     "babel-plugin-styled-components": "^1.13.2",
     "date-fns": "^2.27.0",
-    "framer-motion": "^7.9.1",
+    "framer-motion": "^6.5.0",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.6",
     "hammerjs": "^2.0.8",
