@@ -271,6 +271,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (!mutationProps.loading) {
+      console.log(mutationProps.error);
       if (mutationProps.error) setError(mutationProps.error.message);
     }
   }, [mutationProps.loading, mutationProps.error]);
@@ -317,7 +318,9 @@ const SignUp = () => {
                   await createUser({
                     variables: { email, name, password },
                   });
-                } catch (err) {}
+                } catch (err) {
+                  console.log(err);
+                }
               }
             }}
             className="signUp-form"
