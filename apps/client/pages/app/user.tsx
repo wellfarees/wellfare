@@ -112,6 +112,9 @@ const Wrapper = styled.div`
   .ch {
     max-width: 500px;
     line-height: 2em;
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
 
     label {
       color: ${(props) => props.theme.mainColor};
@@ -128,7 +131,7 @@ const Wrapper = styled.div`
   }
 
   @media only screen and (max-width: 768px) {
-    input {
+    input::not(#warning-check) {
       width: 100%;
     }
 
@@ -244,8 +247,7 @@ const User = () => {
     if (uploadProps.data) {
       setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime());
     } else if (uploadProps.error) {
-      console.log(uploadProps.error);
-      // setError(uploadProps.error.graphQLErrors[0].message);
+      setError(uploadProps.error.graphQLErrors[0].message);
     }
   }, [setPfp, uploadProps.data, uploadProps.error]);
 
