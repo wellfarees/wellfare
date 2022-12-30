@@ -48,6 +48,8 @@ export const sendEmail = async (
       subject = "Password reset";
   }
 
+  console.log(content);
+
   await server.mail.send({
     from: process.env.EMAIL_ADDRESS!,
     to: email,
