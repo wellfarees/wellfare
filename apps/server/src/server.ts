@@ -124,21 +124,18 @@ class Server extends ApolloServer {
     this.applyMiddleware({
       app,
       path: "/",
-      cors: {
+      cors: { origin: "https://www.wellfare.space", credentials: true },
+    });
+    const port = process.env.PORT || 4000;
+    app.use(
+      "/graphql",
+      cors<cors.CorsRequest>({
         origin: [
           "https://www.wellfare.space",
           "https://www.wellfare.space/app/user",
         ],
-        credentials: true,
-      },
-    });
-    const port = process.env.PORT || 4000;
-    // app.use(
-    //   "/graphql",
-    //   cors<cors.CorsRequest>({
-    //     origin: "https://www.wellfare.space",
-    //   })
-    // );lkV
+      })
+    );
     await new Promise<void>((resolve) => app.listen(port, resolve));
     return port;
   }
