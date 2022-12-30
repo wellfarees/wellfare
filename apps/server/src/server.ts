@@ -117,6 +117,7 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
+      csrfPrevention: true,
       formatResponse: (
         response: GraphQLResponse | null,
         requestContext: GraphQLRequestContext<any>
