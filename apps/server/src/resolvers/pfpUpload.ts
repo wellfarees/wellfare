@@ -76,23 +76,23 @@ export default {
 
         imageLocation = res.Location;
 
-      //   // delete the local file
-      //   unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
-      //   await server.db.user.update({
-      //     where: {
-      //       id,
-      //     },
-      //     data: {
-      //       information: {
-      //         update: {
-      //           pfp: imageLocation,
-      //         },
-      //       },
-      //     },
-      //   });
-      // } catch (e) {
-      //   return new ApolloError("Failed to upload the profile picture.");
-      // }
+        // delete the local file
+        unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
+        await server.db.user.update({
+          where: {
+            id,
+          },
+          data: {
+            information: {
+              update: {
+                pfp: imageLocation,
+              },
+            },
+          },
+        });
+      } catch (e) {
+        return new ApolloError("Failed to upload the profile picture.");
+      }
 
       return {
         location:
