@@ -41,12 +41,12 @@ export default {
         // if (data.information.pfp) await deleteByPrefix(id);
 
         // save the image file locally
-        console.log(path.join(__dirname, "../../images", `${id}${extension}`));
+        console.log(path.join(__dirname, "../images", `${id}${extension}`));
         await new Promise((res) =>
           stream
             .pipe(
               createWriteStream(
-                path.join(__dirname, "../../images", `${id}${extension}`)
+                path.join(__dirname, "../images", `${id}${extension}`)
               )
             )
             .on("close", res)
