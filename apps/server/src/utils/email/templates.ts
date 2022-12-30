@@ -54,6 +54,7 @@ export const welcomeEmail = (
     body {
       margin: 0;
       padding: 0;
+      color: black;
     }
 
     table {
@@ -355,6 +356,7 @@ export const newsletterEmail = (unsubLink: string): string => {
     body {
       margin: 0;
       padding: 0;
+      color: black;
     }
 
     table {
@@ -620,6 +622,7 @@ export const resetPasswordEmail = (
     body {
       margin: 0;
       padding: 0;
+      color: black;
     }
 
     table {
