@@ -20,17 +20,13 @@ import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
 
 const app = express();
+
 app.use(
   cors({
     origin: "https://www.wellfare.space",
   })
 );
-app.use(
-  graphqlUploadExpress({
-    maxFileSize: 10000000,
-    maxFiles: 10,
-  })
-);
+
 app.use(async (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://www.wellfare.space");
 
@@ -97,6 +93,14 @@ app.use(async (req, res, next) => {
     next();
   }
 });
+
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 10000000,
+    maxFiles: 10,
+  })
+);
+
 const httpServer = http.createServer(app);
 
 class Server extends ApolloServer {
