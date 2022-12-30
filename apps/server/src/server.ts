@@ -20,10 +20,15 @@ import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
 
 const app = express();
-app.use(graphqlUploadExpress());
 app.use(
   cors({
     origin: "https://www.wellfare.space",
+  })
+);
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 10000000,
+    maxFiles: 10,
   })
 );
 app.use(async (req, res, next) => {
@@ -129,10 +134,6 @@ class Server extends ApolloServer {
     this.applyMiddleware({
       app,
       path: "/",
-      cors: {
-        credentials: true,
-        origin: true,
-      },
     });
     const port = process.env.PORT || 4000;
     await new Promise<void>((resolve) => app.listen(port, resolve));
