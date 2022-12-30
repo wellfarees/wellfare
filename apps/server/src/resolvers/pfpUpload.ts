@@ -42,15 +42,15 @@ export default {
 
         // save the image file locally
         console.log(path.join(__dirname, "../../images", `${id}${extension}`));
-        // await new Promise((res) =>
-        //   stream
-        //     .pipe(
-        //       createWriteStream(
-        //         path.join(__dirname, "../../images", `${id}${extension}`)
-        //       )
-        //     )
-        //     .on("close", res)
-        // ).catch();
+        await new Promise((res) =>
+          stream
+            .pipe(
+              createWriteStream(
+                path.join(__dirname, "../../images", `${id}${extension}`)
+              )
+            )
+            .on("close", res)
+        ).catch();
 
         // compress / minify the image
         // const files = await imagemin([`images/${id}${extension}`], {
