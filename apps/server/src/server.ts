@@ -135,7 +135,6 @@ class Server extends ApolloServer {
       },
     });
     const port = process.env.PORT || 4000;
-    app.use("/graphql", cors<cors.CorsRequest>());
     await new Promise<void>((resolve) => app.listen(port, resolve));
     return port;
   }
