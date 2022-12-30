@@ -8,44 +8,50 @@ export default {
     unsubscribe: async (_: unknown, args: { encodedEmail: string }) => {
       const email = (verifyJWT(args.encodedEmail, "client") as JwtPayload).id;
 
-      const subbedUser = await server.db.newsletterUser.findFirst({
-        where: {
-          email,
-        },
-      });
-
-      const potentiallyReggedUser = await server.db.user.findFirst({
-        where: {
-          information: {
+      try {
+        const subbedUser = await server.db.newsletterUser.findFirst({
+          where: {
             email,
           },
-        },
-      });
+        });
 
-      const reggedAndSubbed = await server.db.newsletterUser.findFirst({
-        where: {
-          relationId: potentiallyReggedUser.id,
-        },
-      });
-
-      if (subbedUser) {
-        // plain, unregistred user
-        await server.db.newsletterUser.delete({
+        const potentiallyReggedUser = await server.db.user.findFirst({
           where: {
-            id: subbedUser.id,
+            information: {
+              email,
+            },
           },
         });
-      } else if (reggedAndSubbed) {
-        // registed user & email in the user database
-        await server.db.newsletterUser.delete({
-          where: {
-            id: reggedAndSubbed.id,
-          },
-        });
-      } else {
-        return new ApolloError(
-          `User with email ${email} has not subscribed to the newsletter.`
-        );
+
+        if (subbedUser) {
+          // plain, unregistred user
+          await server.db.newsletterUser.delete({
+            where: {
+              id: subbedUser.id,
+            },
+          });
+        } else if (potentiallyReggedUser) {
+          // registed user & email in the user database
+          const reggedAndSubbed = await server.db.newsletterUser.findFirst({
+            where: {
+              relationId: potentiallyReggedUser.id,
+            },
+          });
+
+          if (reggedAndSubbed) {
+            await server.db.newsletterUser.delete({
+              where: {
+                id: reggedAndSubbed.id,
+              },
+            });
+          }
+        } else {
+          return new ApolloError(
+            `User with email ${email} has not subscribed to the newsletter.`
+          );
+        }
+      } catch (e) {
+        console.log(e);
       }
 
       return {
