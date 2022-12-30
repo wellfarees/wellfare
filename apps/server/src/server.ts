@@ -21,6 +21,11 @@ import cors from "cors";
 
 const app = express();
 app.use(graphqlUploadExpress());
+app.use(
+  cors({
+    origin: "https://www.wellfare.space",
+  })
+);
 app.use(async (req, res, next) => {
   const auth = req.headers.authorization;
   if (!auth || auth.split("").length < 2) {
