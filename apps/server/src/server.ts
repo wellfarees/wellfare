@@ -18,6 +18,8 @@ import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
+import { GraphQLResponse } from "apollo-server-core";
+import { GraphQLRequestContext } from "apollo-server-core";
 
 const app = express();
 
@@ -115,6 +117,18 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
+      formatResponse: (
+        response: GraphQLResponse | null,
+        requestContext: GraphQLRequestContext<any>
+      ) => {
+        if (requestContext.response && requestContext.response.http) {
+          requestContext.response.http.headers.set(
+            "Access-Control-Allow-Origin",
+            "https://www.wellfare.space"
+          );
+        }
+        return response as GraphQLResponse;
+      },
       context: async ({ req }) => {
         if (req.body.operationName === "addToNewsletter")
           return { ipv6: req.ip };
