@@ -140,6 +140,7 @@ class Server extends ApolloServer {
     this.applyMiddleware({
       app,
       path: "/",
+      cors: false,
     });
     const port = process.env.PORT || 4000;
     await new Promise<void>((resolve) => app.listen(port, resolve));
