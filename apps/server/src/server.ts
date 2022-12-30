@@ -17,6 +17,7 @@ import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import { SIGNIN_METHODS } from "./constants";
+import cors from "cors";
 
 const app = express();
 app.use(graphqlUploadExpress());
@@ -121,6 +122,15 @@ class Server extends ApolloServer {
     await this.start();
     this.applyMiddleware({ app, path: "/" });
     const port = process.env.PORT || 4000;
+    app.use(
+      "/graphql",
+      cors<cors.CorsRequest>({
+        origin: [
+          "https://www.wellfare.space",
+          "https://wellfare-production.up.railway.app",
+        ],
+      })
+    );
     await new Promise<void>((resolve) => app.listen(port, resolve));
     return port;
   }
