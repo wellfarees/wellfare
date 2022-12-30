@@ -32,6 +32,8 @@ app.use(
   })
 );
 app.use(async (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://www.wellfare.space");
+
   const auth = req.headers.authorization;
   if (!auth || auth.split("").length < 2) {
     next();
