@@ -76,11 +76,12 @@ export default {
         );
 
         const jwt = generateJWT({ id: userData.id }, "client");
-        // await sendVerificationEmail(
-        //   userData.information.email,
-        //   userData.information.firstName,
-        //   userData.id
-        // );
+
+        await sendVerificationEmail(
+          userData.information.email,
+          userData.information.firstName,
+          userData.id
+        );
 
         return { jwt, user: userData, publicAlgoliaKey };
       }

@@ -9,10 +9,13 @@ export const sendVerificationEmail = async (
 ): Promise<void> => {
   const verificationJWT = generateJWT({ id }, "verification");
   const verificationURL = `${CLIENT_URL}/auth/verify?token=${verificationJWT}`;
-
-  await sendEmail(email, {
-    type: "verification",
-    link: verificationURL,
-    username: name,
-  });
+  try {
+    await sendEmail(email, {
+      type: "verification",
+      link: verificationURL,
+      username: name,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
