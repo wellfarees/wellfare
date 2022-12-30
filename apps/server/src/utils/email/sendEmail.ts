@@ -2,7 +2,8 @@ import server from "../../server";
 import generateJWT from "../generateJWT";
 import { CLIENT_URL } from "../../endpoints";
 import { welcomeEmail, newsletterEmail, resetPasswordEmail } from "./templates";
-import InlineCss = require("inline-css");
+// import InlineCss = require("inline-css");
+import { inline } from "css-inline";
 
 interface EmailOptions {
   type: "verification" | "newsletter" | "password";
@@ -48,14 +49,12 @@ export const sendEmail = async (
       subject = "Password reset";
   }
 
-  console.log(content);
-
   await server.mail.send({
     from: process.env.EMAIL_ADDRESS!,
     to: email,
     subject,
-    html: await InlineCss(content, {
-      url: "filePath",
+    html: inline(content, {
+      remove_style_tags: true,
     }),
   });
 };
