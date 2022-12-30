@@ -36,63 +36,63 @@ export default {
 
       let imageLocation = "";
 
-      // try {
-      //   // delete all previous user profile pictures with extensions that may vary
-      //   if (data.information.pfp) await deleteByPrefix(id);
+      try {
+        // delete all previous user profile pictures with extensions that may vary
+        if (data.information.pfp) await deleteByPrefix(id);
 
-      //   // save the image file locally
-      //   await new Promise((res) =>
-      //     stream
-      //       .pipe(
-      //         createWriteStream(
-      //           path.join(__dirname, "../../images", `${id}${extension}`)
-      //         )
-      //       )
-      //       .on("close", res)
-      //   ).catch();
+        // save the image file locally
+        await new Promise((res) =>
+          stream
+            .pipe(
+              createWriteStream(
+                path.join(__dirname, "../../images", `${id}${extension}`)
+              )
+            )
+            .on("close", res)
+        ).catch();
 
-      //   // compress / minify the image
-      //   const files = await imagemin([`images/${id}${extension}`], {
-      //     plugins: [
-      //       imageminJpegtran(),
-      //       imageminPngquant({
-      //         quality: [0.4, 0.5],
-      //       }),
-      //     ],
-      //   }).catch(() => {
-      //     return new ApolloError("Could not minify the image.");
-      //   });
+        // compress / minify the image
+        const files = await imagemin([`images/${id}${extension}`], {
+          plugins: [
+            imageminJpegtran(),
+            imageminPngquant({
+              quality: [0.4, 0.5],
+            }),
+          ],
+        }).catch(() => {
+          return new ApolloError("Could not minify the image.");
+        });
 
-      //   if (!files.length) {
-      //     return new ApolloError("Could not minify the image.");
-      //   }
+        if (!files.length) {
+          return new ApolloError("Could not minify the image.");
+        }
 
-      //   // store in aws s3
-      //   const res = await uploadObject(
-      //     files[0].data,
-      //     `images/${id}`,
-      //     extension
-      //   );
+        // store in aws s3
+        const res = await uploadObject(
+          files[0].data,
+          `images/${id}`,
+          extension
+        );
 
-      //   imageLocation = res.Location;
+        imageLocation = res.Location;
 
-      //   // delete the local file
-      //   unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
-      //   await server.db.user.update({
-      //     where: {
-      //       id,
-      //     },
-      //     data: {
-      //       information: {
-      //         update: {
-      //           pfp: imageLocation,
-      //         },
-      //       },
-      //     },
-      //   });
-      // } catch (e) {
-      //   return new ApolloError("Failed to upload the profile picture.");
-      // }
+        // delete the local file
+        unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
+        await server.db.user.update({
+          where: {
+            id,
+          },
+          data: {
+            information: {
+              update: {
+                pfp: imageLocation,
+              },
+            },
+          },
+        });
+      } catch (e) {
+        return new ApolloError("Failed to upload the profile picture.");
+      }
 
       return {
         location:
