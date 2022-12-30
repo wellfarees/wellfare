@@ -41,15 +41,16 @@ export default {
         // if (data.information.pfp) await deleteByPrefix(id);
 
         // save the image file locally
-        await new Promise((res) =>
-          stream
-            .pipe(
-              createWriteStream(
-                path.join(__dirname, "../../images", `${id}${extension}`)
-              )
-            )
-            .on("close", res)
-        ).catch();
+        console.log(path.join(__dirname, "../../images", `${id}${extension}`));
+        // await new Promise((res) =>
+        //   stream
+        //     .pipe(
+        //       createWriteStream(
+        //         path.join(__dirname, "../../images", `${id}${extension}`)
+        //       )
+        //     )
+        //     .on("close", res)
+        // ).catch();
 
         // compress / minify the image
         // const files = await imagemin([`images/${id}${extension}`], {
