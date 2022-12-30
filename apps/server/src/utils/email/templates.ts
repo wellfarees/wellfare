@@ -352,7 +352,6 @@ export const newsletterEmail = (unsubLink: string): string => {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  </head>
 
   <style>
     body {
@@ -502,6 +501,8 @@ export const newsletterEmail = (unsubLink: string): string => {
       width: 65% !important;
     }
   </style>
+  
+  </head>
 
   <body>
     <main class="wrapper">
@@ -616,7 +617,6 @@ export const resetPasswordEmail = (
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  </head>
 
   <style>
     body {
@@ -795,6 +795,7 @@ export const resetPasswordEmail = (
       width: 65% !important;
     }
   </style>
+  </head>
 
   <body>
     <main class="wrapper">
