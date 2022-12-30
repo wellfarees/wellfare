@@ -124,7 +124,6 @@ class Server extends ApolloServer {
     this.applyMiddleware({
       app,
       path: "/",
-      cors: { origin: "https://www.wellfare.space", credentials: true },
     });
     const port = process.env.PORT || 4000;
     app.use(
