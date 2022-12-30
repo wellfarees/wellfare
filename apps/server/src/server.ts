@@ -125,7 +125,10 @@ class Server extends ApolloServer {
       app,
       path: "/",
       cors: {
-        origin: ["https://wellfare.space", "https://wellfare.space/app/user"],
+        origin: [
+          "https://www.wellfare.space",
+          "https://www.wellfare.space/app/user",
+        ],
         credentials: true,
       },
     });
