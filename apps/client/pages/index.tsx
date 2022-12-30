@@ -188,7 +188,7 @@ const MailSection = styled.section`
 
     .maillisted {
       box-shadow: 0px 0px 7px 1px rgba(58, 240, 91, 0.6) !important;
-      background-color: #23db45 !important;
+      background: linear-gradient(180deg, #0fe20a 0%, #00b528 100%);
     }
   }
 
