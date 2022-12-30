@@ -123,7 +123,10 @@ class Server extends ApolloServer {
     await this.start();
     this.applyMiddleware({
       app,
-      path: "/",
+      cors: {
+        credentials: true,
+        origin: true,
+      },
     });
     const port = process.env.PORT || 4000;
     app.use("/graphql", cors<cors.CorsRequest>());
