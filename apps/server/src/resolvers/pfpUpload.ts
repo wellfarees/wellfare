@@ -31,8 +31,8 @@ export default {
       });
 
       const { createReadStream, filename } = await args.image;
-      // const extension = "." + /[^.]+$/.exec(filename);
-      // const stream = createReadStream();
+      const extension = "." + /[^.]+$/.exec(filename);
+      const stream = createReadStream();
 
       let imageLocation = "";
 
