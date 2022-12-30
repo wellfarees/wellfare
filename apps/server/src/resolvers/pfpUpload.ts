@@ -19,22 +19,22 @@ export default {
       args: { image: Promise<FileUpload> },
       headers: { token: string }
     ) => {
-      // const dToken = verifyJWT(headers.token, "client");
-      // if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
-      // const id = (dToken as decodedToken).id;
+      const dToken = verifyJWT(headers.token, "client");
+      if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
+      const id = (dToken as decodedToken).id;
 
-      // const data = await server.db.user.findFirst({
-      //   where: { id },
-      //   select: {
-      //     information: true,
-      //   },
-      // });
+      const data = await server.db.user.findFirst({
+        where: { id },
+        select: {
+          information: true,
+        },
+      });
 
-      // const { createReadStream, filename } = await args.image;
-      // const extension = "." + /[^.]+$/.exec(filename);
-      // const stream = createReadStream();
+      const { createReadStream, filename } = await args.image;
+      const extension = "." + /[^.]+$/.exec(filename);
+      const stream = createReadStream();
 
-      // let imageLocation = "";
+      let imageLocation = "";
 
       // try {
       //   // delete all previous user profile pictures with extensions that may vary
