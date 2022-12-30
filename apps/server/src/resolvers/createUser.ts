@@ -66,7 +66,7 @@ export default {
         });
 
         // adding to newsletter
-        // addToNewsletter(userData.information.email, userData.id);
+        addToNewsletter(userData.information.email, userData.id);
 
         const publicAlgoliaKey = client.generateSecuredApiKey(
           process.env.ALGOLIA_SEARCH!,
