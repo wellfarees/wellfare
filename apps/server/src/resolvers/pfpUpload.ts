@@ -95,8 +95,7 @@ export default {
       }
 
       return {
-        location:
-          "https://wellfare-storage.s3.eu-west-3.amazonaws.com/images/clb8asjt10009dx6d5amdqg6f.jpeg",
+        location,
       };
     },
   },
