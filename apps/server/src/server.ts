@@ -125,10 +125,7 @@ class Server extends ApolloServer {
     app.use(
       "/graphql",
       cors<cors.CorsRequest>({
-        origin: [
-          "https://www.wellfare.space",
-          "https://wellfare-production.up.railway.app",
-        ],
+        origin: "https://www.wellfare.space",
       })
     );
     await new Promise<void>((resolve) => app.listen(port, resolve));
