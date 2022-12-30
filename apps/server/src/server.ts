@@ -25,12 +25,12 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://www.wellfare.space",
+    origin: ["https://www.wellfare.space", "http://localhost:3000"],
   })
 );
 
 app.use(async (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://www.wellfare.space");
+  // res.header("Access-Control-Allow-Origin", "https://www.wellfare.space");
 
   const auth = req.headers.authorization;
   if (!auth || auth.split("").length < 2) {
@@ -121,12 +121,12 @@ class Server extends ApolloServer {
         response: GraphQLResponse | null,
         requestContext: GraphQLRequestContext<any>
       ) => {
-        if (requestContext.response && requestContext.response.http) {
-          requestContext.response.http.headers.set(
-            "Access-Control-Allow-Origin",
-            "https://www.wellfare.space"
-          );
-        }
+        // if (requestContext.response && requestContext.response.http) {
+        //   requestContext.response.http.headers.set(
+        //     "Access-Control-Allow-Origin",
+        //     "https://www.wellfare.space"
+        //   );
+        // }
         return response as GraphQLResponse;
       },
       context: async ({ req }) => {
