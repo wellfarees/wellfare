@@ -105,6 +105,7 @@ class Server extends ApolloServer {
 
         return { token: req.headers.authorization };
       },
+
       plugins: [
         ApolloServerPluginDrainHttpServer({
           httpServer,
@@ -120,7 +121,11 @@ class Server extends ApolloServer {
 
   async listen() {
     await this.start();
-    this.applyMiddleware({ app, path: "/" });
+    this.applyMiddleware({
+      app,
+      path: "/",
+      cors: { origin: "https://wellfare.space", credentials: true },
+    });
     const port = process.env.PORT || 4000;
     app.use(
       "/graphql",

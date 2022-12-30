@@ -244,7 +244,8 @@ const User = () => {
     if (uploadProps.data) {
       setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime());
     } else if (uploadProps.error) {
-      setError(uploadProps.error.graphQLErrors[0].message);
+      console.log(uploadProps.error);
+      // setError(uploadProps.error.graphQLErrors[0].message);
     }
   }, [setPfp, uploadProps.data, uploadProps.error]);
 
