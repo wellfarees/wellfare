@@ -123,6 +123,7 @@ class Server extends ApolloServer {
     await this.start();
     this.applyMiddleware({
       app,
+      path: "/",
       cors: {
         credentials: true,
         origin: true,
