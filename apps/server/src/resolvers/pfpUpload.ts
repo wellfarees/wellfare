@@ -52,7 +52,7 @@ export default {
         ).catch();
 
         // compress / minify the image
-        const files = await imagemin([`images/${id}${extension}`], {
+        const files = await imagemin([`src/images/${id}${extension}`], {
           plugins: [
             imageminJpegtran(),
             imageminPngquant({
@@ -77,7 +77,7 @@ export default {
         imageLocation = res.Location;
 
         // delete the local file
-        unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
+        unlinkSync(path.join(__dirname, "../images/" + `${id}${extension}`));
         await server.db.user.update({
           where: {
             id,
@@ -91,6 +91,7 @@ export default {
           },
         });
       } catch (e) {
+        console.log(e);
         return new ApolloError("Failed to upload the profile picture.");
       }
 
