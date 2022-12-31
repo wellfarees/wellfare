@@ -211,9 +211,7 @@ const User = () => {
 
   const { data, loading } = useQuery<{
     getUser: { information: Credentials; OAuthEmail: string };
-  }>(USER_INFORMATION_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  }>(USER_INFORMATION_QUERY);
 
   const [resendVerificationLink] = useMutation(RESEND_VERIFICATION, {
     variables: { token: jwt },
@@ -487,6 +485,12 @@ const User = () => {
                         (file.size / (1024 * 1024)).toFixed(2)
                       );
 
+                      if (!isImage(file.type)) {
+                        scrollToBottom();
+                        setError("File has to be of type image.");
+                        return;
+                      }
+
                       // image size limit
                       if (fileSizeInMb > 5) {
                         scrollToBottom();
@@ -501,11 +505,6 @@ const User = () => {
                           (await uploadPfp({ variables: { file } }));
                         setError("");
                       } catch (e) {}
-                      if (!isImage(file.type)) {
-                        scrollToBottom();
-                        setError("File has to have a type of an image!");
-                        return;
-                      }
                     }}
                     type="file"
                     id="pfp-file"

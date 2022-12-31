@@ -304,7 +304,7 @@ const Home: NextPage = () => {
         <UIFeaturing>
           <Container>
             <Fade bottom>
-              <h2>Clean UI for the best experience ever.</h2>
+              <h2>Enhance your experience with our sleek and clean UI.</h2>
             </Fade>
             <Showcase />
           </Container>
@@ -312,12 +312,12 @@ const Home: NextPage = () => {
         <MailSection>
           <Container>
             <Fade bottom>
-              <h2>Dont miss out on the latest news!</h2>
+              <h2>Get the latest updates and news.</h2>
             </Fade>
             <Fade bottom>
               <p className="subtitle">
-                Subscribe to our newsletter to stay up to date to the latest
-                updates
+                Stay in the loop and subscribe to our newsletter for the latest
+                updates.
               </p>
             </Fade>
             <Fade bottom>

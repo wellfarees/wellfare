@@ -726,6 +726,7 @@ const Entry: NextPage = () => {
                           unease: values[keys[1]],
                           gratefulness: values[keys[2]],
                         },
+                        refetchQueries: ["GetUserFeed"],
                       });
                       setTimeout(async () => {
                         await router.replace("/app");

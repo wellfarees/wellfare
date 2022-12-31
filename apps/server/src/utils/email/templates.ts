@@ -1,6 +1,6 @@
 const SOCIAL_LINKS = {
-  instagram: "https://www.instagram.com/wellfare/",
-  twitter: "https://twitter.com/wwwellfare",
+  instagram: "https://www.instagram.com/wellfarespace/",
+  twitter: "https://twitter.com/wellfarespacehttps://twitter.com/wwwellfare",
   github: "https://github.com/wellfarees/wellfare",
 };
 

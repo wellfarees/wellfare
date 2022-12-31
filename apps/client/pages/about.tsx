@@ -211,10 +211,6 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
 }) => {
   return (
     <div>
-      <Head>
-        <title>About Wellfare™</title>
-      </Head>
-
       <AboutInfo>
         <Container>
           <Fade bottom>

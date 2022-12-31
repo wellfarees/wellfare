@@ -109,21 +109,33 @@ const Footer = () => {
               <h3>Other platforms</h3>
               <ul>
                 <li>
-                  <a href="https://github.com/wellfaree/">
-                    <i className="fab fa-github"></i>Source code
+                  <a
+                    href="https://www.instagram.com/wellfarespace/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-instagram"></i>Instagram
                   </a>
                 </li>
-                {/* TODO: Create and link Wellfare twitter and discord */}
                 <li>
-                  <a href="#">
+                  <a
+                    href="https://twitter.com/wellfarespace"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <i className="fab fa-twitter"></i>Twitter
                   </a>
                 </li>
                 <li>
-                  <a href="#">
-                    <i className="fab fa-discord"></i>Discord
+                  <a
+                    href="https://github.com/wellfarees/wellfare"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-github"></i>Source code
                   </a>
                 </li>
+                {/* TODO: Create and link Wellfare twitter and discord */}
               </ul>
             </div>
           </div>

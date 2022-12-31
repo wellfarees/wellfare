@@ -202,9 +202,7 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { data, loading } = useQuery(USER_FEED_QUERY);
 
   const recap = useRecap(data);
 
