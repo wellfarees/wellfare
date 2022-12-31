@@ -23,5 +23,5 @@ No current eta for beta.
 
 <h3>Bugs</h3>
 <p>Our app has free access to anyone. If by any chance you encounter an unspeaken bug, you will be much appreciated having it reported.
-To do so, open an issue in this repository and follow given standarts.</p>
+To do so, open an issue in this repository and choose the bug report template.</p>
 <p>The development policy is very strict when it comes down to bugs and imperfections, no major release will be arranged before the app reaches certain level of stability</p>
