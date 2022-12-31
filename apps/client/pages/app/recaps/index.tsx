@@ -217,8 +217,8 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
               <p className="logo">Wellfare™</p>
               <h2>NOTHING’S HERE</h2>
               <p className="info">
-                Your weekly recaps will go here once you start journaling more
-                often
+                This is where you'll find your weekly recaps once you start
+                journaling regularly.
               </p>
               <Link href="/app" passHref>
                 <button className="return-btn">Return to feed</button>
