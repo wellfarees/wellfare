@@ -22,7 +22,7 @@ export default {
     ) => {
       if (!headers.token)
         return new NoTokenInHeaderError(
-          "No token was found in the header. Please provide in Authorization header."
+          "No token was found in the header. Please provide an authorization header."
         );
       const dToken = verifyJWT(headers.token, "client");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
@@ -56,8 +56,6 @@ export default {
             include: {
               User: {
                 include: {
-                  config: true,
-                  information: true,
                   records: true,
                 },
               },
@@ -76,8 +74,11 @@ export default {
 
       const currentRecord = await server.db.record.findFirst({
         where: {
-          date: {
-            gte: today,
+          userId: id,
+          AND: {
+            date: {
+              gte: today,
+            },
           },
         },
         select: {
@@ -94,7 +95,7 @@ export default {
         ...recordBase,
         id: currentRecord.id,
         date: Date.now(),
-        repcaId: currentRecord.Recap ? currentRecord.Recap.id : null,
+        repcapId: currentRecord.Recap ? currentRecord.Recap.id : null,
       };
 
       if (!data)
