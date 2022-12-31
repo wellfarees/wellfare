@@ -31,12 +31,27 @@ const navStateContext = createContext<
 const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
-  const { saveToken, saveConfig, setPfp } = useActions();
+  const { saveToken, saveConfig, setPfp, setWebsiteLoaded } = useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
   const [mutateAppearance, configData] = useMutation(EDIT_USER_CONFIG);
 
+  const { websiteLoaded } = useTypedSelector((state) => state).unitStates;
   const { info } = useTypedSelector((state) => state.user);
+
+  const beforeUnload = () => {
+    // TODO: save config changes
+    mutateAppearance({
+      variables: {
+        darkMode: info.config.theme == "dark",
+        fontSize: info.config.fontSize,
+        reducedMotion: info.config.reducedMotion,
+      },
+    });
+    return true;
+  };
+
+  useBeforeUnload(beforeUnload);
 
   useEffect(() => {
     if (localStorage.getItem("algolia-search") == null) {
@@ -74,7 +89,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       return;
     }
 
-    if (data) {
+    if (data && !websiteLoaded) {
       saveToken(jwt);
       saveConfig({
         fontSize: data.getUser.config.fontSize,
@@ -98,7 +113,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       return;
     }
 
-    if (oAuthUserProps.data) {
+    if (oAuthUserProps.data && !websiteLoaded) {
       const user = oAuthUserProps.data.oAuthLogin.user;
       saveToken(localStorage.getItem("jwt") as string);
       saveConfig({
@@ -121,19 +136,23 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     oAuthUserProps.data,
   ]);
 
-  const beforeUnload = () => {
-    // TODO: save config changes
-    mutateAppearance({
-      variables: {
-        darkMode: info.config.theme == "dark",
-        fontSize: info.config.fontSize,
-        reducedMotion: info.config.reducedMotion,
-      },
-    });
-    return true;
-  };
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setWebsiteLoaded(true);
+    };
 
-  useBeforeUnload(beforeUnload);
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router.events]);
+
+  useEffect(() => {
+    return () => {
+      if (!websiteLoaded) setWebsiteLoaded(true);
+    };
+  }, []);
 
   return ready ? <>{children}</> : <></>;
 };

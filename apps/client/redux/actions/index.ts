@@ -79,6 +79,13 @@ export interface SaveConfigPiece {
   };
 }
 
+export interface SetWebsiteLoaded {
+  type: ActionType.SET_WEBSITE_LOADED;
+  payload: {
+    loaded: boolean;
+  };
+}
+
 export type Action =
   | RetrieveLocalStorage
   | SetLocalStorage
@@ -89,4 +96,5 @@ export type Action =
   | SaveToken
   | SaveConfig
   | SetPfp
-  | SaveConfigPiece;
+  | SaveConfigPiece
+  | SetWebsiteLoaded;
