@@ -115,6 +115,17 @@ export default {
         if (!passwordsMatch)
           throw new WrongPasswordError("Current password is incorrect.");
 
+        const samePassw = await compare(
+          args.changePassword.new,
+          data.information.password
+        );
+
+        if (samePassw) {
+          throw new WrongPasswordError(
+            "Enter a new password different from your current one."
+          );
+        }
+
         updateData.password = await hash(args.changePassword.new, 10);
       }
 
