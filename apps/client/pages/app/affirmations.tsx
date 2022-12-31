@@ -98,7 +98,10 @@ const Affirmations: NextPage = () => {
       if (!res) return;
       setState(!state);
 
-      setAffirmations({ variables: { affirmations: res } });
+      setAffirmations({
+        variables: { affirmations: res },
+        refetchQueries: ["GetUserInfo"],
+      });
       setTimeout(() => {
         setIsLocked(!isLocked);
         if (infoBtn.current) {
