@@ -80,9 +80,9 @@ const Slider = styled.div`
   }
 `;
 
-const showcaseImage1 = "/img/ui_settings.PNG";
-const showcaseImage2 = "/img/main_ui.PNG";
-const showcaseImage3 = "/img/weekly_recap.PNG";
+const showcaseImage1 = "/img/config.jpg";
+const showcaseImage2 = "/img/main-3.jpg";
+const showcaseImage3 = "/img/recap.jpg";
 
 // TODO: Take screenshots with images for showcase and ensure they all are the SAME resolution
 // NOTE: Maybe turn this thing into reusable npm package???
