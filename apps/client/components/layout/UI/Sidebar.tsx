@@ -269,18 +269,18 @@ const Sidebar: React.FC = () => {
               </span>
             </Link>
           </NavPoint>
+          <NavPoint endPoint="recaps">
+            <Link passHref href="/app/recaps">
+              <span>
+                <i className="fas fa-archive"></i>Weekly recap archive
+              </span>
+            </Link>
+          </NavPoint>
           <NavPoint endPoint="config">
             <Link passHref href="/app/config">
               <span>
                 <i className="fas fa-sliders-h"></i>
                 Design configuration
-              </span>
-            </Link>
-          </NavPoint>
-          <NavPoint endPoint="recaps">
-            <Link passHref href="/app/recaps">
-              <span>
-                <i className="fas fa-archive"></i>Weekly recap archive
               </span>
             </Link>
           </NavPoint>
