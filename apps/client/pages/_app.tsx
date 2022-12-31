@@ -19,6 +19,7 @@ import { store } from "../redux/store";
 import { useActions } from "../hooks/useActions";
 import { APPEARANCE_QUERY } from "../graphql/queries";
 import { OAUTH_LOGIN } from "../graphql/mutations";
+import TagManager from "react-gtm-module";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -35,6 +36,12 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (localStorage.getItem("algolia-search") == null) {
       localStorage.setItem("algolia-search", undefined);
     }
+
+    const tagManagerArgs = {
+      gtmId: "G-EQ9WB4FXH7",
+    };
+
+    TagManager.initialize(tagManagerArgs);
   }, []);
 
   useEffect(() => {
