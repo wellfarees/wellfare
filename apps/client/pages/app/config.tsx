@@ -6,7 +6,9 @@ import ReactSlider from "react-slider";
 import { fontSizes } from "../../config/userConfig";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { NextPage } from "next";
+import { useEffect } from "react";
 
+import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
@@ -192,6 +194,7 @@ const Wrapper = styled.div`
 `;
 
 const Conf: NextPage = () => {
+  const { saveConfig, saveConfigPiece } = useActions();
   const { user } = useTypedSelector((state) => state);
   const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
 
@@ -203,6 +206,11 @@ const Conf: NextPage = () => {
   };
 
   // TODO: Solve the reactive reduced motion problem by calling the reduce-motion mutation on component's unmounting lifecycle (useEffect cleanup function)
+  useEffect(() => {
+    if (data) {
+      // saveConfig(transformFetchedConfig(data.editAppearance.config));
+    }
+  }, [data, saveConfig]);
 
   return (
     <Wrapper>
@@ -224,7 +232,9 @@ const Conf: NextPage = () => {
                   user.info?.config.theme === "dark" ? true : false
                 }
                 onChange={(e) => {
-                  mutateSpecificValue({ darkMode: e.target.checked });
+                  saveConfigPiece({
+                    theme: e.target.checked ? "dark" : "light",
+                  });
                 }}
               />
             </div>
@@ -235,7 +245,7 @@ const Conf: NextPage = () => {
                 className="toggler"
                 defaultChecked={Boolean(user.info?.config.reducedMotion)}
                 onChange={(e) => {
-                  mutateSpecificValue({ reducedMotion: e.target.checked });
+                  saveConfigPiece({ reducedMotion: e.target.checked });
                 }}
               />
             </div>
@@ -255,6 +265,7 @@ const Conf: NextPage = () => {
                 marks={[14, 15, 16, 17, 18, 19]}
                 onChange={(val) => {
                   mutateSpecificValue({ fontSize: val });
+                  saveConfigPiece({ fontSize: val as number });
                 }}
               />
               <i className="fas fa-font fa-2x"></i>

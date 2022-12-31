@@ -1,6 +1,7 @@
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
 import { SIGNIN_METHODS } from "../../../../constants";
+import { ConfigPiece } from "./actionCreators";
 
 export interface RetrieveLocalStorage {
   type: ActionType.RETRIEVE_LOCAL_STORAGE;
@@ -71,6 +72,13 @@ export interface SetPfp {
   };
 }
 
+export interface SaveConfigPiece {
+  type: ActionType.SAVE_CONFIG_PIECE;
+  payload: {
+    configPiece: ConfigPiece;
+  };
+}
+
 export type Action =
   | RetrieveLocalStorage
   | SetLocalStorage
@@ -80,4 +88,5 @@ export type Action =
   | Logout
   | SaveToken
   | SaveConfig
-  | SetPfp;
+  | SetPfp
+  | SaveConfigPiece;

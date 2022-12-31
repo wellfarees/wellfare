@@ -10,7 +10,9 @@ import {
 } from "react";
 import { AppProps } from "next/app";
 import { ApolloProvider, useLazyQuery, useMutation } from "@apollo/client";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 import client from "../graphql/client";
+import { EDIT_USER_CONFIG } from "../graphql/mutations";
 import Layout from "../components/layout/Layout";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Provider } from "react-redux";
@@ -20,6 +22,7 @@ import { useActions } from "../hooks/useActions";
 import { APPEARANCE_QUERY } from "../graphql/queries";
 import { OAUTH_LOGIN } from "../graphql/mutations";
 import TagManager from "react-gtm-module";
+import { useBeforeUnload } from "react-use";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -31,6 +34,9 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const { saveToken, saveConfig, setPfp } = useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
+  const [mutateAppearance, configData] = useMutation(EDIT_USER_CONFIG);
+
+  const { info } = useTypedSelector((state) => state.user);
 
   useEffect(() => {
     if (localStorage.getItem("algolia-search") == null) {
@@ -114,6 +120,20 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     oAuthUserProps.error,
     oAuthUserProps.data,
   ]);
+
+  const beforeUnload = () => {
+    // TODO: save config changes
+    mutateAppearance({
+      variables: {
+        darkMode: info.config.theme == "dark",
+        fontSize: info.config.fontSize,
+        reducedMotion: info.config.reducedMotion,
+      },
+    });
+    return true;
+  };
+
+  useBeforeUnload(beforeUnload);
 
   return ready ? <>{children}</> : <></>;
 };

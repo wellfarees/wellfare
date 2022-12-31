@@ -106,3 +106,21 @@ export const setPfp = (url: string | null): SetPfp => {
     },
   };
 };
+
+export function saveConfigPiece<Key extends keyof UserConfig>(
+  config: Pick<UserConfig, Key>
+): {
+  type: ActionType.SAVE_CONFIG_PIECE;
+  payload: { configPiece: Pick<UserConfig, Key> };
+} {
+  return {
+    type: ActionType.SAVE_CONFIG_PIECE,
+    payload: {
+      configPiece: config,
+    },
+  };
+}
+
+export interface ConfigPiece {
+  data: Extract<ReturnType<typeof saveConfigPiece>, object>;
+}
