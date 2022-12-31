@@ -47,6 +47,10 @@ const Wrapper = styled.div`
     gap: 1em;
   }
 
+  .feelings {
+    line-height: 1.3;
+  }
+
   .description {
     color: ${(props: any) => props.theme.shadedColor};
     line-height: 1.5em;
