@@ -183,7 +183,7 @@ const EmojiWrapper = styled.div`
 
   @media only screen and (max-width: 450px) {
     .emoji {
-      font-size: 1.9rem !important;
+      font-size: 2.5rem !important;
     }
   }
 
