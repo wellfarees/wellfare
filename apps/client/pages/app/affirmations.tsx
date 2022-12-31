@@ -79,9 +79,7 @@ const Affirmations: NextPage = () => {
   const [state, setState] = useState(false);
   const [buttonsSwitched, switchButtons] = useState(false);
   const [setAffirmations] = useMutation(EDIT_AFFIRMATIONS);
-  const { loading, data } = useQuery(AFFIRMATIONS_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { loading, data } = useQuery(AFFIRMATIONS_QUERY);
 
   const registerInput = register();
 
