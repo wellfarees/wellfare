@@ -52,14 +52,17 @@ export default {
         ).catch();
 
         // compress / minify the image
-        const files = await imagemin([`src/images/${id}${extension}`], {
-          plugins: [
-            imageminJpegtran(),
-            imageminPngquant({
-              quality: [0.4, 0.5],
-            }),
-          ],
-        }).catch(() => {
+        const files = await imagemin(
+          [path.join(__dirname, `../images`, `${id}${extension}`)],
+          {
+            plugins: [
+              imageminJpegtran(),
+              imageminPngquant({
+                quality: [0.4, 0.5],
+              }),
+            ],
+          }
+        ).catch(() => {
           return new ApolloError("Could not minify the image.");
         });
 
