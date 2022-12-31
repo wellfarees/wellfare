@@ -155,10 +155,15 @@ const Wrapper = styled.main`
         flex-direction: column;
         width: 100%;
         gap: 4em;
-        align-items: flex-start;
+        // align-items: flex-start;
+        align-items: stretch !important;
 
         button {
-          width: 100%;
+          width: 100% !important;
+        }
+
+        a {
+          text-align: center;
         }
       }
     }
