@@ -286,7 +286,7 @@ export const welcomeEmail = (
 
               <tr class="verify">
                 <td>
-                  <a class="verify-btn" href="#">Verify</a>
+                  <a class="verify-btn" href="${link}">Verify</a>
                   <p>Your verification link:</p>
                   <a href="${link}" class="verification-link">${link}</a>
                 </td>
