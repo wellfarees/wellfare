@@ -36,12 +36,6 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (localStorage.getItem("algolia-search") == null) {
       localStorage.setItem("algolia-search", undefined);
     }
-
-    const tagManagerArgs = {
-      gtmId: "G-EQ9WB4FXH7",
-    };
-
-    TagManager.initialize(tagManagerArgs);
   }, []);
 
   useEffect(() => {
@@ -144,9 +138,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     setLoggedIn(false);
   }, [router.pathname]);
 
-  // if router.path includes /app dir -> render another type of layout
-  // NOTE: Temporary solution with loggedIn variable -> to be replaced with secure implementation
+  useEffect(() => {
+    const tagManagerArgs = {
+      gtmId: "G-EQ9WB4FXH7",
+    };
 
+    TagManager.initialize(tagManagerArgs);
+  }, []);
+
+  // if router.path includes /app dir -> render another type of layout
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
