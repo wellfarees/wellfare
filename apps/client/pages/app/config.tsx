@@ -6,13 +6,10 @@ import ReactSlider from "react-slider";
 import { fontSizes } from "../../config/userConfig";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { NextPage } from "next";
-import { useEffect } from "react";
 
-import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { transformFetchedConfig } from "../../utils/transformFetchedConfig";
 
 const StyledSlider = styled(ReactSlider)`
   width: 82%;
@@ -195,7 +192,6 @@ const Wrapper = styled.div`
 `;
 
 const Conf: NextPage = () => {
-  const { saveConfig } = useActions();
   const { user } = useTypedSelector((state) => state);
   const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
 
@@ -207,11 +203,6 @@ const Conf: NextPage = () => {
   };
 
   // TODO: Solve the reactive reduced motion problem by calling the reduce-motion mutation on component's unmounting lifecycle (useEffect cleanup function)
-  useEffect(() => {
-    if (data) {
-      saveConfig(transformFetchedConfig(data.editAppearance.config));
-    }
-  }, [data, saveConfig]);
 
   return (
     <Wrapper>
