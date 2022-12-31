@@ -159,8 +159,11 @@ const Affirmations: NextPage = () => {
               </p>
               <p>
                 {/* TODO: Create an article post or smth */}
-                Here’s <a href="#">an article</a> about affirmations and how to
-                write them.
+                Here’s{" "}
+                <a href="https://www.everydayhealth.com/emotional-health/what-are-affirmations/">
+                  an article
+                </a>{" "}
+                about affirmations and how to write them.
               </p>
             </div>
           </header>
