@@ -215,9 +215,9 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
           ) : (
             <div className="noRecaps">
               <p className="logo">Wellfare™</p>
-              <h2>NOTHING’S HERE</h2>
+              <h2>NOTHING&apos;S HERE</h2>
               <p className="info">
-                This is where you'll find your weekly recaps once you start
+                This is where you&apos;ll find your weekly recaps once you start
                 journaling regularly.
               </p>
               <Link href="/app" passHref>

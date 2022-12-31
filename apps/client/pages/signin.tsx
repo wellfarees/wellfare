@@ -313,7 +313,7 @@ const SignIn = () => {
         <div className="info">
           <h1>Sign in &amp; check back on your mental state</h1>
           <p>
-            Don't hold back - express your emotions and record them in your
+            Don&apos;t hold back - express your emotions and record them in your
             journaling system.
           </p>
         </div>

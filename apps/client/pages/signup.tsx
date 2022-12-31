@@ -282,8 +282,8 @@ const SignUp = () => {
         <div className="info">
           <h1>Sign up now &amp; start journaling</h1>
           <p>
-            Need to speed things up? We've got multiple authentication options
-            to choose from.
+            Need to speed things up? We&apos;ve got multiple authentication
+            options to choose from.
           </p>
         </div>
         <div className="signUp-card">
