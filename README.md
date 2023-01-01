@@ -1,3 +1,4 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <h1>Wellfare</h1>
 <p>  Introducing your future</p>
 
@@ -25,3 +26,6 @@ No current eta for beta.
 <p>Our app has free access to anyone. If by any chance you encounter an unspeaken bug, you will be much appreciated having it reported.
 To do so, open an issue in this repository and choose the bug report template.</p>
 <p>The development policy is very strict when it comes down to bugs and imperfections, no major release will be arranged before the app reaches certain level of stability</p>
+<h3>License</h3>
+Wellfare is licensed under GNU General Public License v3.0 <br>
+<a href="https://github.com/wellfarees/wellfare/blob/main/LICENSE">GNU GPL V3</a>
