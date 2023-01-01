@@ -7,6 +7,7 @@ import {
   SaveToken,
   SaveConfig,
   SetPfp,
+  SetWebsiteLoaded,
 } from ".";
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
@@ -106,3 +107,30 @@ export const setPfp = (url: string | null): SetPfp => {
     },
   };
 };
+
+export function saveConfigPiece<Key extends keyof UserConfig>(
+  config: Pick<UserConfig, Key>
+): {
+  type: ActionType.SAVE_CONFIG_PIECE;
+  payload: { configPiece: Pick<UserConfig, Key> };
+} {
+  return {
+    type: ActionType.SAVE_CONFIG_PIECE,
+    payload: {
+      configPiece: config,
+    },
+  };
+}
+
+export const setWebsiteLoaded = (loaded: boolean): SetWebsiteLoaded => {
+  return {
+    type: ActionType.SET_WEBSITE_LOADED,
+    payload: {
+      loaded,
+    },
+  };
+};
+
+export interface ConfigPiece {
+  data: Extract<ReturnType<typeof saveConfigPiece>, object>;
+}

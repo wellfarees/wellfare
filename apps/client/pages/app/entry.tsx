@@ -74,6 +74,10 @@ const Wrapper = styled.main`
     max-width: 100%;
   }
 
+  .summarizedEmoji {
+    font-size: 2rem !important;
+  }
+
   .details {
     margin-top: 2.5em;
     display: flex;
@@ -144,16 +148,22 @@ const Wrapper = styled.main`
       text-decoration: underline;
     }
 
-    @media only screen and (max-width: 425px) {
+    @media only screen and (max-width: 515px) {
       width: 100%;
 
       .btns {
         flex-direction: column;
         width: 100%;
         gap: 4em;
+        // align-items: flex-start;
+        align-items: stretch !important;
 
         button {
-          width: 100%;
+          width: 100% !important;
+        }
+
+        a {
+          text-align: center;
         }
       }
     }
@@ -165,15 +175,25 @@ const EmojiWrapper = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   display: none;
 
+  .emoji {
+    font-size: 2rem !important;
+  }
+
+  @media only screen and (max-width: 450px) {
+    .emoji {
+      font-size: 2.5rem !important;
+    }
+  }
+
   .overlay {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: rgba(0, 0, 0, 0.6);
     position: absolute;
@@ -238,7 +258,7 @@ const EmojiWrapper = styled.div`
     }
   }
 
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 450px) {
     .draggable {
       display: inline-block !important;
       width: 80px;
@@ -249,7 +269,7 @@ const EmojiWrapper = styled.div`
     }
 
     .modal {
-      width: 100vw;
+      width: 100%;
       position: fixed;
       left: 0;
       bottom: 0;
@@ -547,12 +567,13 @@ const Entry: NextPage = () => {
     });
   };
 
-  useEffect(() => {
-    setIssMobile(document.body.offsetWidth <= 425);
+  const resizeFn = () => {
+    setIssMobile(document.body.offsetWidth <= 450);
+    console.log(document.body.offsetWidth);
+  };
 
-    const resizeFn = () => {
-      setIssMobile(document.body.offsetWidth <= 425);
-    };
+  useEffect(() => {
+    setIssMobile(document.body.offsetWidth <= 450);
 
     window.addEventListener("resize", resizeFn);
 
@@ -650,7 +671,9 @@ const Entry: NextPage = () => {
                       {currentEmoji
                         ? `Report summarized with`
                         : `Summarize your day with an emoji`}
-                      {currentEmoji && <span>{currentEmoji}</span>}
+                      {currentEmoji && (
+                        <span className="summarizedEmoji">{currentEmoji}</span>
+                      )}
                     </p>
                   ) : null}
                 </div>
@@ -703,6 +726,7 @@ const Entry: NextPage = () => {
                           unease: values[keys[1]],
                           gratefulness: values[keys[2]],
                         },
+                        refetchQueries: ["GetUserFeed"],
                       });
                       setTimeout(async () => {
                         await router.replace("/app");

@@ -1,5 +1,5 @@
 import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { uploadObject, deleteObject } from "../utils/s3/methods";
+import { uploadObject, deleteByPrefix } from "../utils/s3/methods";
 import verifyJWT from "../utils/verifyJWT";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import { decodedToken } from "../types/jwt";
@@ -35,33 +35,34 @@ export default {
       const stream = createReadStream();
 
       let imageLocation = "";
+
       try {
-        // delete the previous avatar
-        if (data.information.pfp) {
-          const targetFilename = /([^/]+$)/.exec(data.information.pfp)[0];
-          await deleteObject(targetFilename);
-        }
+        // delete all previous user profile pictures with extensions that may vary
+        if (data.information.pfp) await deleteByPrefix(id);
 
         // save the image file locally
         await new Promise((res) =>
           stream
             .pipe(
               createWriteStream(
-                path.join(__dirname, "../../images", `${id}${extension}`)
+                path.join(__dirname, "../images", `${id}${extension}`)
               )
             )
             .on("close", res)
-        ).catch;
+        ).catch();
 
         // compress / minify the image
-        const files = await imagemin([`images/${id}${extension}`], {
-          plugins: [
-            imageminJpegtran(),
-            imageminPngquant({
-              quality: [0.4, 0.5],
-            }),
-          ],
-        }).catch(() => {
+        const files = await imagemin(
+          [path.join(__dirname, `../images`, `${id}${extension}`)],
+          {
+            plugins: [
+              imageminJpegtran(),
+              imageminPngquant({
+                quality: [0.4, 0.5],
+              }),
+            ],
+          }
+        ).catch(() => {
           return new ApolloError("Could not minify the image.");
         });
 
@@ -70,11 +71,16 @@ export default {
         }
 
         // store in aws s3
-        const res = await uploadObject(files[0].data, id, extension);
+        const res = await uploadObject(
+          files[0].data,
+          `images/${id}`,
+          extension
+        );
+
         imageLocation = res.Location;
 
         // delete the local file
-        unlinkSync(path.join(__dirname, "../../images/" + `${id}${extension}`));
+        unlinkSync(path.join(__dirname, "../images/" + `${id}${extension}`));
         await server.db.user.update({
           where: {
             id,
@@ -88,7 +94,8 @@ export default {
           },
         });
       } catch (e) {
-        return new ApolloError("Failed to upload avatar.");
+        console.log(e);
+        return new ApolloError("Failed to upload the profile picture.");
       }
 
       return {

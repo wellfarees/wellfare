@@ -251,7 +251,6 @@ const SignUp = () => {
   useEffect(() => {
     const { error, data } = mutationProps;
     if (error) {
-      console.log(JSON.stringify(error, null, 2));
       // setError(error.graphQLErrors[0].message);
       setSignedUp(false);
       return;
@@ -270,14 +269,21 @@ const SignUp = () => {
     }
   }, [mutationProps.loading, mutationProps, router, storeUser]);
 
+  useEffect(() => {
+    if (!mutationProps.loading) {
+      console.log(mutationProps.error);
+      if (mutationProps.error) setError(mutationProps.error.message);
+    }
+  }, [mutationProps.loading, mutationProps.error]);
+
   return (
     <Wrapper>
       <Container>
         <div className="info">
           <h1>Sign up now &amp; start journaling</h1>
           <p>
-            Wanna do it quick? We got you covered - choose whatever auth method
-            you like!
+            Need to speed things up? We&apos;ve got multiple authentication
+            options to choose from.
           </p>
         </div>
         <div className="signUp-card">
@@ -312,7 +318,9 @@ const SignUp = () => {
                   await createUser({
                     variables: { email, name, password },
                   });
-                } catch (err) {}
+                } catch (err) {
+                  console.log(err);
+                }
               }
             }}
             className="signUp-form"

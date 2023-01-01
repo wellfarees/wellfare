@@ -25,10 +25,8 @@
     "isolatedModules": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "preserveWatchOutput": true,
-    "strict": true
+    "preserveWatchOutput": true
   },
-  "extends": "tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

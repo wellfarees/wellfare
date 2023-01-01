@@ -23,11 +23,12 @@ const Wrapper = styled.div`
   align-items: flex-start;
   gap: 1em;
   padding: 3em;
-  max-width: 400px;
+  max-width: 300px;
   border-radius: 20px;
   position: relative;
   cursor: pointer;
   transition: 0.3s;
+  min-width: 250px;
 
   &:hover {
     filter: brightness(98%);
@@ -46,9 +47,17 @@ const Wrapper = styled.div`
     gap: 1em;
   }
 
+  .feelings {
+    line-height: 1.3;
+  }
+
   .description {
     color: ${(props: any) => props.theme.shadedColor};
     line-height: 1.5em;
+  }
+
+  .emoji {
+    font-size: 2rem !important;
   }
 `;
 
@@ -62,6 +71,7 @@ const Record: React.FC<RecordProps> = ({
 
   return (
     <Wrapper
+      className="record"
       onClick={() => {
         const RecordContent = (
           <DetailedRecord
@@ -80,7 +90,7 @@ const Record: React.FC<RecordProps> = ({
         }
 
         // TODO: redirect to the record with the appropriate (fetched) id
-        router.push(`/app/records/${id}`);
+        router.push(`/app/records?id=${id}`);
       }}
     >
       <span className="date">{dateString}</span>
@@ -88,7 +98,10 @@ const Record: React.FC<RecordProps> = ({
         <span className="emoji">{emoji}</span>
         <h4 className="feelings">{feelings}</h4>
       </div>
-      <p className="description">{unease}</p>
+      <p className="description">
+        {unease.split(" ").slice(0, 15).join(" ")}{" "}
+        {unease.split(" ").length >= 15 ? "..." : null}
+      </p>
     </Wrapper>
   );
 };

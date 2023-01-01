@@ -8,4 +8,6 @@ export enum ActionType {
   SAVE_TOKEN = "saveToken",
   SAVE_CONFIG = "saveConfig",
   SET_PFP = "savePfp",
+  SAVE_CONFIG_PIECE = "saveConfigPiece",
+  SET_WEBSITE_LOADED = "setWebsiteLoaded",
 }

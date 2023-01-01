@@ -4,7 +4,7 @@ import { hash } from "bcrypt";
 import generateJWT from "../utils/generateJWT";
 import IsNotFullNameError from "../errors/IsNotFullName";
 import { client } from "../algolia";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { addToNewsletter } from "../utils/addToNewsletter";
 
 export default {
@@ -66,7 +66,7 @@ export default {
         });
 
         // adding to newsletter
-        addToNewsletter(userData.information.email, userData.id);
+        addToNewsletter(userData.information.email as string, userData.id);
 
         const publicAlgoliaKey = client.generateSecuredApiKey(
           process.env.ALGOLIA_SEARCH!,
@@ -76,8 +76,9 @@ export default {
         );
 
         const jwt = generateJWT({ id: userData.id }, "client");
+
         await sendVerificationEmail(
-          userData.information.email,
+          userData.information.email as string,
           userData.information.firstName,
           userData.id
         );

@@ -1,13 +1,29 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "typeRoots": ["./node_modules/@types"]
   },
   "lib": ["dom", "dom.iterable", "esnext"],
   "jsx": "preserve",
   "module": "esnext",
   "noEmit": true,
-  "extends": "tsconfig/nextjs.json",
+  // "extends": "tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Next.js"
 }

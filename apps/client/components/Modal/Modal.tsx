@@ -48,7 +48,10 @@ const ModalWindow = styled.div`
   }
 `;
 
-const Modal: React.FC<{ state: boolean }> = ({ children, state }) => {
+const Modal: React.FC<{ state: boolean; children: any }> = ({
+  children,
+  state,
+}) => {
   const { initModal } = useActions();
   const size = useScreenSize();
 

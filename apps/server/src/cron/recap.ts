@@ -2,6 +2,7 @@ import server from "../server";
 import { Cron } from "../types/cron";
 import getWeekDays from "../utils/getWeekDays";
 import { generateRecapFromEmojis } from "../utils/recapGenerator";
+import subDays from "date-fns/subDays";
 
 export default abstract class SendRecap extends Cron {
   constructor() {
@@ -9,7 +10,7 @@ export default abstract class SendRecap extends Cron {
   }
 
   async exec() {
-    const daysOfWeek = getWeekDays(new Date());
+    const daysOfWeek = getWeekDays(subDays(new Date(), 1));
 
     const data = await server.db.user.findMany({
       include: {
@@ -34,12 +35,9 @@ export default abstract class SendRecap extends Cron {
       user.records.forEach((record) => emojis.push(record.emoji));
 
       const recap = generateRecapFromEmojis(emojis, user.lastIndex);
-      const ids = data
-        .map((rec) => rec.records.map((rec) => rec.id))
-        .flat()
-        .map((num) => {
-          return { id: num };
-        });
+      const ids = user.records.map((num) => {
+        return { id: num.id };
+      });
 
       await server.db.user.update({
         where: {

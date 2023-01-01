@@ -3,10 +3,17 @@ import { ShrankContainer } from "../../styled/reusable";
 import styled from "styled-components";
 import Link from "next/link";
 import RecapCard from "../../components/Records/RecapCard";
+import Button from "../../components/Button/Button";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
-import { differenceInWeeks, isSameWeek, startOfDay } from "date-fns";
+import {
+  differenceInWeeks,
+  isSameWeek,
+  startOfDay,
+  differenceInCalendarDays,
+  subDays,
+} from "date-fns";
 import { MasonryGrid } from "@egjs/react-grid";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRecap } from "../../hooks/useRecap";
@@ -48,14 +55,8 @@ const Wrapper = styled.main`
     margin-top: 5em;
     margin-bottom: 8em;
 
-    .journal-cta h4 {
-      color: ${(props: any) => props.theme.watermark};
-      transition: 0.3s;
-      padding: 0.5em 0 1em 0;
-
-      &:hover {
-        filter: brightness(90%);
-      }
+    .journal-cta {
+      padding: 1.5em 0 2.5em 0;
     }
 
     div.affirmations-cta {
@@ -102,10 +103,8 @@ const Wrapper = styled.main`
   }
 
   .records-container {
-    margin-top: -2em;
-
     .records {
-      margin-top: 4em;
+      margin-top: 3em;
 
       & > div {
         & > div > div {
@@ -120,6 +119,7 @@ const Wrapper = styled.main`
       p.time {
         font-weight: bold;
         margin-top: 0 !important;
+        margin-bottom: 1em;
       }
     }
 
@@ -150,11 +150,13 @@ const Wrapper = styled.main`
 
   @media only screen and (max-width: 425px) {
     .journal-cta {
-      h4 {
-        line-height: 1.5;
-        margin-bottom: 0.5em;
-        max-width: 80%;
-      }
+      line-height: 1.5;
+      margin-bottom: 0.5em;
+      max-width: 100% !important;
+    }
+
+    button {
+      padding: 0.8em 0.5em !important;
     }
 
     main {
@@ -200,9 +202,7 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { data, loading } = useQuery(USER_FEED_QUERY);
 
   const recap = useRecap(data);
 
@@ -239,7 +239,12 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
         return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
       }
 
-      if (isSameWeek(dateLeft.date, dateRight.date)) {
+      if (
+        isSameWeek(startOfDay(dateLeft.date), startOfDay(dateRight.date), {
+          weekStartsOn: 1,
+        }) &&
+        differenceInCalendarDays(dateLeft.date, subDays(dateRight.date, 1)) < 7
+      ) {
         if (!weeksArr[weekIndex]) {
           weeks.push([dateLeft]);
         } else {
@@ -283,10 +288,10 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
               data.getUser.lastSubmitted === null ? (
                 <div className="journal-cta">
                   <Link href="/app/entry" passHref>
-                    <h4>
-                      Ready to journal another day?
+                    <Button>Add new record</Button>
+                    {/* <h4>
                       <i className="fas fa-pencil-alt"></i>
-                    </h4>
+                    </h4> */}
                   </Link>
                 </div>
               ) : null)}
@@ -325,27 +330,29 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                   >
                     {splitIntoWeeks(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
+                        const weeksAgo = differenceInWeeks(
+                          new Date(),
+                          new Date(week[week.length - 1].date),
+                          { roundingMethod: "ceil" }
+                        );
                         return (
                           <div
                             className={
-                              isSameWeek(Date.now(), week[week.length - 1].date)
+                              isSameWeek(
+                                Date.now(),
+                                week[week.length - 1].date,
+                                { weekStartsOn: 1 }
+                              )
                                 ? "current"
                                 : undefined
                             }
                             key={index}
                           >
-                            {differenceInWeeks(
-                              startOfDay(new Date()),
-                              startOfDay(new Date(week[week.length - 1].date))
-                            ) == 0 ? null : (
+                            {weeksAgo == 0 ? (
+                              <p className="time"></p>
+                            ) : (
                               <p className="time">
-                                {differenceInWeeks(
-                                  startOfDay(new Date()),
-                                  startOfDay(
-                                    new Date(week[week.length - 1].date)
-                                  )
-                                )}{" "}
-                                weeks ago
+                                {weeksAgo} week{weeksAgo > 1 && "s"} ago
                               </p>
                             )}
 

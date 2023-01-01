@@ -18,6 +18,7 @@ import { store } from "../../redux/store";
 interface LayoutProps {
   loggedIn: boolean;
   isLoaded: boolean;
+  children: any;
 }
 
 const MainContainer = styled.main`
@@ -89,7 +90,7 @@ const onStateChange = () => {
 
 store.subscribe(onStateChange);
 
-const PrivateRoute: React.FC = ({ children }) => {
+const PrivateRoute: React.FC<any> = ({ children }) => {
   const router = useRouter();
   const newDay = router.pathname == "/app/entry";
   const { user } = useTypedSelector((state) => state);
@@ -183,6 +184,32 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
           </>
         )
       ) : null}
+      <Head>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#2b5797" />
+        <meta name="theme-color" content="#ffffff"></meta>
+        <title>
+          {isLoaded ? (loggedIn ? "Wellfare App" : "Wellfare") : "Wellfare"}
+        </title>
+      </Head>
       <ThemeProvider theme={themes[userInfo.config.theme]}>
         <Modal state={open}>{content}</Modal>
       </ThemeProvider>

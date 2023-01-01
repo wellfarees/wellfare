@@ -12,7 +12,6 @@ import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { transformFetchedConfig } from "../../utils/transformFetchedConfig";
 
 const StyledSlider = styled(ReactSlider)`
   width: 82%;
@@ -153,6 +152,10 @@ const Wrapper = styled.div`
         border: 1px solid ${(props) => props.theme.watermark};
       }
     }
+    .toggler.react-toggle--checked .react-toggle-track {
+      background: linear-gradient(180deg, #60b2ff 0%, #0889ff 100%) !important;
+      border: none !important;
+    }
 
     .toggler.react-toggle--checked {
       .react-toggle-thumb {
@@ -191,23 +194,22 @@ const Wrapper = styled.div`
 `;
 
 const Conf: NextPage = () => {
-  const { saveConfig } = useActions();
+  const { saveConfig, saveConfigPiece } = useActions();
   const { user } = useTypedSelector((state) => state);
   const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
+  const { info } = useTypedSelector((state) => state.user);
 
-  const mutateSpecificValue = (mutation: { [key: string]: any }) => {
-    mutateAppearance({
-      variables: mutation,
-      refetchQueries: ["getUser", "login"],
-    });
-  };
-
-  // TODO: Solve the reactive reduced motion problem by calling the mutation on component's unmounting lifecycle (useEffect cleanup function)
   useEffect(() => {
-    if (data) {
-      saveConfig(transformFetchedConfig(data.editAppearance.config));
-    }
-  }, [data, saveConfig]);
+    mutateAppearance({
+      variables: {
+        darkMode: info.config.theme == "dark",
+        fontSize: info.config.fontSize,
+        reducedMotion: info.config.reducedMotion,
+      },
+      refetchQueries: [],
+      fetchPolicy: "no-cache",
+    });
+  }, [info.config]);
 
   return (
     <Wrapper>
@@ -229,7 +231,9 @@ const Conf: NextPage = () => {
                   user.info?.config.theme === "dark" ? true : false
                 }
                 onChange={(e) => {
-                  mutateSpecificValue({ darkMode: e.target.checked });
+                  saveConfigPiece({
+                    theme: e.target.checked ? "dark" : "light",
+                  });
                 }}
               />
             </div>
@@ -240,7 +244,7 @@ const Conf: NextPage = () => {
                 className="toggler"
                 defaultChecked={Boolean(user.info?.config.reducedMotion)}
                 onChange={(e) => {
-                  mutateSpecificValue({ reducedMotion: e.target.checked });
+                  saveConfigPiece({ reducedMotion: e.target.checked });
                 }}
               />
             </div>
@@ -259,7 +263,7 @@ const Conf: NextPage = () => {
                 value={user.info?.config.fontSize}
                 marks={[14, 15, 16, 17, 18, 19]}
                 onChange={(val) => {
-                  mutateSpecificValue({ fontSize: val });
+                  saveConfigPiece({ fontSize: val as number });
                 }}
               />
               <i className="fas fa-font fa-2x"></i>

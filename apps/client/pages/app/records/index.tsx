@@ -31,27 +31,23 @@ const RecordPage: NextPage<{ isMobile: boolean }> = ({ isMobile }) => {
     { identifier: number }
   >(GET_RECORD, { variables: { identifier: parseInt(id as string) } });
 
-  if (!isMobile) {
-    router.push("/404");
-  }
+  // if (!isMobile) {
+  //   router.push("/404");
+  // }
 
   useEffect(() => {
-    if (size === null) return;
-    if (window.innerHeight <= 425) return;
-
-    if (size > 425) {
-      router.push("/404");
-      return;
-    }
+    // if (size === null) return;
+    // if (window.innerHeight <= 425) return;
+    // if (size > 450) {
+    //   router.push("/404");
+    //   return;
+    // }
   }, [size, router]);
 
   return (
     <Wrapper>
       <ShrankContainer>
         {size ? (
-          (isMobile &&
-            size! > 425 &&
-            !(size! <= 812 && window.innerHeight <= 425)) ||
           loading ? null : !data || !data.getRecord ? (
             <ExistsNot name="record" />
           ) : (

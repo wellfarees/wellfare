@@ -6,7 +6,7 @@ import WrongPasswordError from "../errors/WrongPasswordError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
-import { sendVerificationEmail } from "../utils/sendVerificationEmail";
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
 import { getDeprecatedIds } from "../utils/getDeprecatedIds";
 
@@ -114,6 +114,17 @@ export default {
 
         if (!passwordsMatch)
           throw new WrongPasswordError("Current password is incorrect.");
+
+        const samePassw = await compare(
+          args.changePassword.new,
+          data.information.password
+        );
+
+        if (samePassw) {
+          throw new WrongPasswordError(
+            "Enter a new password different from your current one."
+          );
+        }
 
         updateData.password = await hash(args.changePassword.new, 10);
       }

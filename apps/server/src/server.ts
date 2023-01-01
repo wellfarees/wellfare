@@ -7,7 +7,6 @@ import { CronJob } from "cron";
 import { resolve } from "path";
 import { sync } from "glob";
 import { Cron } from "./types/cron";
-import * as dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
@@ -17,10 +16,19 @@ import generateJWT from "./utils/generateJWT";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
-import { SIGNIN_METHODS } from "../../../constants";
+import { SIGNIN_METHODS } from "./constants";
+import cors from "cors";
+import { GraphQLResponse } from "apollo-server-core";
+import { GraphQLRequestContext } from "apollo-server-core";
 
 const app = express();
-app.use(graphqlUploadExpress());
+
+app.use(
+  cors({
+    origin: ["https://www.wellfare.space", "http://localhost:3000"],
+  })
+);
+
 app.use(async (req, res, next) => {
   const auth = req.headers.authorization;
   if (!auth || auth.split("").length < 2) {
@@ -54,7 +62,7 @@ app.use(async (req, res, next) => {
   try {
     const refreshed = await axios.post(
       endpoint,
-      new URLSearchParams(refresh_opts),
+      new URLSearchParams(refresh_opts as unknown as URLSearchParams),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -85,6 +93,14 @@ app.use(async (req, res, next) => {
     next();
   }
 });
+
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 10000000,
+    maxFiles: 10,
+  })
+);
+
 const httpServer = http.createServer(app);
 
 class Server extends ApolloServer {
@@ -99,12 +115,26 @@ class Server extends ApolloServer {
     super({
       resolvers,
       typeDefs,
+      csrfPrevention: true,
+      formatResponse: (
+        response: GraphQLResponse | null,
+        requestContext: GraphQLRequestContext<any>
+      ) => {
+        // if (requestContext.response && requestContext.response.http) {
+        //   requestContext.response.http.headers.set(
+        //     "Access-Control-Allow-Origin",
+        //     "https://www.wellfare.space"
+        //   );
+        // }
+        return response as GraphQLResponse;
+      },
       context: async ({ req }) => {
         if (req.body.operationName === "addToNewsletter")
           return { ipv6: req.ip };
 
         return { token: req.headers.authorization };
       },
+
       plugins: [
         ApolloServerPluginDrainHttpServer({
           httpServer,
@@ -112,7 +142,6 @@ class Server extends ApolloServer {
       ],
     });
 
-    dotenv.config();
     this.db = new PrismaClient();
     this.mail = mail;
     this.mail.setApiKey(process.env.SENDGRID_API_KEY!);
@@ -121,11 +150,14 @@ class Server extends ApolloServer {
 
   async listen() {
     await this.start();
-    this.applyMiddleware({ app, path: "/" });
-    await new Promise<void>((resolve) =>
-      httpServer.listen({ port: 4000 }, resolve)
-    );
-    return `http://localhost:4000${server.graphqlPath}`;
+    this.applyMiddleware({
+      app,
+      path: "/",
+      cors: false,
+    });
+    const port = process.env.PORT || 4000;
+    await new Promise<void>((resolve) => app.listen(port, resolve));
+    return port;
   }
 
   async initCron() {

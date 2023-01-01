@@ -8,9 +8,11 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { ApolloProvider, useLazyQuery, useMutation } from "@apollo/client";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 import client from "../graphql/client";
+import { EDIT_USER_CONFIG } from "../graphql/mutations";
 import Layout from "../components/layout/Layout";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Provider } from "react-redux";
@@ -19,17 +21,20 @@ import { store } from "../redux/store";
 import { useActions } from "../hooks/useActions";
 import { APPEARANCE_QUERY } from "../graphql/queries";
 import { OAUTH_LOGIN } from "../graphql/mutations";
+import TagManager from "react-gtm-module";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
 >(undefined!);
 
-const ReduxMiddleComponent: React.FC = ({ children }) => {
+const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
-  const { saveToken, saveConfig, setPfp } = useActions();
+  const { saveToken, saveConfig, setPfp, setWebsiteLoaded } = useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
+
+  const { websiteLoaded } = useTypedSelector((state) => state).unitStates;
 
   useEffect(() => {
     if (localStorage.getItem("algolia-search") == null) {
@@ -67,7 +72,7 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       return;
     }
 
-    if (data) {
+    if (data && !websiteLoaded) {
       saveToken(jwt);
       saveConfig({
         fontSize: data.getUser.config.fontSize,
@@ -91,9 +96,10 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
       return;
     }
 
-    if (oAuthUserProps.data) {
+    if (oAuthUserProps.data && !websiteLoaded) {
       const user = oAuthUserProps.data.oAuthLogin.user;
       saveToken(localStorage.getItem("jwt") as string);
+      console.log(user.config);
       saveConfig({
         fontSize: user.config.fontSize,
         reducedMotion: user.config.reducedMotion,
@@ -113,6 +119,24 @@ const ReduxMiddleComponent: React.FC = ({ children }) => {
     oAuthUserProps.error,
     oAuthUserProps.data,
   ]);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setWebsiteLoaded(true);
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router.events]);
+
+  useEffect(() => {
+    return () => {
+      if (!websiteLoaded) setWebsiteLoaded(true);
+    };
+  }, []);
 
   return ready ? <>{children}</> : <></>;
 };
@@ -137,9 +161,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     setLoggedIn(false);
   }, [router.pathname]);
 
-  // if router.path includes /app dir -> render another type of layout
-  // NOTE: Temporary solution with loggedIn variable -> to be replaced with secure implementation
+  useEffect(() => {
+    const tagManagerArgs = {
+      gtmId: "G-EQ9WB4FXH7",
+    };
 
+    TagManager.initialize(tagManagerArgs);
+  }, []);
+
+  // if router.path includes /app dir -> render another type of layout
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
