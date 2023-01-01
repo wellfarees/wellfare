@@ -10,6 +10,8 @@ import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
 import Button from "../../components/Button/Button";
+import { USER_FEED_QUERY } from "../../graphql/queries";
+import client from "../../graphql/client";
 
 import { ADD_RECORD } from "../../graphql/mutations";
 import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
@@ -699,7 +701,7 @@ const Entry: NextPage = () => {
                       endingToReplace: "e",
                     },
                   }}
-                  onClick={() => {
+                  onClick={async () => {
                     // custom check if an emoji has been selected
                     if (!currentEmoji) {
                       emojiSelector.current?.classList.add("error");
@@ -726,8 +728,12 @@ const Entry: NextPage = () => {
                           unease: values[keys[1]],
                           gratefulness: values[keys[2]],
                         },
-                        refetchQueries: ["GetUserFeed"],
+                        fetchPolicy: "network-only",
+                        update(cache) {
+                          cache.evict({ fieldName: "records" });
+                        },
                       });
+                      await client.resetStore();
                       setTimeout(async () => {
                         await router.replace("/app");
                         setSubmitInProgress(false);
