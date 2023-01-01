@@ -221,6 +221,59 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   // FIXME: Create appropriate return type
   // TODO: Write tests for this
 
+  // FIXME: Create appropriate return type
+  // TODO: Write tests for this
+  const splitIntoWeeks = (arr: DateInterface[]): any => {
+    if (arr.length == 1) return [arr];
+
+    const checkForWeek = (
+      dates: typeof arr = arr,
+      weeksArr: any = [],
+      weekIndex: number = 0
+    ): [][] => {
+      if (dates.length == 0) {
+        return weeksArr;
+      }
+
+      const dateLeft = dates[0];
+      const dateRight = dates[1];
+      let weeks = weeksArr;
+
+      if (!dateRight) {
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft]);
+        } else {
+          weeks[weekIndex].push(dateLeft);
+        }
+        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
+      }
+
+      if (
+        isSameWeek(startOfDay(dateLeft.date), startOfDay(dateRight.date), {
+          weekStartsOn: 1,
+        }) &&
+        differenceInCalendarDays(dateLeft.date, subDays(dateRight.date, 1)) < 7
+      ) {
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft]);
+        } else {
+          weeks[weekIndex].push(dateLeft);
+        }
+
+        return checkForWeek(dates.slice(1), weeks, weekIndex);
+      } else {
+        if (!weeksArr[weekIndex]) {
+          weeks.push([dateLeft]);
+        } else {
+          weeks[weekIndex].push(dateLeft);
+        }
+        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
+      }
+    };
+
+    return checkForWeek();
+  };
+
   function groupRecordsByWeek(records: DateInterface[]): DateInterface[][] {
     const weeks: DateInterface[][] = [];
 
@@ -228,9 +281,9 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
     const start = startOfWeek(records[records.length - 1].date);
     const end = endOfWeek(records[0].date);
 
-    if (isSameWeek(start, end)) {
-      return [records];
-    }
+    // if (isSameWeek(start, end)) {
+    //   return [records];
+    // }
 
     const weekIntervals = eachWeekOfInterval({ start, end } as Interval, {
       weekStartsOn: 0,
@@ -240,12 +293,14 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       const weekRecords: DateInterface[] = [];
 
       records.forEach((record) => {
+        // console.log(record);
         if (
           isSameWeek(
             isSunday(record.date) ? subDays(record.date, 1) : record.date,
             startOfWeek(weekInterval)
           )
         ) {
+          console.log(record);
           weekRecords.push(record);
         }
       });
@@ -318,12 +373,12 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                     gap={40}
                     columnSize={(screenSize as number) > 425 ? 320 : undefined}
                   >
-                    {groupRecordsByWeek(data.getUser.records).map(
+                    {splitIntoWeeks(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
                         const weeksAgo = differenceInWeeks(
                           new Date(),
                           new Date(week[week.length - 1].date),
-                          { roundingMethod: "ceil" }
+                          { roundingMethod: "floor" }
                         );
                         return (
                           <div
@@ -331,7 +386,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                               isSameWeek(
                                 Date.now(),
                                 week[week.length - 1].date,
-                                { weekStartsOn: 0 }
+                                { weekStartsOn: 1 }
                               )
                                 ? "current"
                                 : undefined
@@ -345,6 +400,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                                 {weeksAgo} week{weeksAgo > 1 && "s"} ago
                               </p>
                             )}
+
                             {mapRecordsToJsx(week).map((record, index) => (
                               <div key={index}>
                                 <AdaptiveAnimation>{record}</AdaptiveAnimation>
