@@ -13,7 +13,13 @@ import {
   startOfDay,
   differenceInCalendarDays,
   subDays,
+  startOfWeek,
+  endOfWeek,
+  eachWeekOfInterval,
+  isWithinInterval,
+  isSunday,
 } from "date-fns";
+
 import { MasonryGrid } from "@egjs/react-grid";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRecap } from "../../hooks/useRecap";
@@ -212,58 +218,37 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
     date: number | Date;
   }
 
-  // FIXME: Create appropriate return type
-  // TODO: Write tests for this
-  const splitIntoWeeks = (arr: DateInterface[]): any => {
-    if (arr.length == 1) return [arr];
+  function groupRecordsByWeek(records: DateInterface[]): DateInterface[][] {
+    const weeks: DateInterface[][] = [];
 
-    const checkForWeek = (
-      dates: typeof arr = arr,
-      weeksArr: any = [],
-      weekIndex: number = 0
-    ): [][] => {
-      if (dates.length == 0) {
-        return weeksArr;
-      }
+    if (records.length < 2) {
+      return weeks;
+    }
 
-      const dateLeft = dates[0];
-      const dateRight = dates[1];
-      let weeks = weeksArr;
+    const start = startOfWeek(records[records.length - 1].date);
+    const end = endOfWeek(records[0].date);
+    const weekIntervals = eachWeekOfInterval({ start, end } as Interval, {
+      weekStartsOn: 0,
+    }).reverse();
 
-      if (!dateRight) {
-        if (!weeksArr[weekIndex]) {
-          weeks.push([dateLeft]);
-        } else {
-          weeks[weekIndex].push(dateLeft);
+    weekIntervals.forEach((weekInterval, index) => {
+      const weekRecords: DateInterface[] = [];
+
+      records.forEach((record) => {
+        if (
+          isSameWeek(
+            isSunday(record.date) ? subDays(record.date, 1) : record.date,
+            startOfWeek(weekInterval)
+          )
+        ) {
+          weekRecords.push(record);
         }
-        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
-      }
+      });
+      if (weekRecords.length) weeks.push(weekRecords);
+    });
 
-      if (
-        isSameWeek(startOfDay(dateLeft.date), startOfDay(dateRight.date), {
-          weekStartsOn: 1,
-        }) &&
-        differenceInCalendarDays(dateLeft.date, subDays(dateRight.date, 1)) < 7
-      ) {
-        if (!weeksArr[weekIndex]) {
-          weeks.push([dateLeft]);
-        } else {
-          weeks[weekIndex].push(dateLeft);
-        }
-
-        return checkForWeek(dates.slice(1), weeks, weekIndex);
-      } else {
-        if (!weeksArr[weekIndex]) {
-          weeks.push([dateLeft]);
-        } else {
-          weeks[weekIndex].push(dateLeft);
-        }
-        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
-      }
-    };
-
-    return checkForWeek();
-  };
+    return weeks;
+  }
 
   return (
     <Wrapper>
@@ -328,7 +313,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                     gap={40}
                     columnSize={(screenSize as number) > 425 ? 320 : undefined}
                   >
-                    {splitIntoWeeks(data.getUser.records).map(
+                    {groupRecordsByWeek(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
                         const weeksAgo = differenceInWeeks(
                           new Date(),
@@ -341,7 +326,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                               isSameWeek(
                                 Date.now(),
                                 week[week.length - 1].date,
-                                { weekStartsOn: 1 }
+                                { weekStartsOn: 0 }
                               )
                                 ? "current"
                                 : undefined
@@ -355,7 +340,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                                 {weeksAgo} week{weeksAgo > 1 && "s"} ago
                               </p>
                             )}
-
                             {mapRecordsToJsx(week).map((record, index) => (
                               <div key={index}>
                                 <AdaptiveAnimation>{record}</AdaptiveAnimation>
