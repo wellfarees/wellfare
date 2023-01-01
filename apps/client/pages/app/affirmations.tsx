@@ -79,9 +79,7 @@ const Affirmations: NextPage = () => {
   const [state, setState] = useState(false);
   const [buttonsSwitched, switchButtons] = useState(false);
   const [setAffirmations] = useMutation(EDIT_AFFIRMATIONS);
-  const { loading, data } = useQuery(AFFIRMATIONS_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { loading, data } = useQuery(AFFIRMATIONS_QUERY);
 
   const registerInput = register();
 
@@ -100,7 +98,10 @@ const Affirmations: NextPage = () => {
       if (!res) return;
       setState(!state);
 
-      setAffirmations({ variables: { affirmations: res } });
+      setAffirmations({
+        variables: { affirmations: res },
+        refetchQueries: ["GetUserInfo"],
+      });
       setTimeout(() => {
         setIsLocked(!isLocked);
         if (infoBtn.current) {
@@ -154,13 +155,20 @@ const Affirmations: NextPage = () => {
             </AdaptiveAnimation>
             <div className="subinfo">
               <p>
-                First time for everything. Write down your affirmations to start
-                reading them and reassuring yourself.
+                New to this? Write down affirmations and repeat them to
+                encourage and uplift yourself.
               </p>
               <p>
                 {/* TODO: Create an article post or smth */}
-                Here’s <a href="#">an article</a> about affirmations and how to
-                write them.
+                Here’s{" "}
+                <a
+                  href="https://www.everydayhealth.com/emotional-health/what-are-affirmations/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  an article
+                </a>{" "}
+                about affirmations and how to write them.
               </p>
             </div>
           </header>

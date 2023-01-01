@@ -36,6 +36,7 @@ const Wrapper = styled.div`
     position: relative;
     cursor: pointer;
     transition: 0.3s;
+    min-width: 250px;
 
     &:hover {
       background: ${(props) => props.theme.recapHover};
@@ -175,7 +176,11 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
                   const emojis = records.map((record) => record.emoji);
 
                   return (
-                    <Link passHref href={`/app/recaps/${id}`} key={index}>
+                    <Link
+                      passHref
+                      href={`/app/recaps/recap?id=${id}`}
+                      key={index}
+                    >
                       <div className="recap-card">
                         <h3 className="watermark">{records.length}</h3>
                         <div className="content">
@@ -210,10 +215,10 @@ const Archive: NextPage<ArchiveProps> = ({ recaps }) => {
           ) : (
             <div className="noRecaps">
               <p className="logo">Wellfare™</p>
-              <h2>NOTHING’S HERE</h2>
+              <h2>NOTHING&apos;S HERE</h2>
               <p className="info">
-                Your weekly recaps will go here once you start journaling more
-                often
+                This is where you&apos;ll find your weekly recaps once you start
+                journaling regularly.
               </p>
               <Link href="/app" passHref>
                 <button className="return-btn">Return to feed</button>

@@ -312,7 +312,10 @@ const SignIn = () => {
       <Container>
         <div className="info">
           <h1>Sign in &amp; check back on your mental state</h1>
-          <p>Make sure to let your emotions out and journal them down.</p>
+          <p>
+            Don&apos;t hold back - express your emotions and record them in your
+            journaling system.
+          </p>
         </div>
         <div className="signUp-card">
           <form

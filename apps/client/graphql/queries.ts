@@ -8,6 +8,7 @@ export const DEVELOPERS_QUERY = gql`
         name
         roles
         image
+        url
       }
     }
   }

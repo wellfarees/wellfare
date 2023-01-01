@@ -1,6 +1,7 @@
 import server from "./server";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-server.listen().then((url): void =>
-  // eslint-disable-next-line no-console
-  console.log(`[Success] 🚀 Apollo Server is now running at ${url}.`)
-);
+server.listen().then((port): void => {
+  console.log(`[Success] 🚀 Apollo Server is now running on port ${port}.`);
+});

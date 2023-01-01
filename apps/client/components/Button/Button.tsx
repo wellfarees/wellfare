@@ -44,8 +44,8 @@ const Wrapper = styled.div`
   }
 
   .loading-btn {
-    box-shadow: 0px 0px 7px 1px rgba(67, 91, 176, 0.6);
-    background: #2c6ca8;
+    box-shadow: 0px 0px 10px 4px rgba(17, 126, 227, 0.2);
+    background: linear-gradient(180deg, #7bc0ff 0%, #0889ff 100%, #0257a5 100%);
   }
 `;
 

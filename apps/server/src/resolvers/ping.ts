@@ -16,7 +16,7 @@ export default {
         ].join(" "),
       };
 
-      const params = new URLSearchParams(options);
+      const params = new URLSearchParams(options as unknown as URLSearchParams);
 
       return `${rootUrl}?${params}`;
     },

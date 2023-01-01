@@ -25,7 +25,7 @@ export const useRecap = (feedData: any): LightRecap => {
       const today = startOfDay(new Date());
 
       if (
-        isSameWeek(subSeconds(subDays(today, 1), 1), lastDate) &&
+        isSameWeek(subDays(today, 1), lastDate, { weekStartsOn: 1 }) &&
         today.getDay() === 1
       ) {
         setRecap(lastRecap);

@@ -13,6 +13,7 @@ const Card = styled.div`
   position: relative;
   border-radius: 20px;
   padding: 3em;
+  margin-bottom: -2em !important;
 
   .contents {
     position: relative;
@@ -75,7 +76,7 @@ const RecapCard: React.FC<{ records: number; id: number }> = ({
           You&apos;ve got <b>{records} new records</b> this week.
         </p>
 
-        <Link passHref href={`/app/recaps/${id}`}>
+        <Link passHref href={`/app/recaps/recap?id=${id}`}>
           <span className="cta">
             Let&apos;s check it out <i className="fas fa-arrow-right"></i>
           </span>

@@ -2,6 +2,7 @@ import EmailAlreadyExistsError from "../errors/EmailAlreadyExistsError";
 import server from "../server";
 import differenceInHours from "date-fns/differenceInHours";
 import { ApolloError } from "apollo-server-core";
+import { sendEmail } from "../utils/email/sendEmail";
 
 export default {
   Mutation: {
@@ -26,7 +27,9 @@ export default {
         });
       } else {
         const subsPerIP = IPUser.subRecords.length;
-        const rateLimit = parseInt(process.env.SUB_RATELIMIT_PER_24HRS);
+        const rateLimit = parseInt(
+          process.env.SUB_RATELIMIT_PER_24HRS as string
+        );
         const latestIPSub = IPUser.subRecords[subsPerIP - 1];
 
         if (subsPerIP >= rateLimit) {
@@ -67,6 +70,9 @@ export default {
             email: args.email,
           },
         });
+
+        await sendEmail(args.email, { type: "newsletter" });
+
         return {
           success: true,
         };

@@ -112,6 +112,9 @@ const Wrapper = styled.div`
   .ch {
     max-width: 500px;
     line-height: 2em;
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
 
     label {
       color: ${(props) => props.theme.mainColor};
@@ -128,7 +131,7 @@ const Wrapper = styled.div`
   }
 
   @media only screen and (max-width: 768px) {
-    input {
+    input::not(#warning-check) {
       width: 100%;
     }
 
@@ -208,9 +211,7 @@ const User = () => {
 
   const { data, loading } = useQuery<{
     getUser: { information: Credentials; OAuthEmail: string };
-  }>(USER_INFORMATION_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  }>(USER_INFORMATION_QUERY);
 
   const [resendVerificationLink] = useMutation(RESEND_VERIFICATION, {
     variables: { token: jwt },
@@ -226,6 +227,11 @@ const User = () => {
       location: string;
     };
   }>(UPLOAD_PFP);
+
+  useEffect(() => {
+    if (uploadProps.loading) {
+    }
+  }, [uploadProps.loading]);
 
   useEffect(() => {
     setInProgress((state) => !state);
@@ -473,20 +479,17 @@ const User = () => {
                         files: [file],
                       },
                     }) => {
-                      // FIXME: AWS account no longer works (suspension)
-                      try {
-                        validity.valid &&
-                          (await uploadPfp({ variables: { file } }));
-                      } catch (e) {}
-                      if (!isImage(file.type)) {
-                        scrollToBottom();
-                        setError("File has to have a type of an image!");
-                        return;
-                      }
-
+                      setError("");
+                      setIsSaved(false);
                       const fileSizeInMb = parseInt(
                         (file.size / (1024 * 1024)).toFixed(2)
                       );
+
+                      if (!isImage(file.type)) {
+                        scrollToBottom();
+                        setError("File has to be of type image.");
+                        return;
+                      }
 
                       // image size limit
                       if (fileSizeInMb > 5) {
@@ -497,7 +500,11 @@ const User = () => {
                         return;
                       }
 
-                      setError("");
+                      try {
+                        validity.valid &&
+                          (await uploadPfp({ variables: { file } }));
+                        setError("");
+                      } catch (e) {}
                     }}
                     type="file"
                     id="pfp-file"

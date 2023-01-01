@@ -78,6 +78,18 @@ export const userReducer = (
           pfp: action.payload.url,
         },
       };
+    case ActionType.SAVE_CONFIG_PIECE:
+      const {} = action.payload;
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          config: {
+            ...state.info.config,
+            ...action.payload.configPiece,
+          },
+        },
+      };
 
     default:
       return state;

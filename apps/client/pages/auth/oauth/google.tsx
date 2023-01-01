@@ -88,11 +88,6 @@ const GoogleOauth: React.FC = () => {
       );
 
       const user = OAuthProps.data.oAuthLogin.user;
-      saveConfig({
-        fontSize: user.config.fontSize,
-        reducedMotion: user.config.reducedMotion,
-        theme: user.config.darkMode ? "dark" : "light",
-      });
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       router.push("/app");
     }

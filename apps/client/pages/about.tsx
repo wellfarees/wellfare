@@ -211,10 +211,6 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
 }) => {
   return (
     <div>
-      <Head>
-        <title>About Wellfare™</title>
-      </Head>
-
       <AboutInfo>
         <Container>
           <Fade bottom>
@@ -239,7 +235,14 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
           <Fade bottom>
             <p className="cta">
               Take a glance ar our source code{" "}
-              <a href="https://github.com/wellfaree/wellfare">Here</a>!
+              <a
+                href="https://github.com/wellfarees/wellfare"
+                target="_BLANK"
+                rel="noreferrer"
+              >
+                Here
+              </a>
+              !
             </p>
           </Fade>
         </Container>
@@ -267,7 +270,14 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
                               <p className="role">
                                 {developer.roles.join(" & ")}
                               </p>
-                              <p className="name">{developer.name}</p>
+                              <a
+                                target="_BLANK"
+                                rel="noreferrer"
+                                href={developer.url}
+                                className="name"
+                              >
+                                {developer.name}
+                              </a>
                             </div>
 
                             {direction === "rtl" ? (
