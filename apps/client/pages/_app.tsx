@@ -99,7 +99,6 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (oAuthUserProps.data && !websiteLoaded) {
       const user = oAuthUserProps.data.oAuthLogin.user;
       saveToken(localStorage.getItem("jwt") as string);
-      console.log(user.config);
       saveConfig({
         fontSize: user.config.fontSize,
         reducedMotion: user.config.reducedMotion,

@@ -224,13 +224,14 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
   function groupRecordsByWeek(records: DateInterface[]): DateInterface[][] {
     const weeks: DateInterface[][] = [];
 
-    if (records.length < 2) {
-      return weeks;
-    }
-
     // First, we'll get all the weeks covered by the records
     const start = startOfWeek(records[records.length - 1].date);
     const end = endOfWeek(records[0].date);
+
+    if (isSameWeek(start, end)) {
+      return [records];
+    }
+
     const weekIntervals = eachWeekOfInterval({ start, end } as Interval, {
       weekStartsOn: 0,
     }).reverse();
@@ -319,7 +320,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                   >
                     {groupRecordsByWeek(data.getUser.records).map(
                       (week: RecordsData, index: number) => {
-                        console.log(week);
                         const weeksAgo = differenceInWeeks(
                           new Date(),
                           new Date(week[week.length - 1].date),
