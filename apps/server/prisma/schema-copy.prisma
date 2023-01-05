@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String           @id @unique @default(cuid())
+  config           Configuration    @relation(fields: [configurationId], references: [id])
+  records          Record[]
+  informationId    String
+  affirmations     String?
+  configurationId  String
+  recaps           Recap[]
+  lastIndex        Int?
+  emailLastUpdated DateTime         @default(now())
+  information      Information      @relation(fields: [informationId], references: [id])
+  OAuthEmail       String?
+  Newsletter       NewsletterUser[]
+  createdAt        DateTime         @default(now())
+  // affID                 String
+  // encryptedAffirmations EncryptedAffirmations @relation(fields: [affID], references: [id])
+}
+
+// model EncryptedAffirmations {
+//   iv      String
+//   content String
+//   id      String @id @unique @default(cuid())
+//   User    User[]
+// }
+
+model Information {
+  id                   String         @id @unique @default(cuid())
+  firstName            String
+  lastName             String
+  email                String?
+  associatedEmail      String?
+  emailsUsed           ChangedEmail[]
+  reconfirmationNeeded Boolean        @default(false)
+  password             String?
+  verified             Boolean        @default(false)
+  pfp                  String?
+  User                 User[]
+}
+
+model Configuration {
+  id            String  @id @default(cuid())
+  darkMode      Boolean @default(false)
+  reducedMotion Boolean @default(false)
+  fontSize      Int     @default(14)
+  User          User[]
+}
+
+model ChangedEmail {
+  id              Int          @id @default(autoincrement())
+  address         String
+  set             DateTime
+  Information     Information? @relation(fields: [informationDbid], references: [id])
+  informationDbid String?
+}
+
+model Record {
+  id           Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  unease       String
+  gratefulness String
+  emoji        String
+  feelings     String
+  userId       String
+  recapId      Int?
+  User         User     @relation(fields: [userId], references: [id])
+  Recap        Recap?   @relation(fields: [recapId], references: [id])
+}
+
+model Recap {
+  id          Int      @id @unique @default(autoincrement())
+  startDate   DateTime
+  endDate     DateTime
+  description String
+  records     Record[]
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+model NewsletterUser {
+  id         String  @id @unique @default(cuid())
+  email      String?
+  relationId String?
+  User       User?   @relation(fields: [userId], references: [id])
+  userId     String?
+}
+
+model NewsletterIPUsers {
+  id         String     @id @unique @default(cuid())
+  ipv6       String
+  subRecords DateTime[]
+}

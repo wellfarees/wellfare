@@ -11,18 +11,28 @@ generator client {
 }
 
 model User {
-  id               String           @id @unique @default(cuid())
-  config           Configuration    @relation(fields: [configurationId], references: [id])
-  records          Record[]
-  informationId    String
-  affirmations     String?
-  configurationId  String
-  recaps           Recap[]
-  lastIndex        Int?
-  emailLastUpdated DateTime         @default(now())
-  information      Information      @relation(fields: [informationId], references: [id])
-  OAuthEmail       String?
-  Newsletter       NewsletterUser[]
+  id                    String                 @id @unique @default(cuid())
+  config                Configuration          @relation(fields: [configurationId], references: [id])
+  records               Record[]
+  informationId         String
+  affirmations          String?
+  configurationId       String
+  recaps                Recap[]
+  lastIndex             Int?
+  emailLastUpdated      DateTime               @default(now())
+  information           Information            @relation(fields: [informationId], references: [id])
+  OAuthEmail            String?
+  Newsletter            NewsletterUser[]
+  createdAt             DateTime               @default(now())
+  affID                 String?
+  encryptedAffirmations EncryptedAffirmations? @relation(fields: [affID], references: [id])
+}
+
+model EncryptedAffirmations {
+  iv      String?
+  content String?
+  id      String  @id @unique @default(cuid())
+  User    User[]
 }
 
 model Information {
@@ -56,16 +66,43 @@ model ChangedEmail {
 }
 
 model Record {
-  id           Int      @id @default(autoincrement())
-  date         DateTime @default(now())
-  unease       String
-  gratefulness String
-  emoji        String
-  feelings     String
-  userId       String
-  recapId      Int?
-  User         User     @relation(fields: [userId], references: [id])
-  Recap        Recap?   @relation(fields: [recapId], references: [id])
+  id                  Int                   @id @default(autoincrement())
+  date                DateTime              @default(now())
+  unease              String
+  gratefulness        String
+  feelings            String
+  emoji               String
+  encryptedGrID       String?
+  encryptedFeelsID    String?
+  encryptedUneaseID   String?
+  gratefulnessUpdated EncryptedGrPiece?     @relation(fields: [encryptedGrID], references: [id])
+  uneaseUpdated       EncryptedUneasePiece? @relation(fields: [encryptedUneaseID], references: [id])
+  feelingsUpdated     EncryptedFeelsPiece?  @relation(fields: [encryptedFeelsID], references: [id])
+  userId              String
+  recapId             Int?
+  User                User                  @relation(fields: [userId], references: [id])
+  Recap               Recap?                @relation(fields: [recapId], references: [id])
+}
+
+model EncryptedGrPiece {
+  iv      String?
+  content String?
+  id      String   @id @unique @default(cuid())
+  Record  Record[]
+}
+
+model EncryptedUneasePiece {
+  iv      String?
+  content String?
+  id      String   @id @unique @default(cuid())
+  Record  Record[]
+}
+
+model EncryptedFeelsPiece {
+  iv      String?
+  content String?
+  id      String   @id @unique @default(cuid())
+  Record  Record[]
 }
 
 model Recap {

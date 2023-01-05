@@ -2,6 +2,7 @@ import server from "../server";
 import verifyJWT from "../utils/verifyJWT";
 import { decodedToken } from "../types/jwt";
 import { hash } from "bcrypt";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 
 export default {
   Mutation: {
@@ -13,7 +14,7 @@ export default {
 
       const id = (dToken as decodedToken).id;
       const newPassword = await hash(args.password, 10);
-      const data = await server.db.user.update({
+      await server.db.user.update({
         where: {
           id,
         },
@@ -26,7 +27,7 @@ export default {
         },
       });
 
-      return data;
+      return await decryptSensitiveData(id, {});
     },
   },
 };

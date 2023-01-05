@@ -3,6 +3,8 @@ import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+import { encrypt } from "../utils/crypto";
 
 export default {
   Mutation: {
@@ -20,18 +22,22 @@ export default {
 
       const id = (dToken as decodedToken).id;
 
-      return await server.db.user.update({
+      await server.db.user.update({
         where: {
           id,
         },
         data: {
           affirmations: args.affirmations,
+          encryptedAffirmations: {
+            update: encrypt(args.affirmations),
+          },
         },
-        include: {
-          config: true,
-          information: true,
-          records: true,
-        },
+      });
+
+      return await decryptSensitiveData(id, {
+        config: true,
+        information: true,
+        records: true,
       });
     },
   },

@@ -2,6 +2,7 @@ import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 import verifyJWT from "../utils/verifyJWT";
 
 export default {
@@ -33,7 +34,7 @@ export default {
 
       const id = (dToken as decodedToken).id;
 
-      return await server.db.user.update({
+      await server.db.user.update({
         where: {
           id,
         },
@@ -48,6 +49,8 @@ export default {
           records: true,
         },
       });
+
+      return await decryptSensitiveData(id);
     },
   },
 };

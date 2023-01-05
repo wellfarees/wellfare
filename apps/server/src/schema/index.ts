@@ -22,6 +22,7 @@ import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken
 import oauthLogin from "./oauth/login";
 import changeToNative from "./changeToNative";
 import unsubscribe from "./unsubscribe";
+import getSearchHits from "./getSearchHits";
 
 const root = gql`
   # Base types
@@ -33,6 +34,20 @@ const root = gql`
 
   type Mutation {
     root: String
+  }
+
+  type Hits {
+    records: [AlgoliaRecord!]
+  }
+
+  type AlgoliaRecord {
+    id: String!
+    date: Float!
+    unease: String!
+    gratefulness: String!
+    emoji: String!
+    feelings: String!
+    recapId: Int
   }
 
   # User types
@@ -180,4 +195,5 @@ export default [
   oauthLogin,
   changeToNative,
   unsubscribe,
+  getSearchHits,
 ];

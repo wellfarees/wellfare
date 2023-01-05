@@ -236,3 +236,19 @@ export const GET_GOOGLE_ACCESS_TOKEN = gql`
     }
   }
 `;
+
+export const GET_SEARCH_HITS = gql`
+  query GetSearchHits($query: String!) {
+    getSearchHits(query: $query) {
+      records {
+        id
+        date
+        unease
+        gratefulness
+        emoji
+        feelings
+        recapId
+      }
+    }
+  }
+`;

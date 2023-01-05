@@ -1,10 +1,10 @@
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
 import differenceInHours from "date-fns/differenceInHours";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 
 export default {
   Query: {
@@ -20,24 +20,10 @@ export default {
 
       const id = (dToken as decodedToken).id;
 
-      const data = await server.db.user.findFirst({
-        where: {
-          id,
-        },
-        include: {
-          information: true,
-          config: true,
-          recaps: {
-            include: {
-              records: true,
-            },
-          },
-          records: {
-            orderBy: {
-              date: "desc",
-            },
-          },
-        },
+      const data = await decryptSensitiveData(id, {
+        config: true,
+        information: true,
+        records: true,
       });
 
       if (!data)
@@ -45,10 +31,12 @@ export default {
           "User does not exist in the database."
         );
 
+      const decrypted = await decryptSensitiveData(id);
+
       if (!data.records[0]) return { ...data, lastSubmitted: null };
       else
         return {
-          ...data,
+          ...decrypted,
           lastSubmitted: differenceInHours(new Date(), data.records[0].date),
         };
     },
