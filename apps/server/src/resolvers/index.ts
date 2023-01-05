@@ -21,6 +21,7 @@ import getUserInformationFromEmailToken from "./getUserInformationFromEmailToken
 import oAauthLogin from "./oauth/login";
 import changeToNative from "./changeToNative";
 import unsubscribe from "./unsubscribe";
+import getSearchHits from "./getSearchHits";
 
 const Query = {
   ...ping.Query,
@@ -31,6 +32,7 @@ const Query = {
   ...login.Query,
   ...verifyJWT.Query,
   ...getUserInformationFromEmailToken.Query,
+  ...getSearchHits.Query,
 };
 
 const Mutation = {

@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useActions";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useSpring, animated } from "react-spring";
+import { GET_SEARCH_HITS } from "../../graphql/queries";
+import client from "../../graphql/client";
 
 const SearchBox = styled.div`
   display: flex;
@@ -125,10 +127,6 @@ interface ListItemProps {
   id: number;
 }
 
-interface RecordHit {
-  record: ListItemProps;
-}
-
 const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
   const { date, emoji, feelings, recapId, id } = data;
   const size = useScreenSize();
@@ -180,7 +178,7 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
 // TODO: Implement keybaord navigation
 const Search: React.FC = () => {
   const searchClient = useAlgolia();
-  const [hits, setHits] = useState<SearchResponse<RecordHit>>();
+  const [hits, setHits] = useState<ListItemProps[]>();
   const [dropdownStyles, dropDownAPI] = useSpring(() => {
     return {
       from: {
@@ -217,33 +215,43 @@ const Search: React.FC = () => {
           onChange={async (e) => {
             if (!searchClient) return;
             const index = searchClient.initIndex("records");
-            const hits: SearchResponse<RecordHit> = await index.search(
-              e.target.value,
-              {
-                hitsPerPage: 4,
+
+            if (e.target.value.length > 4) {
+              try {
+                const data = await client.query<{
+                  getSearchHits: {
+                    records: ListItemProps[];
+                  };
+                }>({
+                  query: GET_SEARCH_HITS,
+                  variables: {
+                    query: e.target.value,
+                  },
+                });
+
+                if (data.data.getSearchHits.records.length) {
+                  setHits(data.data.getSearchHits.records);
+                  dropDownAPI.start({
+                    to: async (animate) => {
+                      await animate({
+                        to: {
+                          display: "block",
+                        },
+                      });
+                      await animate({
+                        to: {
+                          opacity: 1,
+                          y: 0,
+                        },
+                      });
+                    },
+                  });
+                } else {
+                  hideDropdown();
+                }
+              } catch (e) {
+                console.log(e);
               }
-            );
-
-            if (e.target.value.length > 2) {
-              setHits(hits);
-            }
-
-            if (e.target.value.length > 2 && hits.hits.length) {
-              dropDownAPI.start({
-                to: async (animate) => {
-                  await animate({
-                    to: {
-                      display: "block",
-                    },
-                  });
-                  await animate({
-                    to: {
-                      opacity: 1,
-                      y: 0,
-                    },
-                  });
-                },
-              });
             } else {
               hideDropdown();
             }
@@ -257,8 +265,8 @@ const Search: React.FC = () => {
       </SearchBox>
       <DropDown style={dropdownStyles} as={animated.div}>
         {hits &&
-          hits.hits.map((hit, index) => {
-            return <ListItem key={index} data={hit.record} />;
+          hits.map((hit, index) => {
+            return <ListItem key={index} data={hit} />;
           })}
       </DropDown>
     </SearchContainer>

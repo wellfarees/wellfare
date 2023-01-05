@@ -2,7 +2,7 @@ import { verify } from "jsonwebtoken";
 
 export default function verifyJWT(
   token: string,
-  type: "verification" | "client" | "password"
+  type: "verification" | "client" | "password" | "sensitive"
 ) {
   if (
     !process.env.JWT_ID_SECRET_KEY ||
@@ -31,6 +31,7 @@ export default function verifyJWT(
       } catch {
         return null;
       }
+
     default:
       return null;
   }

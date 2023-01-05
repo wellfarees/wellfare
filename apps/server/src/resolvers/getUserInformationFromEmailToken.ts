@@ -1,8 +1,7 @@
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import server from "../server";
 import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 
 export default {
   Query: {
@@ -15,23 +14,9 @@ export default {
       const dToken = verifyJWT(args.token, "verification");
       if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
       const id = (dToken as decodedToken).id;
+      const decrypted = await decryptSensitiveData(id);
 
-      const data = await server.db.user.findFirst({
-        where: {
-          id,
-        },
-        include: {
-          config: true,
-          information: true,
-          recaps: true,
-          records: true,
-        },
-      });
-
-      if (!data)
-        throw new UserDoesNotExistsError("User does not exist in database.");
-
-      return data;
+      return decrypted;
     },
   },
 };

@@ -3,6 +3,7 @@ import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import { decodedToken } from "../types/jwt";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 import verifyJWT from "../utils/verifyJWT";
 
 export default {
@@ -40,7 +41,12 @@ export default {
           "User does not exist in the database."
         );
 
-      return data.records[0];
+      const decrypted = await decryptSensitiveData(id, { records: true });
+      const record = decrypted.records?.find(
+        (record) => record.id == args.identifier
+      );
+
+      return record;
     },
   },
 };

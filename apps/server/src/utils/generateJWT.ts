@@ -2,7 +2,7 @@ import { sign } from "jsonwebtoken";
 
 export default function generateJWT(
   payload: { id: string },
-  type: "verification" | "client" | "password"
+  type: "verification" | "client" | "password" | "sensitive"
 ) {
   if (
     !process.env.JWT_ID_SECRET_KEY ||

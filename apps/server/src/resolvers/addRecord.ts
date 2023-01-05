@@ -7,6 +7,10 @@ import isEmoji from "../utils/isEmoji";
 import verifyJWT from "../utils/verifyJWT";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import { client } from "../algolia";
+// import generateJWT from "../utils/generateJWT";
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+
+import { encrypt } from "../utils/crypto";
 
 export default {
   Mutation: {
@@ -36,11 +40,37 @@ export default {
       }
 
       const recordBase = {
-        feelings: args.feelings,
+        feelings: encrypt(args.feelings),
         emoji,
-        unease: args.unease,
-        gratefulness: args.gratefulness,
+        unease: encrypt(args.unease),
+        gratefulness: encrypt(args.gratefulness),
       };
+
+      // await server.db.user.update({
+      //   where: {
+      //     id
+      //   },
+      //   data: {
+      //     records: {
+      //       create: {
+      //         where: {
+      //           id: record.id,
+      //         },
+      //         data: {
+      //           feelingsUpdated: {
+      //             create: encrypt(record.feelings),
+      //           },
+      //           gratefulnessUpdated: {
+      //             create: encrypt(record.gratefulness),
+      //           },
+      //           uneaseUpdated: {
+      //             create: encrypt(record.unease),
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // });
 
       const data = await server.db.user.update({
         where: {
@@ -48,22 +78,29 @@ export default {
         },
         data: {
           records: {
-            create: [recordBase],
+            create: {
+              gratefulness: args.gratefulness,
+              feelings: args.unease,
+              unease: args.unease,
+              emoji: args.emoji,
+              feelingsUpdated: {
+                create: encrypt(args.feelings),
+              },
+              gratefulnessUpdated: {
+                create: encrypt(args.gratefulness),
+              },
+              uneaseUpdated: {
+                create: encrypt(args.unease),
+              },
+            },
           },
         },
-        select: {
+        include: {
           records: {
-            include: {
-              User: {
-                include: {
-                  records: true,
-                },
-              },
-              Recap: {
-                select: {
-                  id: true,
-                },
-              },
+            select: {
+              feelingsUpdated: true,
+              uneaseUpdated: true,
+              gratefulnessUpdated: true,
             },
           },
         },
@@ -123,7 +160,11 @@ export default {
         autoGenerateObjectIDIfNotExist: true,
       });
 
-      return data.records;
+      const decrypted = await decryptSensitiveData(id, {
+        records: true,
+      });
+
+      return decrypted.records;
     },
   },
 };
