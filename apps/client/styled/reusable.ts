@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { fontSizes } from "../config/userConfig";
 
 const ContainerStyles = css`
   padding-right: 15px;
@@ -52,7 +51,6 @@ export const GlowingBLue = css`
   outline: none;
   border: none;
   display: inline-block;
-  font-size: ${fontSizes.base}px;
 
   background: linear-gradient(180deg, #60b2ff 0%, #0889ff 100%);
   border-radius: 6px;

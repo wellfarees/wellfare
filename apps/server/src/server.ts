@@ -2,27 +2,13 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { ApolloServer } from "apollo-server-express";
 import resolvers from "./resolvers";
 import typeDefs from "./schema";
-import mail, { MailService } from "@sendgrid/mail";
-import { CronJob } from "cron";
-import { resolve } from "path";
-import { sync } from "glob";
-import { Cron } from "./types/cron";
+import { MailService } from "@sendgrid/mail";
 import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { graphqlUploadExpress } from "graphql-upload";
-import { login } from "./utils/oauth/login";
-import generateJWT from "./utils/generateJWT";
-import verifyJWT from "./utils/verifyJWT";
-import { JwtPayload } from "jsonwebtoken";
-import axios from "axios";
-import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
 import { GraphQLResponse } from "apollo-server-core";
-// import { encrypt } from "./utils/crypto";
-// import { GraphQLRequestContext } from "apollo-server-core";
-// import { client } from "./algolia";
-// import { encrypt } from "./utils/crypto";
 
 const app = express();
 
@@ -33,68 +19,9 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  const auth = req.headers.authorization;
-  if (!auth || auth.split("").length < 2) {
-    next();
-    return;
-  }
-
-  const [type, token] = auth.split(" ") as [SIGNIN_METHODS, string];
-
-  if (token == "null") {
-    next();
-    return;
-  }
-
-  if (type == "native") {
-    req.headers.authorization = token;
-    next();
-    return;
-  }
-
-  const endpoint = "https://oauth2.googleapis.com/token";
-  const decoded_refresh = verifyJWT(token, "client") as JwtPayload;
-
-  const refresh_opts = {
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    client_secret: process.env.GOOGLE_CLIENT_SECRET,
-    grant_type: "refresh_token",
-    refresh_token: decoded_refresh.id,
-  };
-
-  try {
-    const refreshed = await axios.post(
-      endpoint,
-      new URLSearchParams(refresh_opts as unknown as URLSearchParams),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    //Also gotta exchange for the access token!!
-    const credentials = await login(type, refreshed.data.access_token);
-
-    const user = await server.db.user.findFirst({
-      where: {
-        OAuthEmail: credentials.email,
-      },
-    });
-
-    if (!user) {
-      next();
-      return;
-    }
-
-    if (user) {
-      const nativeJWT = generateJWT({ id: user.id }, "client");
-      req.headers.authorization = nativeJWT;
-    }
-    next();
-  } catch (e) {
-    next();
-  }
+  res.sendStatus(503);
+  next();
+  return;
 });
 
 app.use(
@@ -113,22 +40,12 @@ class Server extends ApolloServer {
     Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
   >;
   public readonly mail: MailService;
-
   constructor() {
     super({
       resolvers,
       typeDefs,
       csrfPrevention: true,
-      formatResponse: (
-        response: GraphQLResponse | null
-        // requestContext: GraphQLRequestContext<any>
-      ) => {
-        // if (requestContext.response && requestContext.response.http) {
-        //   requestContext.response.http.headers.set(
-        //     "Access-Control-Allow-Origin",
-        //     "https://www.wellfare.space"
-        //   );
-        // }
+      formatResponse: (response: GraphQLResponse | null) => {
         return response as GraphQLResponse;
       },
       context: async ({ req }) => {
@@ -144,12 +61,6 @@ class Server extends ApolloServer {
         }),
       ],
     });
-
-    this.db = new PrismaClient();
-
-    this.mail = mail;
-    this.mail.setApiKey(process.env.SENDGRID_API_KEY!);
-    this.initCron();
   }
 
   async listen() {
@@ -163,118 +74,8 @@ class Server extends ApolloServer {
     await new Promise<void>((resolve) => app.listen(port, resolve));
     return port;
   }
-
-  async initCron() {
-    try {
-      const commandFiles = sync(resolve(__dirname + "/cron/*"));
-      commandFiles.forEach(async (file) => {
-        if (/\.(j|t)s$/iu.test(file)) {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const File = require(file).default;
-          if (File && File.prototype instanceof Cron) {
-            const cj: Cron = new File();
-            const job = new CronJob(cj.interval, cj.exec);
-            job.start();
-          }
-        }
-      });
-
-      // eslint-disable-next-line no-console
-      console.log(
-        `[Success] Successfully registered ${commandFiles.length} cron jobs.`
-      );
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log("[Error] Error while registering cron jobs:");
-      // eslint-disable-next-line no-console
-      console.log(e);
-    }
-  }
 }
 
 const server = new Server();
-
-(async () => {
-  // ENCRYPT USER RECORDS ON ALGOLIA
-  // const index = client.initIndex("records");
-  // index.browseObjects<{
-  //   record: {
-  //     unease: string;
-  //     feelings: string;
-  //     gratefulness: string;
-  //     emoji: string;
-  //   };
-  //   visible_by: string;
-  // }>({
-  //   query: "",
-  //   batch: (batch) => {
-  //     batch.forEach((record) => {
-  //         return;
-  //       if (record.visible_by == "clcbhz3q900393k6d3720p2gw") {
-  //         // console.log(record);
-  //         index.partialUpdateObject({
-  //           record: {
-  //             feelings: encrypt(record.record.feelings),
-  //             unease: encrypt(record.record.unease),
-  //             gratefulness: encrypt(record.record.gratefulness),
-  //           },
-  //           objectID: record.objectID,
-  //         });
-  //       }
-  //     });
-  //   },
-  // });
-  // const users = await server.db.user.findMany({
-  //   include: {
-  //     records: true,
-  //     encryptedAffirmations: true,
-  //   },
-  // });
-  // for (const user of users) {
-  //   // ENCRYPT AFFIRMATIONS
-  //   if (user.encryptedAffirmations) {
-  //     await server.db.user.update({
-  //       where: {
-  //         id: user.id,
-  //       },
-  //       data: {
-  //         encryptedAffirmations: {
-  //           update: encrypt(user.affirmations),
-  //         },
-  //       },
-  //     });
-  //   }
-  //   // ENCRYPT RECORDS
-  //   if (user.records.length) {
-  //     user.records.forEach(async (record) => {
-  //       await server.db.user.update({
-  //         where: {
-  //           id: user.id,
-  //         },
-  //         data: {
-  //           records: {
-  //             update: {
-  //               where: {
-  //                 id: record.id,
-  //               },
-  //               data: {
-  //                 feelingsUpdated: {
-  //                   update: encrypt(record.feelings),
-  //                 },
-  //                 gratefulnessUpdated: {
-  //                   update: encrypt(record.gratefulness),
-  //                 },
-  //                 uneaseUpdated: {
-  //                   update: encrypt(record.unease),
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       });
-  //     });
-  //   }
-  // }
-})();
 
 export default server;
