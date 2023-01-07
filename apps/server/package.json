@@ -80,6 +80,6 @@
     "parse5-htmlparser2-tree-adapter": "^7.0.0"
   },
   "engines": {
-    "node": "16.13.2"
+    "node": "16.x"
   }
 }
