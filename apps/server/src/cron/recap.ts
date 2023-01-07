@@ -1,20 +1,12 @@
 import server from "../server";
-// import { Cron } from "../types/cron";
+import { Cron } from "../types/cron";
 import getWeekDays from "../utils/getWeekDays";
 import { generateRecapFromEmojis } from "../utils/recapGenerator";
 import subDays from "date-fns/subDays";
 
-class Cron {
-  public interval: string;
-
-  constructor(interval: string) {
-    this.interval = interval;
-  }
-}
-
 export default abstract class SendRecap extends Cron {
   constructor() {
-    super("12 0 * * MON");
+    super("00 0 * * MON");
   }
 
   async exec() {
