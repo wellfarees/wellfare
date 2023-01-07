@@ -17,13 +17,6 @@ interface AlgoliaRecord {
   emoji: string;
 }
 
-interface PlainRecord {
-  feelings: string;
-  unease: string;
-  gratefulness: string;
-  emoji: string;
-}
-
 export default {
   Query: {
     getSearchHits: async (
@@ -41,7 +34,12 @@ export default {
 
       const index = client.initIndex("records");
 
-      const resHits: PlainRecord[] = [];
+      const resHits: {
+        feelings: string;
+        unease: string;
+        gratefulness: string;
+        emoji: string;
+      }[] = [];
 
       const res = await index.search<{
         visible_by: string;
