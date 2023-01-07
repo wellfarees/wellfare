@@ -2,7 +2,6 @@ import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import {
   User,
-  Record,
   Configuration,
   Recap,
   Information,
@@ -10,17 +9,20 @@ import {
   EncryptedFeelsPiece,
   EncryptedGrPiece,
   EncryptedUneasePiece,
+  Record,
 } from "@prisma/client";
+
 import { decrypt } from "./crypto";
 
 type ReturnUser = User & {
-  records?: AdvancedRecord[];
+  records?: DecryptedRecord[];
   config?: Configuration;
   recaps: (Recap & {
-    records: AdvancedRecord[];
+    records: DecryptedRecord[];
   })[];
   information?: Information;
   encryptedAffirmations: EncryptedAffirmations;
+  affirmations?: string;
 };
 
 interface Include {
@@ -29,10 +31,16 @@ interface Include {
   records?: boolean;
 }
 
-type AdvancedRecord = Record & {
-  feelingsUpdated: EncryptedFeelsPiece;
-  gratefulnessUpdated: EncryptedGrPiece;
-  uneaseUpdated: EncryptedUneasePiece;
+type EncryptedRecord = Record & {
+  feelings: EncryptedFeelsPiece;
+  gratefulness: EncryptedGrPiece;
+  unease: EncryptedUneasePiece;
+};
+
+type DecryptedRecord = Record & {
+  feelings: string;
+  gratefulness: string;
+  unease: string;
 };
 
 async function decryptSensitiveData(
@@ -50,18 +58,18 @@ async function decryptSensitiveData(
         include: {
           records: {
             include: {
-              feelingsUpdated: true,
-              gratefulnessUpdated: true,
-              uneaseUpdated: true,
+              feelings: true,
+              gratefulness: true,
+              unease: true,
             },
           },
         },
       },
       records: {
         include: {
-          feelingsUpdated: true,
-          gratefulnessUpdated: true,
-          uneaseUpdated: true,
+          feelings: true,
+          gratefulness: true,
+          unease: true,
         },
       },
 
@@ -72,30 +80,31 @@ async function decryptSensitiveData(
   if (!user)
     throw new UserDoesNotExistsError("User does not exist in database.");
 
-  const decryptRecords = (records: AdvancedRecord[]): AdvancedRecord[] => {
-    return records.map((record): AdvancedRecord => {
+  const decryptRecords = (records: EncryptedRecord[]): DecryptedRecord[] => {
+    return records.map((record): DecryptedRecord => {
       return {
         ...record,
-        feelings: decrypt(record.feelingsUpdated),
-        gratefulness: decrypt(record.feelingsUpdated),
-        unease: decrypt(record.uneaseUpdated),
+        feelings: decrypt(record.feelings),
+        gratefulness: decrypt(record.feelings),
+        unease: decrypt(record.unease),
       };
     });
   };
 
   const decryptedRecaps = user.recaps.map(
-    (recap): Recap & { records: AdvancedRecord[] } => {
+    (recap): Recap & { records: DecryptedRecord[] } => {
       return {
         ...recap,
-        records: decryptRecords(recap.records as AdvancedRecord[]),
+        records: decryptRecords(recap.records as EncryptedRecord[]).reverse(),
       };
     }
   );
 
   return {
     ...user,
-    affirmations: decrypt(user.encryptedAffirmations),
-    records: decryptRecords(user.records as AdvancedRecord[]).reverse(),
+    affirmations:
+      user.encryptedAffirmations && decrypt(user.encryptedAffirmations),
+    records: decryptRecords(user.records as EncryptedRecord[]).reverse(),
     recaps: decryptedRecaps,
   };
 }

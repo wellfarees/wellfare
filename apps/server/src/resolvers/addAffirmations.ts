@@ -22,17 +22,38 @@ export default {
 
       const id = (dToken as decodedToken).id;
 
-      await server.db.user.update({
+      const user = await server.db.user.findFirst({
         where: {
           id,
         },
-        data: {
-          affirmations: args.affirmations,
-          encryptedAffirmations: {
-            update: encrypt(args.affirmations),
-          },
+        include: {
+          encryptedAffirmations: true,
         },
       });
+
+      if (user.encryptedAffirmations) {
+        await server.db.user.update({
+          where: {
+            id,
+          },
+          data: {
+            encryptedAffirmations: {
+              update: encrypt(args.affirmations),
+            },
+          },
+        });
+      } else {
+        await server.db.user.update({
+          where: {
+            id,
+          },
+          data: {
+            encryptedAffirmations: {
+              create: encrypt(args.affirmations),
+            },
+          },
+        });
+      }
 
       return await decryptSensitiveData(id, {
         config: true,

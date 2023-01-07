@@ -170,6 +170,12 @@ const Wrapper = styled.main`
       }
     }
   }
+  .warning {
+    line-height: 2;
+    max-width: 650px;
+    font-size: 1.6rem;
+    margin-top: 2em;
+  }
 `;
 
 // Emoji modal
@@ -745,6 +751,12 @@ const Entry: NextPage = () => {
                 </Button>
                 <Link href="/app">Skip, I’ll do this later.</Link>
               </div>
+              <p className="warning">
+                <b>NOTE:</b> The sensitive information you add will be kept
+                completely confidential and cannot be accessed by any other
+                user. Your data will be encrypted and securely stored in our
+                database for safekeeping.
+              </p>
             </footer>
             <EmojiWrapper as={animated.div} style={modalWrapperStyles}>
               <animated.div
