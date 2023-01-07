@@ -6,7 +6,7 @@ import subDays from "date-fns/subDays";
 
 export default abstract class SendRecap extends Cron {
   constructor() {
-    super("00 0 * * MON");
+    super("12 0 * * MON");
   }
 
   async exec() {
@@ -30,6 +30,7 @@ export default abstract class SendRecap extends Cron {
 
     for (const user of data) {
       if (user.records.length < 4) continue;
+      console.log(user);
 
       const emojis: string[] = [];
       user.records.forEach((record) => emojis.push(record.emoji));

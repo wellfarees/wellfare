@@ -19,10 +19,6 @@ import axios from "axios";
 import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
 import { GraphQLResponse } from "apollo-server-core";
-// import { encrypt } from "./utils/crypto";
-// import { GraphQLRequestContext } from "apollo-server-core";
-// import { client } from "./algolia";
-// import { encrypt } from "./utils/crypto";
 
 const app = express();
 
@@ -193,88 +189,5 @@ class Server extends ApolloServer {
 }
 
 const server = new Server();
-
-(async () => {
-  // ENCRYPT USER RECORDS ON ALGOLIA
-  // const index = client.initIndex("records");
-  // index.browseObjects<{
-  //   record: {
-  //     unease: string;
-  //     feelings: string;
-  //     gratefulness: string;
-  //     emoji: string;
-  //   };
-  //   visible_by: string;
-  // }>({
-  //   query: "",
-  //   batch: (batch) => {
-  //     batch.forEach((record) => {
-  //         return;
-  //       if (record.visible_by == "clcbhz3q900393k6d3720p2gw") {
-  //         // console.log(record);
-  //         index.partialUpdateObject({
-  //           record: {
-  //             feelings: encrypt(record.record.feelings),
-  //             unease: encrypt(record.record.unease),
-  //             gratefulness: encrypt(record.record.gratefulness),
-  //           },
-  //           objectID: record.objectID,
-  //         });
-  //       }
-  //     });
-  //   },
-  // });
-  // const users = await server.db.user.findMany({
-  //   include: {
-  //     records: true,
-  //     encryptedAffirmations: true,
-  //   },
-  // });
-  // for (const user of users) {
-  //   // ENCRYPT AFFIRMATIONS
-  //   if (user.encryptedAffirmations) {
-  //     await server.db.user.update({
-  //       where: {
-  //         id: user.id,
-  //       },
-  //       data: {
-  //         encryptedAffirmations: {
-  //           update: encrypt(user.affirmations),
-  //         },
-  //       },
-  //     });
-  //   }
-  //   // ENCRYPT RECORDS
-  //   if (user.records.length) {
-  //     user.records.forEach(async (record) => {
-  //       await server.db.user.update({
-  //         where: {
-  //           id: user.id,
-  //         },
-  //         data: {
-  //           records: {
-  //             update: {
-  //               where: {
-  //                 id: record.id,
-  //               },
-  //               data: {
-  //                 feelingsUpdated: {
-  //                   update: encrypt(record.feelings),
-  //                 },
-  //                 gratefulnessUpdated: {
-  //                   update: encrypt(record.gratefulness),
-  //                 },
-  //                 uneaseUpdated: {
-  //                   update: encrypt(record.unease),
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       });
-  //     });
-  //   }
-  // }
-})();
 
 export default server;

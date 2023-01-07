@@ -79,17 +79,14 @@ export default {
         data: {
           records: {
             create: {
-              gratefulness: args.gratefulness,
-              feelings: args.unease,
-              unease: args.unease,
               emoji: args.emoji,
-              feelingsUpdated: {
+              feelings: {
                 create: encrypt(args.feelings),
               },
-              gratefulnessUpdated: {
+              gratefulness: {
                 create: encrypt(args.gratefulness),
               },
-              uneaseUpdated: {
+              unease: {
                 create: encrypt(args.unease),
               },
             },
@@ -98,9 +95,9 @@ export default {
         include: {
           records: {
             select: {
-              feelingsUpdated: true,
-              uneaseUpdated: true,
-              gratefulnessUpdated: true,
+              feelings: true,
+              unease: true,
+              gratefulness: true,
             },
           },
         },

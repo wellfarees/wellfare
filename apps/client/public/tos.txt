@@ -1,7 +1,7 @@
 
 <h2>1. Terms</h2>
 
-<p>By accessing this Website, accessible from https://development.dc2dwwp55mwts.amplifyapp.com, you are agreeing to be bound by these Website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws. If you disagree with any of these terms, you are prohibited from accessing this site. The materials contained in this Website are protected by copyright and trade mark law.</p>
+<p>By accessing this Website, accessible from https://wellfare.space you are agreeing to be bound by these Website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws. If you disagree with any of these terms, you are prohibited from accessing this site. The materials contained in this Website are protected by copyright and trade mark law.</p>
 
 <h2>2. Use License</h2>
 
@@ -40,6 +40,9 @@
 <h2>8. Governing Law</h2>
 
 <p>Any claim related to Wellfare's Website shall be governed by the laws of Latvia without regards to its conflict of law provisions.</p>
+
+<h2>9. Privacy policy</h2>
+<p> All user data is stored in Wellfare's database and is not to be disclosed to any 3rd party. Thereby all sensitive data such as passwords and journaled entries are encrypted for additional layer of security. </p>
 
 <p class="contacts">
 You can contact us at via email welfare.rescue@gmail.com
