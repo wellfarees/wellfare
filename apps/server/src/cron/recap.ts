@@ -1,8 +1,18 @@
 import server from "../server";
-import { Cron } from "../types/cron";
+// import { Cron } from "../types/cron";
 import getWeekDays from "../utils/getWeekDays";
 import { generateRecapFromEmojis } from "../utils/recapGenerator";
 import subDays from "date-fns/subDays";
+
+abstract class Cron {
+  public interval: string;
+
+  constructor(interval: string) {
+    this.interval = interval;
+  }
+
+  public abstract exec(): void;
+}
 
 export default abstract class SendRecap extends Cron {
   constructor() {
