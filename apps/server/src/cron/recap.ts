@@ -6,7 +6,7 @@ import subDays from "date-fns/subDays";
 
 export default abstract class SendRecap extends Cron {
   constructor() {
-    super("12 0 * * MON");
+    super("00 0 * * MON");
   }
 
   async exec() {
