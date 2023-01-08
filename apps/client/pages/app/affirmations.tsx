@@ -187,8 +187,8 @@ const Affirmations: NextPage = () => {
             placeholder="I have an expensive car. I live a happy..."
             label="My affirmations"
             toFocus={true}
-            isLocked={data && data.getUser.affirmations ? isLocked : !isLocked}
-            defaultValue={data && data.getUser.affirmations}
+            isLocked={info.affirmations ? isLocked : !isLocked}
+            defaultValue={info.affirmations}
             {...(data && registerInput)}
           ></WatermarkInput>
         </div>
