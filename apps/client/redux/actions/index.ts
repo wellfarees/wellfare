@@ -86,6 +86,13 @@ export interface SetWebsiteLoaded {
   };
 }
 
+export interface SetAffirmations {
+  type: ActionType.SET_AFFIRMATIONS;
+  payload: {
+    affirmations: string;
+  };
+}
+
 export type Action =
   | RetrieveLocalStorage
   | SetLocalStorage
@@ -97,4 +104,5 @@ export type Action =
   | SaveConfig
   | SetPfp
   | SaveConfigPiece
-  | SetWebsiteLoaded;
+  | SetWebsiteLoaded
+  | SetAffirmations;

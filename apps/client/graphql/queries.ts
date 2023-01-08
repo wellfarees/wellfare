@@ -79,6 +79,7 @@ export const APPEARANCE_QUERY = gql`
         pfp
         firstName
       }
+      affirmations
     }
   }
 `;

@@ -9,6 +9,7 @@ import { ApolloError } from "apollo-server-core";
 import { SIGNIN_METHODS } from "../../constants";
 import { addToNewsletter } from "../../utils/addToNewsletter";
 import { CLIENT_URL } from "../../endpoints";
+import { decryptSensitiveData } from "../../utils/decryptSensitiveData";
 
 const endpoint = "https://oauth2.googleapis.com/token";
 const getGoogleTokens = async (code: string): Promise<[string, string]> => {
@@ -161,6 +162,7 @@ export default {
               information: true,
               config: true,
               records: true,
+              encryptedAffirmations: true,
             },
           });
 
@@ -175,7 +177,7 @@ export default {
           );
 
           return {
-            user: userData,
+            user: await decryptSensitiveData(userData.id),
             publicAlgoliaKey,
             oAuthRefresh: encoded_refresh,
           };
@@ -188,10 +190,13 @@ export default {
           }
         );
 
-        return { user, publicAlgoliaKey, oAuthRefresh: encoded_refresh };
+        return {
+          user: await decryptSensitiveData(user.id),
+          publicAlgoliaKey,
+          oAuthRefresh: encoded_refresh,
+        };
       } catch (e) {
         console.log(e);
-        console.log(`${CLIENT_URL}/auth/oauth/google`);
         return new ApolloError("oAuth failed", "INVALID_OAUTH");
       }
     },
