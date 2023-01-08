@@ -152,6 +152,7 @@ export const OAUTH_LOGIN = gql`
     oAuthLogin(service: $service, token: $token, type: $type) {
       user {
         id
+        affirmations
         information {
           pfp
           firstName

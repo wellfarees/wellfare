@@ -12,6 +12,8 @@ import { EDIT_AFFIRMATIONS } from "../../graphql/mutations";
 import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
+import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const Wrapper = styled.div`
   .subtitle {
@@ -78,8 +80,10 @@ const Affirmations: NextPage = () => {
   const infoBtn = useRef<HTMLButtonElement | null>(null);
   const [state, setState] = useState(false);
   const [buttonsSwitched, switchButtons] = useState(false);
-  const [setAffirmations] = useMutation(EDIT_AFFIRMATIONS);
+  const [saveAffirmations] = useMutation(EDIT_AFFIRMATIONS);
   const { loading, data } = useQuery(AFFIRMATIONS_QUERY);
+  const { setAffirmations } = useActions();
+  const { info } = useTypedSelector((state) => state.user);
 
   const registerInput = register();
 
@@ -98,10 +102,14 @@ const Affirmations: NextPage = () => {
       if (!res) return;
       setState(!state);
 
-      setAffirmations({
+      saveAffirmations({
         variables: { affirmations: res },
         refetchQueries: ["GetUserInfo"],
+        fetchPolicy: "no-cache",
       });
+
+      setAffirmations(res);
+
       setTimeout(() => {
         setIsLocked(!isLocked);
         if (infoBtn.current) {
@@ -137,7 +145,7 @@ const Affirmations: NextPage = () => {
   return (
     <ShrankContainer>
       <Wrapper>
-        {data.getUser.affirmations ? (
+        {info.affirmations ? (
           <header>
             <AdaptiveAnimation>
               <h2>Your affirmations</h2>

@@ -30,7 +30,8 @@ const navStateContext = createContext<
 const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
-  const { saveToken, saveConfig, setPfp, setWebsiteLoaded } = useActions();
+  const { saveToken, saveConfig, setPfp, setWebsiteLoaded, setAffirmations } =
+    useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
 
@@ -80,6 +81,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
         theme: data.getUser.config.darkMode ? "dark" : "light",
       });
       setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
+      setAffirmations(data.getUser.affirmations);
       setReady(true);
     }
     if (error) {
@@ -104,6 +106,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
         reducedMotion: user.config.reducedMotion,
         theme: user.config.darkMode ? "dark" : "light",
       });
+      setAffirmations(user.affirmations);
       setPfp(user.information.pfp || "/img/mesh-gradient.png");
       setReady(true);
     }

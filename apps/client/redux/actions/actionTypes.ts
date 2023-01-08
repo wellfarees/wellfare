@@ -10,4 +10,5 @@ export enum ActionType {
   SET_PFP = "savePfp",
   SAVE_CONFIG_PIECE = "saveConfigPiece",
   SET_WEBSITE_LOADED = "setWebsiteLoaded",
+  SET_AFFIRMATIONS = "setAffirmations",
 }

@@ -8,6 +8,7 @@ import {
   SaveConfig,
   SetPfp,
   SetWebsiteLoaded,
+  SetAffirmations,
 } from ".";
 import { ActionType } from "./actionTypes";
 import { UserConfig } from "../../config/userConfig";
@@ -127,6 +128,15 @@ export const setWebsiteLoaded = (loaded: boolean): SetWebsiteLoaded => {
     type: ActionType.SET_WEBSITE_LOADED,
     payload: {
       loaded,
+    },
+  };
+};
+
+export const setAffirmations = (affirmations: string): SetAffirmations => {
+  return {
+    type: ActionType.SET_AFFIRMATIONS,
+    payload: {
+      affirmations,
     },
   };
 };

@@ -235,8 +235,23 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
         return weeksArr;
       }
 
-      const dateLeft = dates[0];
-      const dateRight = dates[1];
+      const sorted = [...dates].sort((a, b) => {
+        // convert the dates to Date objects for comparison
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        // sort by ascending date
+        if (dateA < dateB) {
+          return -1;
+        }
+        if (dateA > dateB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      const dateLeft = sorted[0];
+      const dateRight = sorted[1];
       let weeks = weeksArr;
 
       if (!dateRight) {
@@ -245,7 +260,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
         } else {
           weeks[weekIndex].push(dateLeft);
         }
-        return checkForWeek(dates.slice(1), weeks, weekIndex + 1);
+        return checkForWeek(sorted.slice(1), weeks, weekIndex + 1);
       }
 
       if (
@@ -260,7 +275,7 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
           weeks[weekIndex].push(dateLeft);
         }
 
-        return checkForWeek(dates.slice(1), weeks, weekIndex);
+        return checkForWeek(sorted.slice(1), weeks, weekIndex);
       } else {
         if (!weeksArr[weekIndex]) {
           weeks.push([dateLeft]);
@@ -271,7 +286,9 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
       }
     };
 
-    return checkForWeek();
+    return checkForWeek()
+      .reverse()
+      .map((arr) => arr.reverse());
   };
 
   function groupRecordsByWeek(records: DateInterface[]): DateInterface[][] {

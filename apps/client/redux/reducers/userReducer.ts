@@ -11,6 +11,7 @@ type UserState = {
     };
     id: number;
     pfp?: null | string;
+    affirmations?: string;
   } | null;
   jwt: string | null;
 };
@@ -23,6 +24,7 @@ const initialState: UserState = {
     },
     pfp: null,
     id: 0,
+    affirmations: null,
   },
   jwt: null,
 };
@@ -79,7 +81,6 @@ export const userReducer = (
         },
       };
     case ActionType.SAVE_CONFIG_PIECE:
-      const {} = action.payload;
       return {
         ...state,
         info: {
@@ -88,6 +89,16 @@ export const userReducer = (
             ...state.info.config,
             ...action.payload.configPiece,
           },
+        },
+      };
+
+    case ActionType.SET_AFFIRMATIONS:
+      const { affirmations } = action.payload;
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          affirmations,
         },
       };
 
