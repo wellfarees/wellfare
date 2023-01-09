@@ -126,6 +126,7 @@ export default {
           include: {
             information: true,
             config: true,
+            encryptedAffirmations: true,
           },
         });
 
@@ -177,7 +178,7 @@ export default {
           );
 
           return {
-            user: await decryptSensitiveData(userData.id),
+            user: await decryptSensitiveData(userData),
             publicAlgoliaKey,
             oAuthRefresh: encoded_refresh,
           };
@@ -191,7 +192,7 @@ export default {
         );
 
         return {
-          user: await decryptSensitiveData(user.id),
+          user: await decryptSensitiveData(user),
           publicAlgoliaKey,
           oAuthRefresh: encoded_refresh,
         };

@@ -1,5 +1,4 @@
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import server from "../server";
 import {
   User,
   Configuration,
@@ -14,22 +13,30 @@ import {
 
 import { decrypt } from "./crypto";
 
-type ReturnUser = User & {
-  records?: DecryptedRecord[];
+export type ChangeTypeOfKeys<
+  T extends object,
+  Keys extends keyof T,
+  NewType
+> = {
+  [key in keyof T]: key extends Keys ? NewType : T[key];
+};
+
+type AcceptUser = User & {
+  records?: EncryptedRecord[] | Record[];
   config?: Configuration;
-  recaps: (Recap & {
-    records: DecryptedRecord[];
+  recaps?: (Recap & {
+    records: EncryptedRecord[] | Record[];
   })[];
   information?: Information;
-  encryptedAffirmations: EncryptedAffirmations;
+  encryptedAffirmations?: EncryptedAffirmations;
   affirmations?: string;
 };
 
-interface Include {
-  information?: boolean;
-  config?: boolean;
-  records?: boolean;
-}
+type ReturnUser = ChangeTypeOfKeys<
+  ChangeTypeOfKeys<AcceptUser, "records", DecryptedRecord[]>,
+  "recaps",
+  (Recap & { records: DecryptedRecord[] })[]
+>;
 
 type EncryptedRecord = Record & {
   feelings: EncryptedFeelsPiece;
@@ -43,40 +50,7 @@ type DecryptedRecord = Record & {
   unease: string;
 };
 
-async function decryptSensitiveData(
-  id: string,
-  include?: Include
-): Promise<ReturnUser> {
-  const user = await server.db.user.findFirst({
-    where: {
-      id,
-    },
-    include: {
-      information: include ? Boolean(include.information) : true,
-      config: include ? Boolean(include.config) : true,
-      recaps: {
-        include: {
-          records: {
-            include: {
-              feelings: true,
-              gratefulness: true,
-              unease: true,
-            },
-          },
-        },
-      },
-      records: {
-        include: {
-          feelings: true,
-          gratefulness: true,
-          unease: true,
-        },
-      },
-
-      encryptedAffirmations: true,
-    },
-  });
-
+async function decryptSensitiveData(user: AcceptUser): Promise<ReturnUser> {
   if (!user)
     throw new UserDoesNotExistsError("User does not exist in database.");
 
@@ -91,20 +65,22 @@ async function decryptSensitiveData(
     });
   };
 
-  const decryptedRecaps = user.recaps.map(
-    (recap): Recap & { records: DecryptedRecord[] } => {
-      return {
-        ...recap,
-        records: decryptRecords(recap.records as EncryptedRecord[]).reverse(),
-      };
-    }
-  );
+  const decryptedRecaps = user.recaps
+    ? user.recaps.map((recap): Recap & { records: DecryptedRecord[] } => {
+        return {
+          ...recap,
+          records: decryptRecords(recap.records as EncryptedRecord[]).reverse(),
+        };
+      })
+    : [];
 
   return {
     ...user,
     affirmations:
       user.encryptedAffirmations && decrypt(user.encryptedAffirmations),
-    records: decryptRecords(user.records as EncryptedRecord[]).reverse(),
+    records: user.records
+      ? decryptRecords(user.records as EncryptedRecord[]).reverse()
+      : [],
     recaps: decryptedRecaps,
   };
 }
