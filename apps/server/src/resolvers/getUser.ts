@@ -5,6 +5,7 @@ import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
 import differenceInHours from "date-fns/differenceInHours";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+import server from "../server";
 
 export default {
   Query: {
@@ -20,10 +21,22 @@ export default {
 
       const id = (dToken as decodedToken).id;
 
-      const data = await decryptSensitiveData(id, {
-        config: true,
-        information: true,
-        records: true,
+      const data = await server.db.user.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          config: true,
+          information: true,
+          records: {
+            include: {
+              feelings: true,
+              gratefulness: true,
+              unease: true,
+            },
+          },
+          encryptedAffirmations: true,
+        },
       });
 
       if (!data)
@@ -31,12 +44,12 @@ export default {
           "User does not exist in the database."
         );
 
-      const decrypted = await decryptSensitiveData(id);
+      const decryptedData = await decryptSensitiveData(data);
 
-      if (!data.records[0]) return { ...data, lastSubmitted: null };
+      if (!data.records[0]) return { ...decryptedData, lastSubmitted: null };
       else
         return {
-          ...decrypted,
+          ...decryptedData,
           lastSubmitted: differenceInHours(new Date(), data.records[0].date),
         };
     },

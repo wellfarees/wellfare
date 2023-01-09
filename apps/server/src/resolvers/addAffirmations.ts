@@ -5,6 +5,7 @@ import { decodedToken } from "../types/jwt";
 import verifyJWT from "../utils/verifyJWT";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 import { encrypt } from "../utils/crypto";
+import { User, EncryptedAffirmations } from "@prisma/client";
 
 export default {
   Mutation: {
@@ -31,8 +32,12 @@ export default {
         },
       });
 
+      let finalUser: User & {
+        encryptedAffirmations: EncryptedAffirmations;
+      };
+
       if (user.encryptedAffirmations) {
-        await server.db.user.update({
+        finalUser = await server.db.user.update({
           where: {
             id,
           },
@@ -41,9 +46,12 @@ export default {
               update: encrypt(args.affirmations),
             },
           },
+          include: {
+            encryptedAffirmations: true,
+          },
         });
       } else {
-        await server.db.user.update({
+        finalUser = await server.db.user.update({
           where: {
             id,
           },
@@ -52,14 +60,13 @@ export default {
               create: encrypt(args.affirmations),
             },
           },
+          include: {
+            encryptedAffirmations: true,
+          },
         });
       }
 
-      return await decryptSensitiveData(id, {
-        config: true,
-        information: true,
-        records: true,
-      });
+      return await decryptSensitiveData(finalUser);
     },
   },
 };

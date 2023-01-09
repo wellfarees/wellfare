@@ -41,7 +41,7 @@ export default {
           "User does not exist in the database."
         );
 
-      const decrypted = await decryptSensitiveData(id, { records: true });
+      const decrypted = await decryptSensitiveData(data);
       const record = decrypted.records?.find(
         (record) => record.id == args.identifier
       );

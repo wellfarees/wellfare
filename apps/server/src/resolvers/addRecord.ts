@@ -93,13 +93,7 @@ export default {
           },
         },
         include: {
-          records: {
-            select: {
-              feelings: true,
-              unease: true,
-              gratefulness: true,
-            },
-          },
+          records: true,
         },
       });
 
@@ -157,9 +151,7 @@ export default {
         autoGenerateObjectIDIfNotExist: true,
       });
 
-      const decrypted = await decryptSensitiveData(id, {
-        records: true,
-      });
+      const decrypted = await decryptSensitiveData(data);
 
       return decrypted.records;
     },

@@ -65,19 +65,19 @@ model ChangedEmail {
 }
 
 model Record {
-  id                Int                   @id @default(autoincrement())
-  date              DateTime              @default(now())
+  id                Int                  @id @default(autoincrement())
+  date              DateTime             @default(now())
   emoji             String
-  encryptedGrID     String?
-  encryptedFeelsID  String?
-  encryptedUneaseID String?
-  gratefulness      EncryptedGrPiece?     @relation(fields: [encryptedGrID], references: [id])
-  unease            EncryptedUneasePiece? @relation(fields: [encryptedUneaseID], references: [id])
-  feelings          EncryptedFeelsPiece?  @relation(fields: [encryptedFeelsID], references: [id])
+  encryptedGrID     String
+  encryptedFeelsID  String
+  encryptedUneaseID String
+  gratefulness      EncryptedGrPiece     @relation(fields: [encryptedGrID], references: [id])
+  unease            EncryptedUneasePiece @relation(fields: [encryptedUneaseID], references: [id])
+  feelings          EncryptedFeelsPiece  @relation(fields: [encryptedFeelsID], references: [id])
   userId            String
   recapId           Int?
-  User              User                  @relation(fields: [userId], references: [id])
-  Recap             Recap?                @relation(fields: [recapId], references: [id])
+  User              User                 @relation(fields: [userId], references: [id])
+  Recap             Recap?               @relation(fields: [recapId], references: [id])
 }
 
 model EncryptedGrPiece {

@@ -16,41 +16,43 @@ export default {
       },
       headers: { token?: string }
     ) => {
-      if (!headers.token)
-        return new NoTokenInHeaderError(
-          "No token was found in the header. Please provide in Authorization header."
-        );
-      const dToken = verifyJWT(headers.token, "client");
-      if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
-      const updateData: {
-        darkMode?: boolean;
-        reducedMotion?: boolean;
-        fontSize?: number;
-      } = {};
-      if (args.darkMode !== undefined) updateData.darkMode = args.darkMode;
-      if (args.reducedMotion !== undefined)
-        updateData.reducedMotion = args.reducedMotion;
-      if (args.fontSize) updateData.fontSize = args.fontSize;
+      try {
+        if (!headers.token)
+          return new NoTokenInHeaderError(
+            "No token was found in the header. Please provide in Authorization header."
+          );
+        const dToken = verifyJWT(headers.token, "client");
+        if (!dToken) throw new InvalidJWTTokenError("JWT token is invalid.");
+        const updateData: {
+          darkMode?: boolean;
+          reducedMotion?: boolean;
+          fontSize?: number;
+        } = {};
+        if (args.darkMode !== undefined) updateData.darkMode = args.darkMode;
+        if (args.reducedMotion !== undefined)
+          updateData.reducedMotion = args.reducedMotion;
+        if (args.fontSize) updateData.fontSize = args.fontSize;
 
-      const id = (dToken as decodedToken).id;
+        const id = (dToken as decodedToken).id;
 
-      await server.db.user.update({
-        where: {
-          id,
-        },
-        data: {
-          config: {
-            update: updateData,
+        const user = await server.db.user.update({
+          where: {
+            id,
           },
-        },
-        include: {
-          config: true,
-          information: true,
-          records: true,
-        },
-      });
+          data: {
+            config: {
+              update: updateData,
+            },
+          },
+          include: {
+            config: true,
+          },
+        });
 
-      return await decryptSensitiveData(id);
+        return await decryptSensitiveData(user);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };

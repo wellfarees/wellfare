@@ -14,7 +14,7 @@ export default {
 
       const id = (dToken as decodedToken).id;
       const newPassword = await hash(args.password, 10);
-      await server.db.user.update({
+      const user = await server.db.user.update({
         where: {
           id,
         },
@@ -27,7 +27,7 @@ export default {
         },
       });
 
-      return await decryptSensitiveData(id, {});
+      return await decryptSensitiveData(user);
     },
   },
 };
