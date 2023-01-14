@@ -12,7 +12,6 @@ import { EDIT_AFFIRMATIONS } from "../../graphql/mutations";
 import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
-import { useActions } from "../../hooks/useActions";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setAffirmations } from "../../redux/actions/userSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";

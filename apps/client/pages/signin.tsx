@@ -9,7 +9,6 @@ import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
-import { useActions } from "../hooks/useActions";
 import { GET_LAST_SUBMITTED } from "../graphql/queries";
 import ApolloClient from "../graphql/client";
 import AccountSuspended from "../components/AccountSuspended/AccountSuspended";

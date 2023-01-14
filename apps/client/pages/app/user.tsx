@@ -23,7 +23,6 @@ import {
 } from "../../graphql/mutations";
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import { UserPfp } from "../../components/Pfp/Pfp";
-import { useActions } from "../../hooks/useActions";
 import { fontSizes } from "../../config/userConfig";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setPfp } from "../../redux/actions/userSlice";

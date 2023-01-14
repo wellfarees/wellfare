@@ -8,7 +8,6 @@ import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { NextPage } from "next";
 import { useEffect } from "react";
 
-import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
