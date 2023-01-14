@@ -176,7 +176,7 @@ const PasswordReset: NextPage = () => {
           style={{
             display: loading
               ? "none"
-              : data.verifyJWT.success
+              : data && data.verifyJWT.success
               ? "flex"
               : "none",
           }}
@@ -251,7 +251,7 @@ const PasswordReset: NextPage = () => {
           style={{
             display: loading
               ? "none"
-              : data.verifyJWT.success
+              : data && data.verifyJWT.success
               ? "none"
               : "flex",
           }}

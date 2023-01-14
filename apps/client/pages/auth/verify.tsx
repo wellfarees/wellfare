@@ -118,7 +118,7 @@ const Verify: NextPage = () => {
                 </p>
               </div>
             </div>
-          ) : !loading && error ? (
+          ) : (!loading && error) || token == undefined ? (
             <div className="failure">
               <h1>
                 This verification link is <b>invalid</b>

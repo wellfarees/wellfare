@@ -11,9 +11,9 @@ import { useEffect } from "react";
 import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { saveConfigPiece } from "../../redux/actions/userSlice";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const StyledSlider = styled(ReactSlider)`
   width: 82%;
@@ -196,9 +196,9 @@ const Wrapper = styled.div`
 `;
 
 const Conf: NextPage = () => {
-  const { user } = useTypedSelector((state) => state);
+  const { user } = useAppSelector((state) => state);
   const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
-  const { info } = useTypedSelector((state) => state.user);
+  const { info } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

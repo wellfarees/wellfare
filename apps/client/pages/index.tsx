@@ -10,11 +10,11 @@ import Fade from "react-reveal/Fade";
 import { emailRegExp } from "../utils/emailRegExp";
 import Scroller from "../components/Scroller/Scroller";
 import LoadingButton from "../components/Button/Button";
-import { useTypedSelector } from "../hooks/useTypedSelector";
 import { GlowingBLue } from "../styled/reusable";
 
 import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
+import { useAppSelector } from "../hooks/useAppSelector";
 
 const Showcase = memo(ShowcaseComp);
 
@@ -233,7 +233,7 @@ const Home: NextPage = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const successfullyMailListed = useRef(false);
   const mailContainer = useRef<HTMLDivElement | null>(null);
-  const { jwt } = useTypedSelector((state) => state).user;
+  const { jwt } = useAppSelector((state) => state).user;
   const [addEmailToNewsletter, { error, loading }] = useMutation(
     ADD_EMAIL_TO_NEWSLETTER
   );

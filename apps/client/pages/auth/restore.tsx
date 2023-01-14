@@ -46,6 +46,10 @@ const Wrapper = styled.div`
       button {
         margin-left: 0.1em;
       }
+
+      .default-btn-styles {
+        width: 100%;
+      }
     }
 
     header {

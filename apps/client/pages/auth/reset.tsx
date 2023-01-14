@@ -65,6 +65,10 @@ const Wrapper = styled.div`
       }
     }
 
+    .default-btn-styles {
+      width: 100%;
+    }
+
     .error,
     .success {
       font-size: 1.4rem;

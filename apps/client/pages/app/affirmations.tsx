@@ -13,9 +13,9 @@ import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useActions } from "../../hooks/useActions";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setAffirmations } from "../../redux/actions/userSlice";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const Wrapper = styled.div`
   .subtitle {
@@ -84,7 +84,7 @@ const Affirmations: NextPage = () => {
   const [buttonsSwitched, switchButtons] = useState(false);
   const [saveAffirmations] = useMutation(EDIT_AFFIRMATIONS);
   const { loading, data } = useQuery(AFFIRMATIONS_QUERY);
-  const { info } = useTypedSelector((state) => state.user);
+  const { info } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const registerInput = register();

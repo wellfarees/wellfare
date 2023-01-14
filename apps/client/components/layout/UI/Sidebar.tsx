@@ -3,12 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSpring, animated } from "react-spring";
 import { useEffect, useRef, MutableRefObject } from "react";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { themes } from "../../../styled/themes";
 import { useActions } from "../../../hooks/useActions";
 import { toggleSidebar } from "../../../redux/actions/unitStatesSlice";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { logout } from "../../../redux/actions/userSlice";
+import { useAppSelector } from "../../../hooks/useAppSelector";
 
 const Wrapper = styled.div`
   .overlay {
@@ -95,7 +95,7 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
 }) => {
   const itemRef = useRef<HTMLLIElement | null>(null);
   const router = useRouter();
-  const { user } = useTypedSelector((state) => state);
+  const { user } = useAppSelector((state) => state);
   const userInfo = user.info!;
 
   const retrieveTextFromSpan = (span: HTMLSpanElement): string => {
@@ -187,7 +187,7 @@ const Sidebar: React.FC = () => {
     };
   });
 
-  const asideToggled = useTypedSelector(
+  const asideToggled = useAppSelector(
     (state) => state.unitStates
   ).sidebarToggled;
 
