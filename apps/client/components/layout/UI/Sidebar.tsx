@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useSpring, animated } from "react-spring";
 import { useEffect, useRef, MutableRefObject } from "react";
 import { themes } from "../../../styled/themes";
-import { useActions } from "../../../hooks/useActions";
 import { toggleSidebar } from "../../../redux/actions/unitStatesSlice";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { logout } from "../../../redux/actions/userSlice";

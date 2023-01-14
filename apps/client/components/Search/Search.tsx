@@ -7,13 +7,12 @@ import { GlowingBLue } from "../../styled/reusable";
 import Link from "next/link";
 import DetailedRecord from "../Records/DetailedRecord";
 import { useRouter } from "next/router";
-import { useActions } from "../../hooks/useActions";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useSpring, animated } from "react-spring";
 import { GET_SEARCH_HITS } from "../../graphql/queries";
 import client from "../../graphql/client";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { initModal } from "../../redux/actions/modalSlice";
+import { initRecordModal } from "../../redux/actions/modalSlice";
 
 const SearchBox = styled.div`
   display: flex;
@@ -151,9 +150,11 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
             );
             if (size! > 425 && !(size! <= 812 && window.innerHeight <= 425)) {
               dispatch(
-                initModal({
-                  open: true,
-                  content: JSON.stringify(RecordContent),
+                initRecordModal({
+                  props: {
+                    ...data,
+                    feelings: "Feeling " + feelings,
+                  },
                 })
               );
               return;

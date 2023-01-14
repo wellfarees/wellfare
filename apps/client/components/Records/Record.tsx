@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { formatDate } from "../../utils/formatDate";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRouter } from "next/router";
-import { useActions } from "../../hooks/useActions";
 import DetailedRecord from "./DetailedRecord";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { initRecordModal } from "../../redux/actions/modalSlice";

@@ -4,7 +4,6 @@ import { OAUTH_LOGIN } from "../../../graphql/mutations";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
-import { useActions } from "../../../hooks/useActions";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { setPfp } from "../../../redux/actions/userSlice";
 
