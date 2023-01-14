@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Toggle from "react-toggle";
 import "react-toggle/style.css"; // for ES6 modules
 import ReactSlider from "react-slider";
-import { fontSizes } from "../../config/userConfig";
+import { UserConfig, fontSizes } from "../../config/userConfig";
 import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
 import { NextPage } from "next";
 import { useEffect } from "react";
@@ -12,6 +12,8 @@ import { useActions } from "../../hooks/useActions";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { saveConfigPiece } from "../../redux/actions/userSlice";
 
 const StyledSlider = styled(ReactSlider)`
   width: 82%;
@@ -194,10 +196,10 @@ const Wrapper = styled.div`
 `;
 
 const Conf: NextPage = () => {
-  const { saveConfig, saveConfigPiece } = useActions();
   const { user } = useTypedSelector((state) => state);
   const [mutateAppearance, { data }] = useMutation(EDIT_USER_CONFIG);
   const { info } = useTypedSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     mutateAppearance({
@@ -231,9 +233,11 @@ const Conf: NextPage = () => {
                   user.info?.config.theme === "dark" ? true : false
                 }
                 onChange={(e) => {
-                  saveConfigPiece({
-                    theme: e.target.checked ? "dark" : "light",
-                  });
+                  dispatch(
+                    saveConfigPiece({
+                      theme: e.target.checked ? "dark" : "light",
+                    })
+                  );
                 }}
               />
             </div>
@@ -244,7 +248,9 @@ const Conf: NextPage = () => {
                 className="toggler"
                 defaultChecked={Boolean(user.info?.config.reducedMotion)}
                 onChange={(e) => {
-                  saveConfigPiece({ reducedMotion: e.target.checked });
+                  dispatch(
+                    saveConfigPiece({ reducedMotion: e.target.checked })
+                  );
                 }}
               />
             </div>
@@ -263,7 +269,7 @@ const Conf: NextPage = () => {
                 value={user.info?.config.fontSize}
                 marks={[14, 15, 16, 17, 18, 19]}
                 onChange={(val) => {
-                  saveConfigPiece({ fontSize: val as number });
+                  dispatch(saveConfigPiece({ fontSize: val as number }));
                 }}
               />
               <i className="fas fa-font fa-2x"></i>

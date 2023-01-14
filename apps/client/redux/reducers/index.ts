@@ -1,15 +1,13 @@
-import { combineReducers } from "redux";
 import { implementLocalStorage } from "./localStorageReducer";
-import { unitStatesReducer } from "./unitStatesReducer";
-import { initModalReducer } from "./initModalReducer";
-import { userReducer } from "./userReducer";
+import modalReducer from "../actions/modalSlice";
+import unitStateReducer from "../actions/unitStatesSlice";
+import userReduder from "../actions/userSlice";
 
-const reducers = combineReducers({
+const reducers = {
   localStorage: implementLocalStorage,
-  unitStates: unitStatesReducer,
-  modal: initModalReducer,
-  user: userReducer,
-});
+  unitStates: unitStateReducer,
+  modal: modalReducer,
+  user: userReduder,
+};
 
 export default reducers;
-export type RootState = ReturnType<typeof reducers>;

@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
 import { useActions } from "../../../hooks/useActions";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { setPfp } from "../../../redux/actions/userSlice";
 
 const Main = styled.main`
   min-height: 100vh;
@@ -32,8 +34,7 @@ const Main = styled.main`
 
 const GoogleOauth: React.FC = () => {
   const router = useRouter();
-
-  const { setPfp, saveConfig } = useActions();
+  const dispatch = useAppDispatch();
 
   const [login, OAuthProps] = useMutation<{
     oAuthLogin: {
@@ -88,10 +89,10 @@ const GoogleOauth: React.FC = () => {
       );
 
       const user = OAuthProps.data.oAuthLogin.user;
-      setPfp(user.information.pfp || "/img/mesh-gradient.png");
+      dispatch(setPfp(user.information.pfp || "/img/mesh-gradient.png"));
       router.push("/app");
     }
-  }, [OAuthProps.error, OAuthProps.data, router, saveConfig, setPfp]);
+  }, [OAuthProps.error, OAuthProps.data, router, setPfp]);
 
   return (
     <Main>

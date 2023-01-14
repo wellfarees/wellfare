@@ -4,6 +4,8 @@ import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useActions";
 import DetailedRecord from "./DetailedRecord";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { initRecordModal } from "../../redux/actions/modalSlice";
 
 interface RecordProps {
   data: {
@@ -67,25 +69,24 @@ const Record: React.FC<RecordProps> = ({
   const dateString = formatDate(date);
   const size = useScreenSize();
   const router = useRouter();
-  const { initModal } = useActions();
+  const dispatch = useAppDispatch();
 
   return (
     <Wrapper
       className="record"
       onClick={() => {
-        const RecordContent = (
-          <DetailedRecord
-            data={{
-              date: date,
-              emoji,
-              feelings,
-              gratefulness,
-              unease,
-            }}
-          />
-        );
         if (size! > 425 && !(size! <= 812 && window.innerHeight <= 425)) {
-          initModal(true, RecordContent);
+          dispatch(
+            initRecordModal({
+              props: {
+                date: date,
+                emoji,
+                feelings,
+                gratefulness,
+                unease,
+              },
+            })
+          );
           return;
         }
 

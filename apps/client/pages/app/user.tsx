@@ -26,6 +26,8 @@ import { UserPfp } from "../../components/Pfp/Pfp";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { fontSizes } from "../../config/userConfig";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setPfp } from "../../redux/actions/userSlice";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -204,10 +206,10 @@ const User = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const { jwt } = useTypedSelector((state) => state.user);
-  const { setPfp } = useActions();
   const warningCheck = useRef(null);
   const [changeToNative, changeResult] = useMutation(CHANGE_TO_NATIVE);
   const [isSetToNative, setToNative] = useState(false);
+  const dispatch = useAppDispatch();
 
   const { data, loading } = useQuery<{
     getUser: { information: Credentials; OAuthEmail: string };
@@ -243,7 +245,9 @@ const User = () => {
 
   useEffect(() => {
     if (uploadProps.data) {
-      setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime());
+      dispatch(
+        setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime())
+      );
     } else if (uploadProps.error) {
       setError(uploadProps.error.graphQLErrors[0].message);
     }

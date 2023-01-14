@@ -14,6 +14,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setAffirmations } from "../../redux/actions/userSlice";
 
 const Wrapper = styled.div`
   .subtitle {
@@ -82,8 +84,8 @@ const Affirmations: NextPage = () => {
   const [buttonsSwitched, switchButtons] = useState(false);
   const [saveAffirmations] = useMutation(EDIT_AFFIRMATIONS);
   const { loading, data } = useQuery(AFFIRMATIONS_QUERY);
-  const { setAffirmations } = useActions();
   const { info } = useTypedSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const registerInput = register();
 
@@ -107,8 +109,7 @@ const Affirmations: NextPage = () => {
         refetchQueries: ["GetUserInfo"],
         fetchPolicy: "no-cache",
       });
-
-      setAffirmations(res);
+      dispatch(setAffirmations(res));
 
       setTimeout(() => {
         setIsLocked(!isLocked);

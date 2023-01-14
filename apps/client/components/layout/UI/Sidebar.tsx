@@ -6,6 +6,9 @@ import { useEffect, useRef, MutableRefObject } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { themes } from "../../../styled/themes";
 import { useActions } from "../../../hooks/useActions";
+import { toggleSidebar } from "../../../redux/actions/unitStatesSlice";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { logout } from "../../../redux/actions/userSlice";
 
 const Wrapper = styled.div`
   .overlay {
@@ -170,6 +173,7 @@ const NavPoint: React.FC<{ active?: boolean; endPoint?: string }> = ({
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const sideBar = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
 
   const [sidebarStyles, sidebarApi] = useSpring(() => {
     return {
@@ -182,8 +186,6 @@ const Sidebar: React.FC = () => {
       from: { opacity: 0, display: "none" },
     };
   });
-
-  const { toggleSidebar, logout } = useActions();
 
   const asideToggled = useTypedSelector(
     (state) => state.unitStates
@@ -207,7 +209,7 @@ const Sidebar: React.FC = () => {
         left: "-100%",
       },
     });
-    toggleSidebar(false);
+    dispatch(toggleSidebar(false));
   };
 
   const openSidebar = (): void => {
@@ -228,7 +230,7 @@ const Sidebar: React.FC = () => {
         });
       },
     });
-    toggleSidebar(true);
+    dispatch(toggleSidebar(true));
   };
 
   useEffect(() => {
@@ -290,7 +292,7 @@ const Sidebar: React.FC = () => {
               onClick={async (e) => {
                 e.preventDefault();
                 await router.push("/");
-                logout();
+                dispatch(logout());
               }}
             >
               <span>
