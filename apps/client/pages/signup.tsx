@@ -17,9 +17,6 @@ import { storeUser } from "../redux/actions/userSlice";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutations";
 
-// Redux
-import { useActions } from "../hooks/useActions";
-
 const Wrapper = styled.main`
   height: 100vh;
   width: 100%;

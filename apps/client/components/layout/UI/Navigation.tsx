@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Container } from "../../../styled/reusable";
 import { UserPfp } from "../../Pfp/Pfp";
 import { useRouter } from "next/router";
-import { useActions } from "../../../hooks/useActions";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { toggleSidebar } from "../../../redux/actions/unitStatesSlice";
 

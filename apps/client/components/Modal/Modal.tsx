@@ -1,6 +1,5 @@
 import { animated, useSpring } from "react-spring";
 import styled from "styled-components";
-import { useActions } from "../../hooks/useActions";
 import { useEffect } from "react";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
