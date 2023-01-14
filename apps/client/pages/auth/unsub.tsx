@@ -67,7 +67,7 @@ const Unsub: React.FC = () => {
   return (
     <Wrapper>
       <Container>
-        {!loading && called ? (
+        {!loading ? (
           data ? (
             <div className="content">
               <h2 className="success">Success!</h2>

@@ -5,9 +5,7 @@ import { ThemeProvider, GlobalStyleComponent } from "styled-components";
 import { SpringContext } from "react-spring";
 import styled, { createGlobalStyle } from "styled-components";
 import { useEffect, useRef } from "react";
-import { useActions } from "../../hooks/useActions";
 import { useScreenSize } from "../../hooks/useScreenSize";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import Modal from "../../components/Modal/Modal";
 import { withAuthRequired } from "../../components/HOC/withAuthRequired";
 import { generateFontSizesFromBase } from "../../utils/generateFontSizesFromBase";
@@ -17,6 +15,7 @@ import { store } from "../../redux/store";
 import { toggleSidebar } from "../../redux/actions/unitStatesSlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { initRecordModal, toggleModal } from "../../redux/actions/modalSlice";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 interface LayoutProps {
   loggedIn: boolean;
@@ -96,7 +95,7 @@ store.subscribe(onStateChange);
 const PrivateRoute: React.FC<any> = ({ children }) => {
   const router = useRouter();
   const newDay = router.pathname == "/app/entry";
-  const { user } = useTypedSelector((state) => state);
+  const { user } = useAppSelector((state) => state);
   const userInfo = user.info!;
 
   return (
@@ -128,8 +127,8 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   const router = useRouter();
   const size = useScreenSize();
   const isMobileOnly = /app\/records\/\[id\]+/.test(router.pathname);
-  const { content, open } = useTypedSelector((state) => state.modal);
-  const { user } = useTypedSelector((state) => state);
+  const { open } = useAppSelector((state) => state).modal;
+  const { user } = useAppSelector((state) => state);
   const userInfo = user.info!;
   const dispatch = useAppDispatch();
 
@@ -213,7 +212,7 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
         </title>
       </Head>
       <ThemeProvider theme={themes[userInfo.config.theme]}>
-        <Modal state={open}>{content}</Modal>
+        <Modal state={open} />
       </ThemeProvider>
     </>
   );

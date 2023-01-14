@@ -164,6 +164,7 @@ export const OAUTH_LOGIN = gql`
           reducedMotion
         }
         OAuthEmail
+        affirmations
       }
       publicAlgoliaKey
       oAuthRefresh

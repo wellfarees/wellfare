@@ -53,10 +53,7 @@ const ModalWindow = styled.div`
   }
 `;
 
-const Modal: React.FC<{ state: boolean; children: any }> = ({
-  children,
-  state,
-}) => {
+const Modal: React.FC<{ state: boolean }> = ({ children, state }) => {
   const size = useScreenSize();
   const dispatch = useAppDispatch();
   const modalInfo = useAppSelector((state) => state.modal);

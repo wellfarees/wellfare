@@ -24,10 +24,10 @@ import {
 import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import { UserPfp } from "../../components/Pfp/Pfp";
 import { useActions } from "../../hooks/useActions";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { fontSizes } from "../../config/userConfig";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setPfp } from "../../redux/actions/userSlice";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -205,7 +205,7 @@ const User = () => {
   const [error, setError] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const [inProgress, setInProgress] = useState(false);
-  const { jwt } = useTypedSelector((state) => state.user);
+  const { jwt } = useAppSelector((state) => state.user);
   const warningCheck = useRef(null);
   const [changeToNative, changeResult] = useMutation(CHANGE_TO_NATIVE);
   const [isSetToNative, setToNative] = useState(false);

@@ -1,7 +1,7 @@
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const animationVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
@@ -18,7 +18,7 @@ const AdaptiveAnimation: React.FC<any> = ({ children }) => {
     }
   }, [control, inView]);
 
-  const { user } = useTypedSelector((state) => state);
+  const { user } = useAppSelector((state) => state);
 
   return user.info?.config.reducedMotion ? (
     <>{children}</>
