@@ -3,6 +3,8 @@ import { Container } from "../../../styled/reusable";
 import { UserPfp } from "../../Pfp/Pfp";
 import { useRouter } from "next/router";
 import { useActions } from "../../../hooks/useActions";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { toggleSidebar } from "../../../redux/actions/unitStatesSlice";
 
 const NavContainer = styled.div`
   width: 100%;
@@ -63,7 +65,7 @@ const ActionPoint = styled.span`
 
 const Navigation: React.FC = () => {
   const router = useRouter();
-  const { toggleSidebar } = useActions();
+  const dispatch = useAppDispatch();
 
   return (
     <NavContainer>
@@ -72,7 +74,7 @@ const Navigation: React.FC = () => {
           {router.pathname === "/app" ? (
             <i
               onClick={() => {
-                toggleSidebar(true);
+                dispatch(toggleSidebar(true));
               }}
               className="fas fa-bars"
             ></i>

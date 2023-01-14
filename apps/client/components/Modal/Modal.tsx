@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { useActions } from "../../hooks/useActions";
 import { useEffect } from "react";
 import { useScreenSize } from "../../hooks/useScreenSize";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { toggleModal } from "../../redux/actions/modalSlice";
+import DetailedRecord from "../Records/DetailedRecord";
+import AccountSuspended from "../AccountSuspended/AccountSuspended";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -52,8 +57,9 @@ const Modal: React.FC<{ state: boolean; children: any }> = ({
   children,
   state,
 }) => {
-  const { initModal } = useActions();
   const size = useScreenSize();
+  const dispatch = useAppDispatch();
+  const modalInfo = useAppSelector((state) => state.modal);
 
   const [backdropStyles, backdropApi] = useSpring(() => {
     return {
@@ -136,10 +142,21 @@ const Modal: React.FC<{ state: boolean; children: any }> = ({
   useEffect(() => {
     if (size! < 425 || (size! <= 812 && window.innerHeight <= 425)) {
       closeModal();
-      initModal(false);
+      dispatch(toggleModal({ open: false }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]);
+
+  let ModalContents: JSX.Element;
+
+  switch (modalInfo.type) {
+    case "record":
+      ModalContents = <DetailedRecord data={modalInfo.record.content} />;
+      break;
+    case "accountSuspended":
+      ModalContents = <AccountSuspended email={modalInfo.suspended.email} />;
+      break;
+  }
 
   return (
     <Wrapper as={animated.div} style={wrapperStyles}>
@@ -147,7 +164,7 @@ const Modal: React.FC<{ state: boolean; children: any }> = ({
         as={animated.div}
         style={backdropStyles}
         onClick={() => {
-          initModal(false);
+          dispatch(toggleModal({ open: false }));
         }}
       ></Backdrop>
       <ModalWindow
@@ -158,12 +175,12 @@ const Modal: React.FC<{ state: boolean; children: any }> = ({
         <span
           className="close-modal"
           onClick={() => {
-            initModal(false);
+            dispatch(toggleModal({ open: false }));
           }}
         >
           &times;
         </span>
-        <div className="modal-content">{children}</div>
+        <div className="modal-content">{ModalContents}</div>
       </ModalWindow>
     </Wrapper>
   );

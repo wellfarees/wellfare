@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
 import OAuthMethods from "../components/OAuth/OAuthMethods";
 import Link from "next/dist/client/link";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { storeUser } from "../redux/actions/userSlice";
 
 // GraphQL
 import { useMutation } from "@apollo/client";
@@ -246,7 +248,7 @@ const SignUp = () => {
   const handleErrors = useHandleFormErrors();
   const [signedUp, setSignedUp] = useState(false);
   const [createUser, mutationProps] = useMutation(CREATE_USER);
-  const { storeUser } = useActions();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const { error, data } = mutationProps;
@@ -260,7 +262,7 @@ const SignUp = () => {
       setError(null);
 
       const { jwt, user, publicAlgoliaKey } = data.createUser;
-      storeUser("native", jwt, user);
+      dispatch(storeUser({ jwt, user, type: "native" }));
       setSignedUp(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
 

@@ -14,6 +14,9 @@ import { generateFontSizesFromBase } from "../../utils/generateFontSizesFromBase
 import Head from "next/dist/shared/lib/head";
 import ClientOnly from "../ClientOnly";
 import { store } from "../../redux/store";
+import { toggleSidebar } from "../../redux/actions/unitStatesSlice";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { initRecordModal, toggleModal } from "../../redux/actions/modalSlice";
 
 interface LayoutProps {
   loggedIn: boolean;
@@ -128,13 +131,12 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
   const { content, open } = useTypedSelector((state) => state.modal);
   const { user } = useTypedSelector((state) => state);
   const userInfo = user.info!;
-  const { initModal } = useActions();
+  const dispatch = useAppDispatch();
 
   const history = useRef<string[]>([]);
-  const { setLocalStorage, toggleSidebar } = useActions();
 
   useEffect(() => {
-    initModal(false);
+    dispatch(toggleModal({ open: false }));
     if (history.current.length <= 1) {
       if (localStorage.getItem("lastRoute") !== "null") {
         history.current[0] = localStorage.getItem("lastRoute")!;
@@ -147,14 +149,14 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
       history.current[1] = router.pathname;
     }
 
-    setLocalStorage(
-      "lastRoute",
-      history.current.length === 1 ? "null" : history.current[0]
-    );
+    // setLocalStorage(
+    //   "lastRoute",
+    //   history.current.length === 1 ? "null" : history.current[0]
+    // );
 
     // hide sidebar on mobile whenever change a path
-    toggleSidebar(false);
-  }, [router.pathname, initModal, setLocalStorage, toggleSidebar]);
+    dispatch(toggleSidebar(false));
+  }, [router.pathname, initRecordModal, dispatch]);
 
   return (
     <>

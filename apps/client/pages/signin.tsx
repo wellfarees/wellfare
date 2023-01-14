@@ -14,9 +14,12 @@ import { GET_LAST_SUBMITTED } from "../graphql/queries";
 import ApolloClient from "../graphql/client";
 import AccountSuspended from "../components/AccountSuspended/AccountSuspended";
 import OAuthMethods from "../components/OAuth/OAuthMethods";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { storeUser } from "../redux/actions/userSlice";
 
 import { useLazyQuery } from "@apollo/client";
 import { LOGIN } from "../graphql/queries";
+import { initAccountSuspendedModal } from "../redux/actions/modalSlice";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -233,7 +236,7 @@ const SignIn = () => {
   const [login, queryProps] = useLazyQuery(LOGIN, {
     fetchPolicy: "network-only",
   });
-  const { storeUser, initModal } = useActions();
+  const dispatch = useAppDispatch();
   const [emailUsed, setEmailUsed] = useState<string>();
 
   useEffect(() => {
@@ -263,7 +266,11 @@ const SignIn = () => {
     if (error) {
       const gqlError = error.graphQLErrors[0]?.message || error.message;
       if (gqlError === "Account suspended.") {
-        initModal(true, <AccountSuspended email={emailUsed} />);
+        dispatch(
+          initAccountSuspendedModal({
+            email: emailUsed,
+          })
+        );
       }
 
       setError(gqlError);
@@ -276,7 +283,15 @@ const SignIn = () => {
     if (data) {
       setError(null);
       const { jwt, user, publicAlgoliaKey } = data.login;
-      storeUser("native", jwt, user);
+
+      dispatch(
+        storeUser({
+          type: "native",
+          jwt,
+          user,
+        })
+      );
+
       setSignedIn(false);
       localStorage.setItem("algolia-search", publicAlgoliaKey);
       (async () => {
@@ -301,7 +316,7 @@ const SignIn = () => {
   }, [
     queryProps.data,
     queryProps.loading,
-    initModal,
+    initAccountSuspendedModal,
     storeUser,
     router,
     queryProps,

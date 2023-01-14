@@ -22,6 +22,14 @@ import { useActions } from "../hooks/useActions";
 import { APPEARANCE_QUERY } from "../graphql/queries";
 import { OAUTH_LOGIN } from "../graphql/mutations";
 import TagManager from "react-gtm-module";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import {
+  saveToken,
+  saveConfig,
+  setPfp,
+  setAffirmations,
+} from "../redux/actions/userSlice";
+import { setWebsiteLoaded } from "../redux/actions/unitStatesSlice";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -30,10 +38,9 @@ const navStateContext = createContext<
 const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
   const [getConfig, { loading, error, data }] = useLazyQuery(APPEARANCE_QUERY);
   const [getOauthUser, oAuthUserProps] = useMutation(OAUTH_LOGIN);
-  const { saveToken, saveConfig, setPfp, setWebsiteLoaded, setAffirmations } =
-    useActions();
   const [ready, setReady] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const { websiteLoaded } = useTypedSelector((state) => state).unitStates;
 
@@ -74,14 +81,18 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     }
 
     if (data && !websiteLoaded) {
-      saveToken(jwt);
-      saveConfig({
-        fontSize: data.getUser.config.fontSize,
-        reducedMotion: data.getUser.config.reducedMotion,
-        theme: data.getUser.config.darkMode ? "dark" : "light",
-      });
-      setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png");
-      setAffirmations(data.getUser.affirmations);
+      dispatch(saveToken(jwt));
+      dispatch(
+        saveConfig({
+          fontSize: data.getUser.config.fontSize,
+          reducedMotion: data.getUser.config.reducedMotion,
+          theme: data.getUser.config.darkMode ? "dark" : "light",
+        })
+      );
+      dispatch(
+        setPfp(data.getUser.information.pfp || "/img/mesh-gradient.png")
+      );
+      dispatch(setAffirmations(data.getUser.affirmations));
       setReady(true);
     }
     if (error) {
@@ -100,14 +111,16 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
 
     if (oAuthUserProps.data && !websiteLoaded) {
       const user = oAuthUserProps.data.oAuthLogin.user;
-      saveToken(localStorage.getItem("jwt") as string);
-      saveConfig({
-        fontSize: user.config.fontSize,
-        reducedMotion: user.config.reducedMotion,
-        theme: user.config.darkMode ? "dark" : "light",
-      });
-      setAffirmations(user.affirmations);
-      setPfp(user.information.pfp || "/img/mesh-gradient.png");
+      dispatch(saveToken(localStorage.getItem("jwt") as string));
+      dispatch(
+        saveConfig({
+          fontSize: user.config.fontSize,
+          reducedMotion: user.config.reducedMotion,
+          theme: user.config.darkMode ? "dark" : "light",
+        })
+      );
+      dispatch(setAffirmations(user.affirmations));
+      dispatch(setPfp(user.information.pfp || "/img/mesh-gradient.png"));
       setReady(true);
     }
 
@@ -124,7 +137,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setWebsiteLoaded(true);
+      dispatch(setWebsiteLoaded(true));
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
@@ -136,7 +149,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
 
   useEffect(() => {
     return () => {
-      if (!websiteLoaded) setWebsiteLoaded(true);
+      if (!websiteLoaded) dispatch(setWebsiteLoaded(true));
     };
   }, []);
 

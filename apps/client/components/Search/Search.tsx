@@ -12,6 +12,8 @@ import { useScreenSize } from "../../hooks/useScreenSize";
 import { useSpring, animated } from "react-spring";
 import { GET_SEARCH_HITS } from "../../graphql/queries";
 import client from "../../graphql/client";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { initModal } from "../../redux/actions/modalSlice";
 
 const SearchBox = styled.div`
   display: flex;
@@ -117,7 +119,7 @@ const StyledListItem = styled.div`
   }
 `;
 
-interface ListItemProps {
+export interface ListItemProps {
   date: number;
   feelings: string;
   emoji: string;
@@ -131,7 +133,7 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
   const { date, emoji, feelings, recapId, id } = data;
   const size = useScreenSize();
   const router = useRouter();
-  const { initModal } = useActions();
+  const dispatch = useAppDispatch();
 
   return (
     <StyledListItem>
@@ -148,7 +150,12 @@ const ListItem: React.FC<{ data: ListItemProps }> = ({ data }) => {
               />
             );
             if (size! > 425 && !(size! <= 812 && window.innerHeight <= 425)) {
-              initModal(true, RecordContent);
+              dispatch(
+                initModal({
+                  open: true,
+                  content: JSON.stringify(RecordContent),
+                })
+              );
               return;
             }
 
