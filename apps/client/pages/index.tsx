@@ -152,7 +152,7 @@ const Home: NextPage = () => {
           </ul>
         </div>
         <p className="thanks">
-          Sorry for the inconvinience and thank you for your patience,{" "}
+          Sorry for the inconvenience and thank you for your patience,{" "}
           <b>
             {" "}
             Wellfare
