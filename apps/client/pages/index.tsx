@@ -11,7 +11,8 @@ import {
 import Head from "next/head";
 
 const Wrapper = styled.div`
-  height: 100vh;
+  min-height: 100vh;
+  padding: 5em 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,12 +98,17 @@ const Wrapper = styled.div`
 
   @media only screen and (max-width: 547px) {
     .stay-updated {
+      margin-top: 4em;
       ul {
         li {
           display: block;
           margin-top: 2.5em;
         }
       }
+    }
+
+    p.thanks {
+      margin-top: 2em;
     }
   }
 `;
