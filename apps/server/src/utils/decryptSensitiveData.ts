@@ -59,7 +59,7 @@ async function decryptSensitiveData(user: AcceptUser): Promise<ReturnUser> {
       return {
         ...record,
         feelings: decrypt(record.feelings),
-        gratefulness: decrypt(record.feelings),
+        gratefulness: decrypt(record.gratefulness),
         unease: decrypt(record.unease),
       };
     });

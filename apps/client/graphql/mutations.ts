@@ -100,6 +100,11 @@ export const ADD_RECORD = gql`
       feelings: $feelings
     ) {
       id
+      gratefulness
+      emoji
+      unease
+      feelings
+      date
     }
   }
 `;

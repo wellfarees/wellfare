@@ -126,6 +126,21 @@ export const GET_FIRST_NAME = gql`
   }
 `;
 
+export const GET_RECORDS = gql`
+  query getRecords {
+    getUser {
+      records {
+        id
+        unease
+        gratefulness
+        feelings
+        date
+        emoji
+      }
+    }
+  }
+`;
+
 export const USER_FEED_QUERY = gql`
   query GetUserFeed {
     getUser {

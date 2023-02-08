@@ -12,13 +12,13 @@ import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { graphqlUploadExpress } from "graphql-upload";
 import { login } from "./utils/oauth/login";
-import generateJWT from "./utils/generateJWT";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import { SIGNIN_METHODS } from "./constants";
 import cors from "cors";
 import { GraphQLResponse } from "apollo-server-core";
+import generateJWT from "./utils/generateJWT";
 
 const app = express();
 

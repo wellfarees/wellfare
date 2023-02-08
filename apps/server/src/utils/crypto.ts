@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const algorithm = "aes-256-ctr";
 const secretKey = process.env.CRYPTO_STRING;

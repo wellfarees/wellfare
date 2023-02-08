@@ -127,6 +127,13 @@ export default {
             information: true,
             config: true,
             encryptedAffirmations: true,
+            records: {
+              include: {
+                feelings: true,
+                gratefulness: true,
+                unease: true,
+              },
+            },
           },
         });
 
@@ -162,7 +169,13 @@ export default {
             include: {
               information: true,
               config: true,
-              records: true,
+              records: {
+                include: {
+                  feelings: true,
+                  gratefulness: true,
+                  unease: true,
+                },
+              },
               encryptedAffirmations: true,
             },
           });
