@@ -15,6 +15,7 @@ import { GlowingBLue } from "../styled/reusable";
 import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { useAppSelector } from "../hooks/useAppSelector";
+import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
 
 const Showcase = memo(ShowcaseComp);
 
@@ -262,20 +263,20 @@ const Home: NextPage = () => {
         <Hero>
           <Container>
             <div className="hero-info">
-              <Fade bottom>
+              <AdaptiveAnimation>
                 <h1>Summarize your mental state in a single place</h1>
-              </Fade>
-              <Fade bottom>
+              </AdaptiveAnimation>
+              <AdaptiveAnimation>
                 <p className="subtitle">
                   Feeling overwhelmed and drained? Take control of your mental
                   well-being and get back on track with <b>Wellfare</b>.
                 </p>
-              </Fade>
-              <Fade bottom>
+              </AdaptiveAnimation>
+              <AdaptiveAnimation>
                 <Link passHref href={jwt ? "/app" : "/signup"}>
                   <Button>Get Started</Button>
                 </Link>
-              </Fade>
+              </AdaptiveAnimation>
             </div>
           </Container>
           <Scroller>
@@ -303,24 +304,24 @@ const Home: NextPage = () => {
         </Hero>
         <UIFeaturing>
           <Container>
-            <Fade bottom>
+            <AdaptiveAnimation>
               <h2>Enhance your experience with our sleek and clean UI.</h2>
-            </Fade>
+            </AdaptiveAnimation>
             <Showcase />
           </Container>
         </UIFeaturing>
         <MailSection>
           <Container>
-            <Fade bottom>
+            <AdaptiveAnimation>
               <h2>Get the latest updates and news.</h2>
-            </Fade>
-            <Fade bottom>
+            </AdaptiveAnimation>
+            <AdaptiveAnimation>
               <p className="subtitle">
                 Stay in the loop and subscribe to our newsletter for the latest
                 updates.
               </p>
-            </Fade>
-            <Fade bottom>
+            </AdaptiveAnimation>
+            <AdaptiveAnimation>
               <div className="mail-input">
                 <input
                   ref={emailRef}
@@ -396,7 +397,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <p className="email-error">{emailError}</p>
-            </Fade>
+            </AdaptiveAnimation>
           </Container>
         </MailSection>
       </div>

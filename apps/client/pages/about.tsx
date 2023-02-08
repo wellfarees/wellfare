@@ -8,7 +8,8 @@ import { DEVELOPERS_QUERY } from "../graphql/queries";
 import { DevelopersQueryInterface } from "../graphql/queriesTypes";
 import client from "../graphql/client";
 import { ApolloQueryResult } from "apollo-client";
-import Fade from "react-reveal/Fade";
+// import Fade from "react-reveal/Fade";
+import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
 
 const Wrapper = styled.div`
   background-size: cover;
@@ -213,26 +214,26 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
     <div>
       <AboutInfo>
         <Container>
-          <Fade bottom>
+          <AdaptiveAnimation>
             <h1>About Wellfare™</h1>
-          </Fade>
+          </AdaptiveAnimation>
 
           <div className="description">
-            <Fade bottom>
+            <AdaptiveAnimation>
               <p>
                 Wellfaree is an app thats allows you to journal your thoughts,
                 emotions &amp; feelings and store it all in one place.
               </p>
-            </Fade>
-            <Fade bottom>
+            </AdaptiveAnimation>
+            <AdaptiveAnimation>
               <p>
                 We’re open source and using <b>React</b>, <b>Redux</b> &amp;{" "}
                 <b>NextJs</b> as far as fronted goes. As for backend, we use{" "}
                 <b>NodeJs</b>, <b>GraphQL</b> with <b>Prisma</b> and more!
               </p>
-            </Fade>
+            </AdaptiveAnimation>
           </div>
-          <Fade bottom>
+          <AdaptiveAnimation>
             <p className="cta">
               Take a glance ar our source code{" "}
               <a
@@ -244,23 +245,23 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
               </a>
               !
             </p>
-          </Fade>
+          </AdaptiveAnimation>
         </Container>
       </AboutInfo>
       <DevelopersSection>
         <Container>
           {data ? (
             <>
-              <Fade bottom>
+              <AdaptiveAnimation>
                 <h1>Wellfare Developers</h1>
-              </Fade>
+              </AdaptiveAnimation>
               <div className="developers">
                 {data &&
                   data.company.developers.map((developer, index) => {
                     const direction = index % 2 === 0 ? "ltr" : "rtl";
                     return (
                       <div key={index}>
-                        <Fade bottom>
+                        <AdaptiveAnimation>
                           <div className={`developer ${direction}`}>
                             {direction === "ltr" ? (
                               <Pfp url={developer.image}></Pfp>
@@ -284,7 +285,7 @@ const About: NextPage<ApolloQueryResult<DevelopersQueryInterface>> = ({
                               <Pfp url={developer.image}></Pfp>
                             ) : null}
                           </div>
-                        </Fade>
+                        </AdaptiveAnimation>
                       </div>
                     );
                   })}

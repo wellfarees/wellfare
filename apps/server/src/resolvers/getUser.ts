@@ -26,8 +26,8 @@ export default {
           id,
         },
         include: {
-          config: true,
           information: true,
+          config: true,
           records: {
             include: {
               feelings: true,

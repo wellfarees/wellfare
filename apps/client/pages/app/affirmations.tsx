@@ -105,7 +105,6 @@ const Affirmations: NextPage = () => {
 
       saveAffirmations({
         variables: { affirmations: res },
-        refetchQueries: ["GetUserInfo"],
         fetchPolicy: "no-cache",
       });
       dispatch(setAffirmations(res));

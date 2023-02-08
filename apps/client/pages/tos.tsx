@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { staticFileFetch } from "../hooks/useReadFile";
 import styled from "styled-components";
 import { Container } from "../styled/reusable";
-import Fade from "react-reveal/Fade";
 import { GetStaticProps, NextPage } from "next";
 import { CLIENT_URL } from "../endpoints";
+import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -58,12 +58,12 @@ const TOS: NextPage<{ text: string }> = ({ text }) => {
     <Wrapper>
       <Container>
         <div className="titles">
-          <Fade bottom>
+          <AdaptiveAnimation>
             <h1>Terms of service</h1>
-          </Fade>
-          <Fade bottom>
+          </AdaptiveAnimation>
+          <AdaptiveAnimation>
             <p>For those who are concerned</p>
-          </Fade>
+          </AdaptiveAnimation>
         </div>
         <div ref={tosContainer} className="tos"></div>
       </Container>

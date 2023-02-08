@@ -10,12 +10,12 @@ import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
 import { TouchEvent } from "react";
 import Button from "../../components/Button/Button";
-import { USER_FEED_QUERY } from "../../graphql/queries";
+import { GET_RECORDS, USER_FEED_QUERY } from "../../graphql/queries";
 import client from "../../graphql/client";
 
 import { ADD_RECORD } from "../../graphql/mutations";
 import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery, useLazyQuery, gql } from "@apollo/client";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -350,7 +350,18 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
-  const [addRecord] = useMutation(ADD_RECORD);
+  const [addRecord] = useMutation(ADD_RECORD, {
+    update(cache, data) {
+      cache.writeQuery({
+        query: GET_RECORDS,
+        data: {
+          getUser: {
+            records: data.data.addRecord,
+          },
+        },
+      });
+    },
+  });
   const userQueryProps = useQuery(GET_FIRST_NAME);
   const [getLastSubmitted, { data, loading }] = useLazyQuery(
     GET_LAST_SUBMITTED,
@@ -734,12 +745,8 @@ const Entry: NextPage = () => {
                           unease: values[keys[1]],
                           gratefulness: values[keys[2]],
                         },
-                        fetchPolicy: "network-only",
-                        update(cache) {
-                          cache.evict({ fieldName: "records" });
-                        },
                       });
-                      await client.resetStore();
+                      // await client.resetStore();
                       setTimeout(async () => {
                         await router.replace("/app");
                         setSubmitInProgress(false);
