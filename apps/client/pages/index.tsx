@@ -3,17 +3,21 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import styled from "styled-components";
-import { Container } from "../styled/reusable";
-import { Button } from "../styled/reusable";
-import { Showcase as ShowcaseComp, Card } from "../components";
-import Fade from "react-reveal/Fade";
-import { emailRegExp } from "../utils/emailRegExp";
-import Scroller from "../components/Scroller/Scroller";
-import LoadingButton from "../components/Button/Button";
-import { GlowingBLue } from "../styled/reusable";
 
-import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
+import {
+  Showcase as ShowcaseComp,
+  Card,
+  Scroller,
+  Button,
+} from "../components";
+import { Container } from "../styled/reusable";
+import { Button as ButtonStyles } from "../styled/reusable";
+import { GlowingBlue } from "../styled/reusable";
+import { emailRegExp } from "../utils/emailRegExp";
+
 import { useMutation } from "@apollo/client";
+import { ADD_EMAIL_TO_NEWSLETTER } from "../graphql/mutations";
+
 import { useAppSelector } from "../hooks/useAppSelector";
 import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
 
@@ -57,7 +61,7 @@ const Hero = styled.section`
       color: #444;
     }
 
-    ${Button} {
+    ${ButtonStyles} {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -179,7 +183,7 @@ const MailSection = styled.section`
       justify-content: center;
       align-items: center;
       transition: 0.3s all;
-      ${GlowingBLue}
+      ${GlowingBlue}
       padding: 0.4em 2em;
 
       &:hover {
@@ -334,7 +338,7 @@ const Home: NextPage = () => {
                 />
 
                 <div ref={mailContainer}>
-                  <LoadingButton
+                  <Button
                     customClassName="email-btn"
                     withLoading={{
                       toBeLoading: emailProgress.state,
@@ -393,7 +397,7 @@ const Home: NextPage = () => {
                     }}
                   >
                     {emailProgress.status}
-                  </LoadingButton>
+                  </Button>
                 </div>
               </div>
               <p className="email-error">{emailError}</p>

@@ -1,5 +1,7 @@
 import "../styles/globals.css";
 import "../styles/reset.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import { useRouter } from "next/router";
 import {
   createContext,
@@ -9,15 +11,18 @@ import {
   useEffect,
 } from "react";
 import { AppProps } from "next/app";
+import { Provider } from "react-redux";
+import TagManager from "react-gtm-module";
+
+import { Layout } from "../components";
+
 import { ApolloProvider, useLazyQuery, useMutation } from "@apollo/client";
 import client from "../graphql/client";
-import Layout from "../components/layout/Layout";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Provider } from "react-redux";
-import { store } from "../redux/store";
-import { APPEARANCE_QUERY } from "../graphql/queries";
 import { OAUTH_LOGIN } from "../graphql/mutations";
-import TagManager from "react-gtm-module";
+import { APPEARANCE_QUERY } from "../graphql/queries";
+import { useAppSelector } from "../hooks/useAppSelector";
+
+import { store } from "../redux/store";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import {
   saveToken,
@@ -26,7 +31,6 @@ import {
   setAffirmations,
 } from "../redux/actions/userSlice";
 import { setWebsiteLoaded } from "../redux/actions/unitStatesSlice";
-import { useAppSelector } from "../hooks/useAppSelector";
 
 const navStateContext = createContext<
   [boolean, Dispatch<SetStateAction<boolean>>]
@@ -67,7 +71,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     } else {
       getConfig();
     }
-  }, [router.pathname, getConfig, getOauthUser]);
+  }, [router.pathname, getConfig, getOauthUser, websiteLoaded]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -95,7 +99,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (error) {
       console.error(error);
     }
-  }, [loading, data, error, router.pathname, saveToken, saveConfig, setPfp]);
+  }, [loading, data, error, router.pathname, dispatch, websiteLoaded]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -124,13 +128,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (oAuthUserProps.error) {
       console.log(JSON.stringify(oAuthUserProps.error, null, 2));
     }
-  }, [
-    saveConfig,
-    saveToken,
-    setPfp,
-    oAuthUserProps.error,
-    oAuthUserProps.data,
-  ]);
+  }, [oAuthUserProps.error, oAuthUserProps.data, dispatch, websiteLoaded]);
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -142,13 +140,13 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, [router.events]);
+  }, [router.events, dispatch]);
 
   useEffect(() => {
     return () => {
       if (!websiteLoaded) dispatch(setWebsiteLoaded(true));
     };
-  }, []);
+  }, [dispatch, websiteLoaded]);
 
   return ready ? <>{children}</> : <></>;
 };

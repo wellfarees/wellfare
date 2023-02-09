@@ -1,12 +1,13 @@
 import { NextPage } from "next";
-import { ShrankContainer } from "../../styled/reusable";
-import styled from "styled-components";
 import Link from "next/link";
-import RecapCard from "../../components/Records/RecapCard";
-import Button from "../../components/Button/Button";
-import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
+import styled from "styled-components";
+
+import { AdaptiveAnimation, RecapCard, Button } from "../../components";
+import { ShrankContainer } from "../../styled/reusable";
+
 import { RecordsData } from "../../components/Records/RecordTypes";
 import { mapRecordsToJsx } from "../../utils/mapRecordsToJsx";
+
 import {
   differenceInWeeks,
   isSameWeek,
@@ -16,7 +17,6 @@ import {
   startOfWeek,
   endOfWeek,
   eachWeekOfInterval,
-  isWithinInterval,
   isSunday,
 } from "date-fns";
 
@@ -25,7 +25,7 @@ import { useScreenSize } from "../../hooks/useScreenSize";
 import { useRecap } from "../../hooks/useRecap";
 import Search from "../../components/Search/Search";
 
-import { USER_FEED_QUERY } from "../../graphql/queries";
+import { GET_FIRST_NAME, USER_FEED_QUERY } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 
 const Wrapper = styled.main`
@@ -208,9 +208,9 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY, {
-    nextFetchPolicy: "standby",
-  });
+  const { data, loading } = useQuery(USER_FEED_QUERY);
+
+  const firstNameProps = useQuery(GET_FIRST_NAME);
 
   const recap = useRecap(data);
 
@@ -336,7 +336,10 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
           <AdaptiveAnimation>
             <h2>
               Here&apos;s your moodboard,{" "}
-              <b>{data && data.getUser.information.firstName}</b>
+              <b>
+                {firstNameProps.data &&
+                  firstNameProps.data.getUser.information.firstName}
+              </b>
             </h2>
           </AdaptiveAnimation>
 

@@ -1,21 +1,22 @@
-import { useState, useEffect } from "react";
-import { LabeledInput } from "../components";
-import { Container } from "../styled/reusable";
-import { GlowingBLue } from "../styled/reusable";
-import styled from "styled-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/dist/client/link";
+import styled from "styled-components";
+
+import { LabeledInput, Button, OAuthMethods } from "../components";
+import { Container } from "../styled/reusable";
+import { GlowingBlue } from "../styled/reusable";
+
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
-import { useRouter } from "next/router";
-import Button from "../components/Button/Button";
-import OAuthMethods from "../components/OAuth/OAuthMethods";
-import Link from "next/dist/client/link";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { storeUser } from "../redux/actions/userSlice";
 
-// GraphQL
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutations";
+
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { storeUser } from "../redux/actions/userSlice";
 
 const Wrapper = styled.main`
   height: 100vh;
@@ -125,7 +126,7 @@ const Wrapper = styled.main`
         text-align: left !important;
       }
       button {
-        ${GlowingBLue}
+        ${GlowingBlue}
         width: 100%;
         margin-top: 1.5em;
         display: inline-flex;
@@ -266,7 +267,7 @@ const SignUp = () => {
       // redirect after successful registration
       router.push("/app/entry");
     }
-  }, [mutationProps.loading, mutationProps, router, storeUser]);
+  }, [mutationProps.loading, mutationProps, router, dispatch]);
 
   useEffect(() => {
     if (!mutationProps.loading) {

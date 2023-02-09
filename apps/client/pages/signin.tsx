@@ -1,23 +1,23 @@
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { LabeledInput } from "../components";
-import { Container } from "../styled/reusable";
-import { GlowingBLue } from "../styled/reusable";
-import styled from "styled-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import styled from "styled-components";
+
+import { LabeledInput, Button, OAuthMethods } from "../components";
+import { Container } from "../styled/reusable";
+import { GlowingBlue } from "../styled/reusable";
+
 import { useForm } from "../hooks/useForm";
 import { useHandleFormErrors } from "../hooks/useHandleFormErrors";
-import { useRouter } from "next/router";
-import Button from "../components/Button/Button";
-import { GET_LAST_SUBMITTED } from "../graphql/queries";
-import ApolloClient from "../graphql/client";
-import AccountSuspended from "../components/AccountSuspended/AccountSuspended";
-import OAuthMethods from "../components/OAuth/OAuthMethods";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { storeUser } from "../redux/actions/userSlice";
 
 import { useLazyQuery } from "@apollo/client";
-import { LOGIN } from "../graphql/queries";
+import ApolloClient from "../graphql/client";
+import { LOGIN, GET_LAST_SUBMITTED } from "../graphql/queries";
+
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { storeUser } from "../redux/actions/userSlice";
 import { initAccountSuspendedModal } from "../redux/actions/modalSlice";
 
 const Wrapper = styled.main`
@@ -127,7 +127,7 @@ const Wrapper = styled.main`
       text-align: left;
 
       button {
-        ${GlowingBLue}
+        ${GlowingBlue}
         width: 100%;
         margin-top: 1.5em;
         display: inline-flex;

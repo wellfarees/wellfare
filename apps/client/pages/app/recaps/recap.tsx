@@ -1,17 +1,16 @@
-import { ShrankContainer } from "../../../styled/reusable";
-import AdaptiveAnimation from "../../../components/animated/AdaptiveAnimation";
-import { formatDate } from "../../../utils/formatDate";
-import styled from "styled-components";
-import Scroller from "../../../components/Scroller/Scroller";
-import { useScreenSize } from "../../../hooks/useScreenSize";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import GoBack from "../../../components/Routing/GoBack";
-import React from "react";
+import styled from "styled-components";
+import { MasonryGrid } from "@egjs/react-grid";
+
+import { ShrankContainer } from "../../../styled/reusable";
+import { AdaptiveAnimation, Scroller, GoBack } from "../../../components";
+import ExistsNot from "../../../components/ExistsNot";
+
+import { formatDate } from "../../../utils/formatDate";
+import { useScreenSize } from "../../../hooks/useScreenSize";
 import { mapRecordsToJsx } from "../../../utils/mapRecordsToJsx";
 import { RecordsData } from "../../../components/Records/RecordTypes";
-import ExistsNot from "../../../components/ExistsNot";
-import { MasonryGrid } from "@egjs/react-grid";
 
 import { useQuery } from "@apollo/client";
 import { GET_RECAP } from "../../../graphql/queries";

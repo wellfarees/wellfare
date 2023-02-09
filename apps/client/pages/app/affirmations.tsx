@@ -1,17 +1,18 @@
-import { GetStaticProps, NextPage } from "next";
+import { useState, useRef, useEffect } from "react";
+import { NextPage } from "next";
 import styled from "styled-components";
-import { formatDate } from "../../utils/formatDate";
+
 import { ShrankContainer } from "../../styled/reusable";
-import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
-import { WatermarkInput } from "../../components";
+import { WatermarkInput, AdaptiveAnimation, Button } from "../../components";
+import { GlowingBlue } from "../../styled/reusable";
+
+import { formatDate } from "../../utils/formatDate";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
-import { GlowingBLue } from "../../styled/reusable";
-import { useState, useRef } from "react";
-import Button from "../../components/Button/Button";
+
+import { useMutation, useQuery } from "@apollo/client";
 import { EDIT_AFFIRMATIONS } from "../../graphql/mutations";
 import { AFFIRMATIONS_QUERY } from "../../graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
-import { useEffect } from "react";
+
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setAffirmations } from "../../redux/actions/userSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -48,7 +49,7 @@ const Wrapper = styled.div`
   }
 
   .save-btn {
-    ${GlowingBLue}
+    ${GlowingBlue}
   }
 
   .button-container {

@@ -1,10 +1,11 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
+
 import { ShrankContainer } from "../../../styled/reusable";
-import DetailedRecord from "../../../components/Records/DetailedRecord";
-import { useRouter } from "next/router";
+import { DetailedRecord } from "../../../components";
 import { useScreenSize } from "../../../hooks/useScreenSize";
-import { useEffect } from "react";
 import ExistsNot from "../../../components/ExistsNot";
 
 import { useQuery } from "@apollo/client";
@@ -43,11 +44,6 @@ const RecordPage: NextPage<{ isMobile: boolean }> = ({ isMobile }) => {
     //   return;
     // }
   }, [size, router]);
-
-  useEffect(() => {
-    console.log(id);
-    console.log(data);
-  }, [data]);
 
   return (
     <Wrapper>

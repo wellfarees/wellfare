@@ -3,7 +3,7 @@ import { SearchResponse } from "@algolia/client-search";
 import { formatDate } from "../../utils/formatDate";
 import { useState } from "react";
 import styled from "styled-components";
-import { GlowingBLue } from "../../styled/reusable";
+import { GlowingBlue } from "../../styled/reusable";
 import Link from "next/link";
 import DetailedRecord from "../Records/DetailedRecord";
 import { useRouter } from "next/router";
@@ -110,7 +110,7 @@ const StyledListItem = styled.div`
     }
 
     button {
-      ${GlowingBLue}
+      ${GlowingBlue}
       padding: 0.3em 1em !important;
       display: inline-block;
       width: auto !important;

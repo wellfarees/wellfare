@@ -1,5 +1,3 @@
-// TODO: To be replaced with actual fetched user configuration
-// These are default values btw
 export interface UserConfig {
   fontSize: number;
   reducedMotion: boolean;
@@ -7,6 +5,7 @@ export interface UserConfig {
   pfp: string | null;
 }
 
+// Default values for config
 export const userConfig: UserConfig = {
   fontSize: 14,
   reducedMotion: false,

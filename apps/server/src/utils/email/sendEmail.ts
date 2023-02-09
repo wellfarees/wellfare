@@ -1,6 +1,6 @@
 import server from "../../server";
 import generateJWT from "../generateJWT";
-import { CLIENT_URL } from "../../endpoints";
+import { CLIENT_URL } from "../../constants";
 import { welcomeEmail, newsletterEmail, resetPasswordEmail } from "./templates";
 // import InlineCss = require("inline-css");
 import { inline } from "css-inline";

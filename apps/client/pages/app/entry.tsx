@@ -2,20 +2,20 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import styled from "styled-components";
-import { Container, GlowingBLue, Error } from "../../styled/reusable";
-import { WatermarkInput } from "../../components";
-import { UserPfp } from "../../components/Pfp/Pfp";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, TouchEvent } from "react";
+
+import { Container, GlowingBlue, Error } from "../../styled/reusable";
+import { WatermarkInput, UserPfp, Button } from "../../components";
 import { useTextareaValidator } from "../../hooks/useTextareaValidator";
 import { animated, useSpring, config } from "react-spring";
-import { TouchEvent } from "react";
-import Button from "../../components/Button/Button";
-import { GET_RECORDS, USER_FEED_QUERY } from "../../graphql/queries";
-import client from "../../graphql/client";
 
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import {
+  GET_FIRST_NAME,
+  GET_LAST_SUBMITTED,
+  GET_RECORDS,
+} from "../../graphql/queries";
 import { ADD_RECORD } from "../../graphql/mutations";
-import { GET_FIRST_NAME, GET_LAST_SUBMITTED } from "../../graphql/queries";
-import { useMutation, useQuery, useLazyQuery, gql } from "@apollo/client";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -141,7 +141,7 @@ const Wrapper = styled.main`
     }
 
     button {
-      ${GlowingBLue}
+      ${GlowingBlue}
     }
 
     a {
@@ -319,7 +319,7 @@ const NotAllowed = styled.div`
     }
 
     button {
-      ${GlowingBLue}
+      ${GlowingBlue}
       margin-top: 2.5em;
     }
   }
@@ -622,7 +622,7 @@ const Entry: NextPage = () => {
         await router.replace("/app");
       }, 1000);
     }
-  }, [recordMutationProps.data]);
+  }, [recordMutationProps.data, router]);
 
   return (
     <Wrapper>

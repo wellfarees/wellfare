@@ -26,6 +26,7 @@ export const LOGIN = gql`
           reducedMotion
         }
         information {
+          id
           email
           firstName
           lastName
@@ -52,6 +53,7 @@ export const GET_USER = gql`
         reducedMotion
       }
       information {
+        id
         email
         firstName
         lastName
@@ -76,6 +78,7 @@ export const APPEARANCE_QUERY = gql`
         reducedMotion
       }
       information {
+        id
         pfp
         firstName
       }
@@ -121,7 +124,6 @@ export const GET_FIRST_NAME = gql`
       information {
         id
         firstName
-        pfp
       }
     }
   }
@@ -148,11 +150,6 @@ export const USER_FEED_QUERY = gql`
     getUser {
       id
       lastSubmitted
-      information {
-        id
-        firstName
-        pfp
-      }
       records {
         date
         emoji
@@ -234,6 +231,7 @@ export const GET_USER_PROFILE_PICTURE = gql`
     getUser {
       id
       information {
+        id
         pfp
         firstName
       }

@@ -41,7 +41,7 @@ const flexCentered = css`
   align-items: center;
 `;
 
-export const GlowingBLue = css`
+export const GlowingBlue = css`
   color: #fafafa !important;
   padding: 0.7em 4em;
   /* background: #117ee3; */
@@ -71,7 +71,7 @@ export const GlowingBLue = css`
 `;
 
 export const Button = styled.a`
-  ${GlowingBLue}
+  ${GlowingBlue}
 
   &:hover {
     transform: translateY(-3px);

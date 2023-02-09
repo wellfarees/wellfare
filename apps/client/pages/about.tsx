@@ -1,15 +1,13 @@
-import { Container } from "../styled/reusable";
-import styled from "styled-components";
-import Head from "next/dist/shared/lib/head";
 import { GetStaticProps, NextPage } from "next";
+import styled from "styled-components";
 
-// GraphQL & Apollo related stuff
+import { AdaptiveAnimation } from "../components";
+import { Container } from "../styled/reusable";
+
+import { ApolloQueryResult } from "apollo-client";
+import client from "../graphql/client";
 import { DEVELOPERS_QUERY } from "../graphql/queries";
 import { DevelopersQueryInterface } from "../graphql/queriesTypes";
-import client from "../graphql/client";
-import { ApolloQueryResult } from "apollo-client";
-// import Fade from "react-reveal/Fade";
-import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
 
 const Wrapper = styled.div`
   background-size: cover;

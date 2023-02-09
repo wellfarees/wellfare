@@ -8,7 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { ApolloError } from "apollo-server-core";
 import { SIGNIN_METHODS } from "../../constants";
 import { addToNewsletter } from "../../utils/addToNewsletter";
-import { CLIENT_URL } from "../../endpoints";
+import { CLIENT_URL } from "../../constants";
 import { decryptSensitiveData } from "../../utils/decryptSensitiveData";
 
 const endpoint = "https://oauth2.googleapis.com/token";

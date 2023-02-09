@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Container } from "../../styled/reusable";
 import styled from "styled-components";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/LabeledInput";
+
+import { Button, LabeledInput } from "../../components";
+import { Container } from "../../styled/reusable";
+
 import { useForm } from "../../hooks/useForm";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
@@ -163,11 +164,11 @@ const Restore: NextPage = () => {
               if (message) setResult(message);
             }}
           >
-            <Input
+            <LabeledInput
               {...register("Email")}
               defaultValue={emailToRestore as string}
             />
-            <Input {...register("New email")} type="email" />
+            <LabeledInput {...register("New email")} type="email" />
             <Button
               withLoading={{
                 toBeLoading: loading,

@@ -1,20 +1,20 @@
-import { NextPage } from "next";
-import styled from "styled-components";
-import { Container } from "../../styled/reusable";
-import Link from "next/link";
-import { GlowingBLue } from "../../styled/reusable";
 import { useState } from "react";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import styled from "styled-components";
 
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/LabeledInput";
+import { LabeledInput, Button } from "../../components";
+import { Container } from "../../styled/reusable";
+import { GlowingBlue } from "../../styled/reusable";
 
 import { useForm } from "../../hooks/useForm";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
-import { useRouter } from "next/router";
+
+import { useQuery, useMutation } from "@apollo/client";
 import { VALID_JWT } from "../../graphql/queries";
 import { CHANGE_PASSWORD } from "../../graphql/mutations";
-import { useQuery, useMutation } from "@apollo/client";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -38,7 +38,7 @@ const Wrapper = styled.div`
     }
 
     span {
-      ${GlowingBLue}
+      ${GlowingBlue}
       display: inline-block;
     }
 
@@ -226,8 +226,8 @@ const PasswordReset: NextPage = () => {
               }
             }}
           >
-            <Input {...register("password")} />
-            <Input {...register("password confirmation")} />
+            <LabeledInput {...register("password")} />
+            <LabeledInput {...register("password confirmation")} />
 
             <Button
               withLoading={{
