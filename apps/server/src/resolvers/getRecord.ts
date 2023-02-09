@@ -1,10 +1,13 @@
+import server from "../server";
+
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+import verifyJWT from "../utils/verifyJWT";
+
+import { decodedToken } from "../types/jwt";
+
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import server from "../server";
-import { decodedToken } from "../types/jwt";
-import { decryptSensitiveData } from "../utils/decryptSensitiveData";
-import verifyJWT from "../utils/verifyJWT";
 
 export default {
   Query: {

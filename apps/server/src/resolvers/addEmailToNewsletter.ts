@@ -1,8 +1,11 @@
-import EmailAlreadyExistsError from "../errors/EmailAlreadyExistsError";
 import server from "../server";
+
 import differenceInHours from "date-fns/differenceInHours";
-import { ApolloError } from "apollo-server-core";
 import { sendEmail } from "../utils/email/sendEmail";
+
+import { ApolloError } from "apollo-server-core";
+
+import EmailAlreadyExistsError from "../errors/EmailAlreadyExistsError";
 
 export default {
   Mutation: {

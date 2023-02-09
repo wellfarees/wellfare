@@ -1,16 +1,17 @@
+import server from "../server";
+
+import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+import { encrypt } from "../utils/crypto";
+import isEmoji from "../utils/isEmoji";
+import verifyJWT from "../utils/verifyJWT";
+
+import { client } from "../algolia";
+import { decodedToken } from "../types/jwt";
+
 import InvalidEmojiError from "../errors/InvalidEmojiError";
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import server from "../server";
-import { decodedToken } from "../types/jwt";
-import isEmoji from "../utils/isEmoji";
-import verifyJWT from "../utils/verifyJWT";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
-// import { client } from "../algolia";
-// import generateJWT from "../utils/generateJWT";
-import { decryptSensitiveData } from "../utils/decryptSensitiveData";
-
-import { encrypt } from "../utils/crypto";
 
 export default {
   Mutation: {
@@ -39,38 +40,12 @@ export default {
         );
       }
 
-      // const recordBase = {
-      //   feelings: encrypt(args.feelings),
-      //   emoji,
-      //   unease: encrypt(args.unease),
-      //   gratefulness: encrypt(args.gratefulness),
-      // };
-
-      // await server.db.user.update({
-      //   where: {
-      //     id
-      //   },
-      //   data: {
-      //     records: {
-      //       create: {
-      //         where: {
-      //           id: record.id,
-      //         },
-      //         data: {
-      //           feelingsUpdated: {
-      //             create: encrypt(record.feelings),
-      //           },
-      //           gratefulnessUpdated: {
-      //             create: encrypt(record.gratefulness),
-      //           },
-      //           uneaseUpdated: {
-      //             create: encrypt(record.unease),
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // });
+      const recordBase = {
+        feelings: encrypt(args.feelings),
+        emoji,
+        unease: encrypt(args.unease),
+        gratefulness: encrypt(args.gratefulness),
+      };
 
       const data = await server.db.user.update({
         where: {
@@ -106,56 +81,56 @@ export default {
       const today = new Date();
       today.setHours(0, 0, 0);
 
-      // const currentRecord = await server.db.record.findFirst({
-      //   where: {
-      //     userId: id,
-      //     AND: {
-      //       date: {
-      //         gte: today,
-      //       },
-      //     },
-      //   },
-      //   select: {
-      //     id: true,
-      //     Recap: {
-      //       select: {
-      //         id: true,
-      //       },
-      //     },
-      //   },
-      // });
+      const currentRecord = await server.db.record.findFirst({
+        where: {
+          userId: id,
+          AND: {
+            date: {
+              gte: today,
+            },
+          },
+        },
+        select: {
+          id: true,
+          Recap: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
 
-      // let algoliaRecordInfo = {};
+      let algoliaRecordInfo = {};
 
-      // if (currentRecord) {
-      //   algoliaRecordInfo = {
-      //     ...recordBase,
-      //     id: currentRecord.id,
-      //     date: Date.now(),
-      //     repcapId: currentRecord.Recap ? currentRecord.Recap.id : null,
-      //   };
-      // }
+      if (currentRecord) {
+        algoliaRecordInfo = {
+          ...recordBase,
+          id: currentRecord.id,
+          date: Date.now(),
+          repcapId: currentRecord.Recap ? currentRecord.Recap.id : null,
+        };
+      }
 
       if (!data)
         throw new UserDoesNotExistsError(
           "User does not exist in the database."
         );
 
-      // const index = client.initIndex("records");
+      const index = client.initIndex("records");
 
-      // const algoliaRecord = {
-      //   record: algoliaRecordInfo,
-      //   visible_by: id,
-      // };
+      const algoliaRecord = {
+        record: algoliaRecordInfo,
+        visible_by: id,
+      };
 
-      // index.setSettings({
-      //   attributesForFaceting: ["filterOnly(visible_by)"],
-      //   unretrievableAttributes: ["visible_by"],
-      // });
+      index.setSettings({
+        attributesForFaceting: ["filterOnly(visible_by)"],
+        unretrievableAttributes: ["visible_by"],
+      });
 
-      // index.saveObject(algoliaRecord, {
-      //   autoGenerateObjectIDIfNotExist: true,
-      // });
+      index.saveObject(algoliaRecord, {
+        autoGenerateObjectIDIfNotExist: true,
+      });
 
       const decrypted = await decryptSensitiveData(data);
 

@@ -1,8 +1,10 @@
 import server from "../server";
-import verifyJWT from "../utils/verifyJWT";
-import { decodedToken } from "../types/jwt";
+
 import { hash } from "bcrypt";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
+import verifyJWT from "../utils/verifyJWT";
+
+import { decodedToken } from "../types/jwt";
 
 export default {
   Mutation: {

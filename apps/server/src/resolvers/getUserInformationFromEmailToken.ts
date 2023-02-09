@@ -1,8 +1,11 @@
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import { decodedToken } from "../types/jwt";
+import server from "../server";
+
 import verifyJWT from "../utils/verifyJWT";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
-import server from "../server";
+
+import { decodedToken } from "../types/jwt";
+
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 
 export default {
   Query: {

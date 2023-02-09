@@ -1,8 +1,11 @@
-import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
-import generateJWT from "../utils/generateJWT";
-import { CLIENT_URL } from "../constants";
+
 import { sendEmail } from "../utils/email/sendEmail";
+import generateJWT from "../utils/generateJWT";
+
+import { CLIENT_URL } from "../constants";
+
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 
 export default {
   Mutation: {

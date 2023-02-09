@@ -1,12 +1,15 @@
 import server from "../server";
-import verifyJWT from "../utils/verifyJWT";
+import axios from "axios";
 import { hash } from "bcrypt";
+
 import { login } from "../utils/oauth/login";
 import { JwtPayload } from "jsonwebtoken";
-import axios from "axios";
-import generateJWT from "../utils/generateJWT";
 import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
+import generateJWT from "../utils/generateJWT";
+import verifyJWT from "../utils/verifyJWT";
+
 import { SIGNIN_METHODS } from "../constants";
+
 import { ApolloError } from "apollo-server-core";
 
 export default {

@@ -1,22 +1,25 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { ApolloServer } from "apollo-server-express";
-import resolvers from "./resolvers";
-import typeDefs from "./schema";
 import mail, { MailService } from "@sendgrid/mail";
+import { graphqlUploadExpress } from "graphql-upload";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { CronJob } from "cron";
 import { resolve } from "path";
 import { sync } from "glob";
-import { Cron } from "./types/cron";
+
 import express from "express";
+import axios from "axios";
+import cors from "cors";
 import http from "http";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { graphqlUploadExpress } from "graphql-upload";
+
+import resolvers from "./resolvers";
+import typeDefs from "./schema";
+
+import { Cron } from "./types/cron";
 import { login } from "./utils/oauth/login";
 import verifyJWT from "./utils/verifyJWT";
 import { JwtPayload } from "jsonwebtoken";
-import axios from "axios";
 import { SIGNIN_METHODS } from "./constants";
-import cors from "cors";
 import { GraphQLResponse } from "apollo-server-core";
 import generateJWT from "./utils/generateJWT";
 
