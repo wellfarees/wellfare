@@ -1,9 +1,12 @@
+import server from "../server";
 import { compare } from "bcrypt";
+
+import generateJWT from "../utils/generateJWT";
+
+import { client } from "../algolia";
+
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import WrongPasswordError from "../errors/WrongPasswordError";
-import server from "../server";
-import generateJWT from "../utils/generateJWT";
-import { client } from "../algolia";
 
 export default {
   Query: {

@@ -1,15 +1,20 @@
-import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { uploadObject, deleteByPrefix } from "../utils/s3/methods";
-import verifyJWT from "../utils/verifyJWT";
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import { decodedToken } from "../types/jwt";
 import server from "../server";
-import { createWriteStream, unlinkSync } from "fs";
-import path from "path";
+
 import imagemin from "imagemin";
 import imageminJpegtran from "imagemin-jpegtran";
 import imageminPngquant from "imagemin-pngquant";
+
+import { createWriteStream, unlinkSync } from "fs";
+import path from "path";
+
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { uploadObject, deleteByPrefix } from "../utils/s3/methods";
+import verifyJWT from "../utils/verifyJWT";
+
+import { decodedToken } from "../types/jwt";
+
 import { ApolloError } from "apollo-server-core";
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 
 export default {
   Upload: GraphQLUpload,

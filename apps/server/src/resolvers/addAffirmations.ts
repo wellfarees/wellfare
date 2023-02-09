@@ -1,11 +1,14 @@
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import server from "../server";
-import { decodedToken } from "../types/jwt";
+
 import verifyJWT from "../utils/verifyJWT";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
 import { encrypt } from "../utils/crypto";
+
+import { decodedToken } from "../types/jwt";
 import { User, EncryptedAffirmations } from "@prisma/client";
+
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 
 export default {
   Mutation: {

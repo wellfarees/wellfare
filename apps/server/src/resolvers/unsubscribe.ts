@@ -1,7 +1,10 @@
-import { ApolloError } from "apollo-server-core";
-import { JwtPayload } from "jsonwebtoken";
-import verifyJWT from "../utils/verifyJWT";
 import server from "../server";
+
+import verifyJWT from "../utils/verifyJWT";
+
+import { JwtPayload } from "jsonwebtoken";
+
+import { ApolloError } from "apollo-server-core";
 
 export default {
   Mutation: {

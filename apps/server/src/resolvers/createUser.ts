@@ -1,11 +1,13 @@
-import UserExistsError from "../errors/UserExists";
 import server from "../server";
 import { hash } from "bcrypt";
-import generateJWT from "../utils/generateJWT";
-import IsNotFullNameError from "../errors/IsNotFullName";
+
 import { client } from "../algolia";
 import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
 import { addToNewsletter } from "../utils/addToNewsletter";
+import generateJWT from "../utils/generateJWT";
+
+import UserExistsError from "../errors/UserExists";
+import IsNotFullNameError from "../errors/IsNotFullName";
 
 export default {
   Mutation: {

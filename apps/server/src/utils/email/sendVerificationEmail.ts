@@ -1,6 +1,8 @@
 import generateJWT from "../generateJWT";
-import { CLIENT_URL } from "../../constants";
+
 import { sendEmail } from "./sendEmail";
+
+import { CLIENT_URL } from "../../constants";
 
 export const sendVerificationEmail = async (
   email: string,

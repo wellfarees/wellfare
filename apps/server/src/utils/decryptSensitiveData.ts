@@ -1,4 +1,4 @@
-import UserDoesNotExistsError from "../errors/UserDoesNotExist";
+import { decrypt } from "./crypto";
 import {
   User,
   Configuration,
@@ -11,7 +11,7 @@ import {
   Record,
 } from "@prisma/client";
 
-import { decrypt } from "./crypto";
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 
 export type ChangeTypeOfKeys<
   T extends object,

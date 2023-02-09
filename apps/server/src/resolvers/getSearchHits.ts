@@ -1,9 +1,11 @@
 import { decrypt } from "../utils/crypto";
 import { client } from "../algolia";
-import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import verifyJWT from "../utils/verifyJWT";
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+
 import { decodedToken } from "../types/jwt";
+
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 
 interface EncryptedData {
   iv: string;

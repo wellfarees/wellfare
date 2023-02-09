@@ -1,9 +1,12 @@
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
-import { decodedToken } from "../types/jwt";
+
 import verifyJWT from "../utils/verifyJWT";
 import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
+
+import { decodedToken } from "../types/jwt";
+
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 
 export default {
   Mutation: {

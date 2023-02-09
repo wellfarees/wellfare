@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { SIGNIN_METHODS } from "../../constants";
 import { User } from "./types";
 

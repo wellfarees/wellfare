@@ -1,11 +1,14 @@
-import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
-import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
-import UserDoesNotExistsError from "../errors/UserDoesNotExist";
-import { decodedToken } from "../types/jwt";
+import server from "../server";
+
 import verifyJWT from "../utils/verifyJWT";
 import differenceInHours from "date-fns/differenceInHours";
 import { decryptSensitiveData } from "../utils/decryptSensitiveData";
-import server from "../server";
+
+import { decodedToken } from "../types/jwt";
+
+import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
+import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
+import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 
 export default {
   Query: {

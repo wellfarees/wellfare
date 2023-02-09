@@ -1,14 +1,17 @@
+import server from "../server";
 import { hash, compare } from "bcrypt";
+
+import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
+import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
+import { getDeprecatedIds } from "../utils/getDeprecatedIds";
+import verifyJWT from "../utils/verifyJWT";
+
+import { decodedToken } from "../types/jwt";
+
 import InvalidJWTTokenError from "../errors/InvalidJWTTokenError";
 import NoTokenInHeaderError from "../errors/NoTokenInHeaderError";
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import WrongPasswordError from "../errors/WrongPasswordError";
-import server from "../server";
-import { decodedToken } from "../types/jwt";
-import verifyJWT from "../utils/verifyJWT";
-import { sendVerificationEmail } from "../utils/email/sendVerificationEmail";
-import { countRecentEmailsChanged } from "../utils/countRecentEmailsChanged";
-import { getDeprecatedIds } from "../utils/getDeprecatedIds";
 
 const EMAIL_RATE_LIMIT = parseInt(process.env.EMAIL_RATELIMIT_PER_24HRS!);
 
