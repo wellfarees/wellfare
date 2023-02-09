@@ -208,7 +208,9 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY);
+  const { data, loading } = useQuery(USER_FEED_QUERY, {
+    nextFetchPolicy: "standby",
+  });
 
   const recap = useRecap(data);
 

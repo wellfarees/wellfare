@@ -17,9 +17,7 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
   const ComposedComponent: React.FC<Props> = (props) => {
     const [verified, setVerified] = useState<null | boolean>(false);
     const router = useRouter();
-    const { loading, error, data } = useQuery(GET_USER_OBJECT, {
-      fetchPolicy: "network-only",
-    });
+    const { loading, error, data } = useQuery(GET_USER_OBJECT);
 
     useEffect(() => {
       const jwt = localStorage.getItem("jwt");
@@ -36,7 +34,11 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
       }
     }, [loading, data, error, router]);
 
-    return loading || !verified ? <></> : <ChildComponent {...props} />;
+    return loading || !verified ? (
+      <>Loading...</>
+    ) : (
+      <ChildComponent {...props} />
+    );
   };
 
   return ComposedComponent;

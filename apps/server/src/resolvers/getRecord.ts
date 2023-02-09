@@ -32,6 +32,11 @@ export default {
             where: {
               id: args.identifier,
             },
+            include: {
+              feelings: true,
+              gratefulness: true,
+              unease: true,
+            },
           },
         },
       });
