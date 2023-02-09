@@ -67,7 +67,7 @@ export const GET_USER = gql`
 `;
 
 export const APPEARANCE_QUERY = gql`
-  query GetUser {
+  query GetUserAppearance {
     getUser {
       id
       config {
@@ -89,6 +89,7 @@ export const USER_INFORMATION_QUERY = gql`
     getUser {
       id
       information {
+        id
         firstName
         lastName
         verified
@@ -101,13 +102,13 @@ export const USER_INFORMATION_QUERY = gql`
 `;
 
 export const AFFIRMATIONS_QUERY = gql`
-  query GetUserInfo {
+  query GetUserAffirmations {
     getUser {
       id
       affirmations
       information {
+        id
         firstName
-        pfp
       }
     }
   }
@@ -129,6 +130,7 @@ export const GET_FIRST_NAME = gql`
 export const GET_RECORDS = gql`
   query getRecords {
     getUser {
+      id
       records {
         id
         unease
@@ -162,6 +164,7 @@ export const USER_FEED_QUERY = gql`
       recaps {
         id
         records {
+          id
           date
         }
       }
@@ -229,6 +232,7 @@ export const GET_LAST_SUBMITTED = gql`
 export const GET_USER_PROFILE_PICTURE = gql`
   query GetUserProfilePicture {
     getUser {
+      id
       information {
         pfp
         firstName

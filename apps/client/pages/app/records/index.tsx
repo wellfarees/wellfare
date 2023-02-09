@@ -44,6 +44,11 @@ const RecordPage: NextPage<{ isMobile: boolean }> = ({ isMobile }) => {
     // }
   }, [size, router]);
 
+  useEffect(() => {
+    console.log(id);
+    console.log(data);
+  }, [data]);
+
   return (
     <Wrapper>
       <ShrankContainer>

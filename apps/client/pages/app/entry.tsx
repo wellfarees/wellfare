@@ -350,25 +350,39 @@ const Entry: NextPage = () => {
   const lastDeltaY = useRef(0);
   const emojiSelector = useRef<HTMLParagraphElement | null>(null);
   const [submitInProgress, setSubmitInProgress] = useState(false);
-  const [addRecord] = useMutation(ADD_RECORD, {
-    update(cache, data) {
+  const [getLastSubmitted, { data, loading }] =
+    useLazyQuery(GET_LAST_SUBMITTED);
+
+  const [addRecord, recordMutationProps] = useMutation(ADD_RECORD, {
+    update(cache, receivedData) {
+      const records = receivedData.data.addRecord;
+
+      const cachedRecords: { getUser: { id: string } } = cache.readQuery({
+        query: GET_RECORDS,
+      });
+
       cache.writeQuery({
         query: GET_RECORDS,
         data: {
           getUser: {
-            records: data.data.addRecord,
+            id: cachedRecords.getUser.id,
+            records: records,
           },
+        },
+      });
+
+      cache.modify({
+        id: cache.identify({
+          __typename: "lastSubmittedUser",
+        }),
+        fields: {
+          lastSubmitted: records[records.length - 1].date,
         },
       });
     },
   });
+
   const userQueryProps = useQuery(GET_FIRST_NAME);
-  const [getLastSubmitted, { data, loading }] = useLazyQuery(
-    GET_LAST_SUBMITTED,
-    {
-      fetchPolicy: "network-only",
-    }
-  );
 
   const { register, handleTextareaSubmit, handleResults } =
     useTextareaValidator(
@@ -601,6 +615,15 @@ const Entry: NextPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (recordMutationProps.data) {
+      setTimeout(async () => {
+        setSubmitInProgress(false);
+        await router.replace("/app");
+      }, 1000);
+    }
+  }, [recordMutationProps.data]);
+
   return (
     <Wrapper>
       <Container>
@@ -746,11 +769,6 @@ const Entry: NextPage = () => {
                           gratefulness: values[keys[2]],
                         },
                       });
-                      // await client.resetStore();
-                      setTimeout(async () => {
-                        await router.replace("/app");
-                        setSubmitInProgress(false);
-                      }, 1000);
                     }
                   }}
                 >

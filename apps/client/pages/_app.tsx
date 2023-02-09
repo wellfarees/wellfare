@@ -56,7 +56,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       return;
     }
 
-    if (serviceType != "native") {
+    if (!websiteLoaded && serviceType != "native") {
       getOauthUser({
         variables: {
           service: serviceType,
