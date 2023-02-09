@@ -155,7 +155,7 @@ const Layout: React.FC<LayoutProps> = ({ loggedIn, children, isLoaded }) => {
 
     // hide sidebar on mobile whenever change a path
     dispatch(toggleSidebar(false));
-  }, [router.pathname, initRecordModal, dispatch]);
+  }, [router.pathname, dispatch]);
 
   return (
     <>

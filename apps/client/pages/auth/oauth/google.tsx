@@ -1,9 +1,12 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
+import styled from "styled-components";
+
+import { Container } from "../../../styled/reusable";
+
 import { useMutation } from "@apollo/client";
 import { OAUTH_LOGIN } from "../../../graphql/mutations";
-import { useEffect } from "react";
-import styled from "styled-components";
-import { Container } from "../../../styled/reusable";
+
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { setPfp } from "../../../redux/actions/userSlice";
 
@@ -91,7 +94,7 @@ const GoogleOauth: React.FC = () => {
       dispatch(setPfp(user.information.pfp || "/img/mesh-gradient.png"));
       router.push("/app");
     }
-  }, [OAuthProps.error, OAuthProps.data, router, setPfp]);
+  }, [OAuthProps.error, OAuthProps.data, router, dispatch]);
 
   return (
     <Main>

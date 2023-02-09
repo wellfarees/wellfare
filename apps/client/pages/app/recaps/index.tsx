@@ -1,10 +1,11 @@
 import { NextPage, GetStaticProps } from "next";
-import { ShrankContainer, GlowingBLue } from "../../../styled/reusable";
+import Link from "next/link";
 import styled from "styled-components";
+
+import { ShrankContainer, GlowingBlue } from "../../../styled/reusable";
 import { formatDate } from "../../../utils/formatDate";
 import { fontSizes } from "../../../config/userConfig";
-import AdaptiveAnimation from "../../../components/animated/AdaptiveAnimation";
-import Link from "next/link";
+import { AdaptiveAnimation } from "../../../components";
 
 import { useQuery } from "@apollo/client";
 import { RECAP_LIST_QUERY } from "../../../graphql/queries";
@@ -94,7 +95,7 @@ const Wrapper = styled.div`
     }
 
     button {
-      ${GlowingBLue}
+      ${GlowingBlue}
       margin-top: 2em;
     }
   }

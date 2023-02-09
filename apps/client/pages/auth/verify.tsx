@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { Container } from "../../styled/reusable";
-import styled from "styled-components";
 import Link from "next/link";
-import { GlowingBLue } from "../../styled/reusable";
+import styled from "styled-components";
+
+import { Container } from "../../styled/reusable";
+import { GlowingBlue } from "../../styled/reusable";
 
 import { useMutation } from "@apollo/client";
 import { VERIFY_USER } from "../../graphql/mutations";
@@ -65,7 +66,7 @@ const Wrapper = styled.div`
     }
 
     span {
-      ${GlowingBLue}
+      ${GlowingBlue}
       display: inline-block;
     }
   }

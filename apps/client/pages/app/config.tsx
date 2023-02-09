@@ -1,15 +1,17 @@
-import { ShrankContainer } from "../../styled/reusable";
+import { NextPage } from "next";
+import { useEffect } from "react";
 import styled from "styled-components";
 import Toggle from "react-toggle";
 import "react-toggle/style.css"; // for ES6 modules
 import ReactSlider from "react-slider";
-import { UserConfig, fontSizes } from "../../config/userConfig";
-import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
-import { NextPage } from "next";
-import { useEffect } from "react";
+
+import { ShrankContainer } from "../../styled/reusable";
+import { AdaptiveAnimation } from "../../components";
+import { fontSizes } from "../../config/userConfig";
 
 import { useMutation } from "@apollo/client";
 import { EDIT_USER_CONFIG } from "../../graphql/mutations";
+
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { saveConfigPiece } from "../../redux/actions/userSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -210,7 +212,7 @@ const Conf: NextPage = () => {
       refetchQueries: [],
       fetchPolicy: "no-cache",
     });
-  }, [info.config]);
+  }, [info.config, mutateAppearance]);
 
   return (
     <Wrapper>

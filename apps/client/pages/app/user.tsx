@@ -1,32 +1,37 @@
-import { ShrankContainer } from "../../styled/reusable";
-import styled from "styled-components";
-import { GlowingBLue } from "../../styled/reusable";
-import { LabeledInput } from "../../components";
-import { useForm } from "../../hooks/useForm";
-import AdaptiveAnimation from "../../components/animated/AdaptiveAnimation";
-import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
 import { useState, useEffect, useRef } from "react";
-import GoBack from "../../components/Routing/GoBack";
-import { scrollToBottom } from "../../utils/scrollToBottom";
-import Button from "../../components/Button/Button";
+import styled from "styled-components";
+
+import {
+  AdaptiveAnimation,
+  GoBack,
+  Button,
+  LabeledInput,
+  UserPfp,
+} from "../../components";
+import { ShrankContainer } from "../../styled/reusable";
+import { GlowingBlue } from "../../styled/reusable";
+
 import {
   mapRefsIntoValues,
   ResultingObject,
 } from "../../utils/mapRefsIntoValues";
+import { useForm } from "../../hooks/useForm";
+import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
+import { scrollToBottom } from "../../utils/scrollToBottom";
+import { fontSizes } from "../../config/userConfig";
 
 import { useMutation, useQuery } from "@apollo/client";
+import { USER_INFORMATION_QUERY } from "../../graphql/queries";
 import {
   EDIT_USER_INFORMATION,
   RESEND_VERIFICATION,
   UPLOAD_PFP,
   CHANGE_TO_NATIVE,
 } from "../../graphql/mutations";
-import { USER_INFORMATION_QUERY } from "../../graphql/queries";
-import { UserPfp } from "../../components/Pfp/Pfp";
-import { fontSizes } from "../../config/userConfig";
+
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { setPfp } from "../../redux/actions/userSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { setPfp } from "../../redux/actions/userSlice";
 
 const Wrapper = styled.div`
   margin-bottom: 5em;
@@ -49,7 +54,7 @@ const Wrapper = styled.div`
       gap: 2em;
 
       .change-btn {
-        ${GlowingBLue}
+        ${GlowingBlue}
         padding: 0.4em 2em !important;
         display: inline-block;
         width: auto !important;
@@ -86,7 +91,7 @@ const Wrapper = styled.div`
   }
 
   .saveBtn {
-    ${GlowingBLue}
+    ${GlowingBlue}
     margin-top: 3em;
     display: flex;
     align-items: center;
@@ -250,7 +255,7 @@ const User = () => {
     } else if (uploadProps.error) {
       setError(uploadProps.error.graphQLErrors[0].message);
     }
-  }, [setPfp, uploadProps.data, uploadProps.error]);
+  }, [uploadProps.data, uploadProps.error, dispatch]);
 
   const isImage = (type: string): boolean => {
     var ext = type.split("/")[1];

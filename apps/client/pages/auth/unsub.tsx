@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import styled from "styled-components";
-import { Container } from "../../styled/reusable";
 import { useRouter } from "next/router";
+
+import { Container } from "../../styled/reusable";
+
 import { useMutation } from "@apollo/client";
 import { UNSCUBSCRIBE } from "../../graphql/mutations";
-import { useEffect } from "react";
 
 const Wrapper = styled.div`
   height: 100vh;

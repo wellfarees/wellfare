@@ -1,5 +1,5 @@
 import generateJWT from "../generateJWT";
-import { CLIENT_URL } from "../../endpoints";
+import { CLIENT_URL } from "../../constants";
 import { sendEmail } from "./sendEmail";
 
 export const sendVerificationEmail = async (

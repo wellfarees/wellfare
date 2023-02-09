@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { staticFileFetch } from "../hooks/useReadFile";
-import styled from "styled-components";
-import { Container } from "../styled/reusable";
 import { GetStaticProps, NextPage } from "next";
-import { CLIENT_URL } from "../endpoints";
-import AdaptiveAnimation from "../components/animated/AdaptiveAnimation";
+import styled from "styled-components";
+
+import { AdaptiveAnimation } from "../components";
+import { Container } from "../styled/reusable";
+
+import { staticFileFetch } from "../hooks/useReadFile";
+import { CLIENT_URL } from "../constants";
 
 const Wrapper = styled.div`
   min-height: 100vh;

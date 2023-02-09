@@ -1,7 +1,7 @@
 import UserDoesNotExistsError from "../errors/UserDoesNotExist";
 import server from "../server";
 import generateJWT from "../utils/generateJWT";
-import { CLIENT_URL } from "../endpoints";
+import { CLIENT_URL } from "../constants";
 import { sendEmail } from "../utils/email/sendEmail";
 
 export default {

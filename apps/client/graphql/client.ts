@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/link-context";
-import { SERVER_URL } from "../endpoints";
+import { SERVER_URL } from "../constants";
 import { createUploadLink } from "apollo-upload-client";
 
 const getSyncInfo = (): [string | null, string | null] => {

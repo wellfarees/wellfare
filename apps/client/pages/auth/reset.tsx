@@ -1,11 +1,12 @@
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
-import Input from "../../components/Input/LabeledInput";
-import Button from "../../components/Button/Button";
+import styled from "styled-components";
+
+import { LabeledInput, Button } from "../../components";
+import { Container } from "../../styled/reusable";
+
 import { useForm } from "../../hooks/useForm";
 import { useHandleFormErrors } from "../../hooks/useHandleFormErrors";
-import { Container } from "../../styled/reusable";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { mapRefsIntoValues } from "../../utils/mapRefsIntoValues";
 
 import { useMutation } from "@apollo/client";
@@ -159,7 +160,7 @@ const Reset: NextPage = () => {
               setResult(message);
             }}
           >
-            <Input {...register("Email")} />
+            <LabeledInput {...register("Email")} />
             <Button
               withLoading={{
                 toBeLoading: loading,

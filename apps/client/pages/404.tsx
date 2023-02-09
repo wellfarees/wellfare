@@ -1,8 +1,9 @@
-import styled from "styled-components";
-import { Container } from "../styled/reusable";
-import { GlowingBLue } from "../styled/reusable";
 import Link from "next/link";
 import Image from "next/image";
+import styled from "styled-components";
+
+import { Container } from "../styled/reusable";
+import { GlowingBlue } from "../styled/reusable";
 
 const Wrapper = styled.main`
   min-height: 100vh;
@@ -72,7 +73,7 @@ const Wrapper = styled.main`
       }
 
       button {
-        ${GlowingBLue}
+        ${GlowingBlue}
         margin-top: 1em;
       }
     }

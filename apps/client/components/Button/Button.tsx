@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlowingBLue } from "../../styled/reusable";
+import { GlowingBlue } from "../../styled/reusable";
 import { useLoadingIndicator } from "../../hooks/useLoadingIndicator";
 import { useEffect, useRef } from "react";
 
@@ -39,7 +39,7 @@ const Wrapper = styled.div`
   }
 
   .default-btn-styles {
-    ${GlowingBLue}
+    ${GlowingBlue}
     transition: 0.3s all;
   }
 
