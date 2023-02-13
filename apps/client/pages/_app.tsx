@@ -68,10 +68,12 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
           type: "token",
         },
       });
+      setWebsiteLoaded(true);
+      console.log("called to fetch oauth user");
     } else {
       getConfig();
     }
-  }, [router.pathname, getConfig, getOauthUser, websiteLoaded]);
+  }, [router.pathname, getConfig, getOauthUser]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -95,11 +97,12 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       );
       dispatch(setAffirmations(data.getUser.affirmations));
       setReady(true);
+      setWebsiteLoaded(true);
     }
     if (error) {
       console.error(error);
     }
-  }, [loading, data, error, router.pathname, dispatch, websiteLoaded]);
+  }, [loading, data, error, router.pathname, dispatch]);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -110,8 +113,10 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       return;
     }
 
+    console.log("oauth user has been fetched");
     if (oAuthUserProps.data && !websiteLoaded) {
       const user = oAuthUserProps.data.oAuthLogin.user;
+      console.log(user);
       dispatch(saveToken(localStorage.getItem("jwt") as string));
       dispatch(
         saveConfig({
@@ -128,25 +133,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     if (oAuthUserProps.error) {
       console.log(JSON.stringify(oAuthUserProps.error, null, 2));
     }
-  }, [oAuthUserProps.error, oAuthUserProps.data, dispatch, websiteLoaded]);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      dispatch(setWebsiteLoaded(true));
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
-
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, [router.events, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      if (!websiteLoaded) dispatch(setWebsiteLoaded(true));
-    };
-  }, [dispatch, websiteLoaded]);
+  }, [oAuthUserProps.error, oAuthUserProps.data, dispatch]);
 
   return ready ? <>{children}</> : <></>;
 };
