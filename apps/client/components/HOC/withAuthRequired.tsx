@@ -34,11 +34,7 @@ export const withAuthRequired = (ChildComponent: React.FC): React.FC<Props> => {
       }
     }, [loading, data, error, router]);
 
-    return loading || !verified ? (
-      <>Loading...</>
-    ) : (
-      <ChildComponent {...props} />
-    );
+    return loading || !verified ? <></> : <ChildComponent {...props} />;
   };
 
   return ComposedComponent;
