@@ -250,7 +250,11 @@ const User = () => {
   useEffect(() => {
     if (uploadProps.data) {
       dispatch(
-        setPfp(uploadProps.data.pfpUpload.location + "?" + new Date().getTime())
+        dispatch(
+          setPfp(
+            uploadProps.data.pfpUpload.location + "?" + new Date().getTime()
+          )
+        )
       );
     } else if (uploadProps.error) {
       setError(uploadProps.error.graphQLErrors[0].message);

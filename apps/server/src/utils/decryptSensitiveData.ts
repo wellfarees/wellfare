@@ -55,14 +55,18 @@ async function decryptSensitiveData(user: AcceptUser): Promise<ReturnUser> {
     throw new UserDoesNotExistsError("User does not exist in database.");
 
   const decryptRecords = (records: EncryptedRecord[]): DecryptedRecord[] => {
-    return records.map((record): DecryptedRecord => {
-      return {
-        ...record,
-        feelings: decrypt(record.feelings),
-        gratefulness: decrypt(record.gratefulness),
-        unease: decrypt(record.unease),
-      };
-    });
+    return records
+      .map((record): DecryptedRecord => {
+        return {
+          ...record,
+          feelings: decrypt(record.feelings),
+          gratefulness: decrypt(record.gratefulness),
+          unease: decrypt(record.unease),
+        };
+      })
+      .sort((a, b) => {
+        return a.id > b.id ? -1 : 1;
+      });
   };
 
   const decryptedRecaps = user.recaps

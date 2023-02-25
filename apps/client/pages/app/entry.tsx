@@ -377,6 +377,7 @@ const Entry: NextPage = () => {
         }),
         fields: {
           lastSubmitted: records[records.length - 1].date,
+          records,
         },
       });
     },
