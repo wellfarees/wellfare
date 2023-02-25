@@ -68,7 +68,8 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
           type: "token",
         },
       });
-      setWebsiteLoaded(true);
+      console.log("ez???//");
+      dispatch(setWebsiteLoaded(true));
       console.log("called to fetch oauth user");
     } else {
       getConfig();
@@ -83,7 +84,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       return;
     }
 
-    if (data && !websiteLoaded) {
+    if (data) {
       dispatch(saveToken(jwt));
       dispatch(
         saveConfig({
@@ -97,7 +98,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
       );
       dispatch(setAffirmations(data.getUser.affirmations));
       setReady(true);
-      setWebsiteLoaded(true);
+      dispatch(setWebsiteLoaded(true));
     }
     if (error) {
       console.error(error);
@@ -114,7 +115,7 @@ const ReduxMiddleComponent: React.FC<any> = ({ children }) => {
     }
 
     console.log("oauth user has been fetched");
-    if (oAuthUserProps.data && !websiteLoaded) {
+    if (oAuthUserProps.data) {
       const user = oAuthUserProps.data.oAuthLogin.user;
       console.log(user);
       dispatch(saveToken(localStorage.getItem("jwt") as string));
