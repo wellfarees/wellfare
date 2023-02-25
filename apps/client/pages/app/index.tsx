@@ -208,9 +208,7 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY, {
-    fetchPolicy: "cache-and-network",
-  });
+  const { data, loading } = useQuery(USER_FEED_QUERY);
 
   const firstNameProps = useQuery(GET_FIRST_NAME);
 
