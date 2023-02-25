@@ -208,7 +208,9 @@ const NoRecordsFound = styled.div`
 `;
 
 const App: NextPage<{ records: RecordsData }> = ({ records }) => {
-  const { data, loading } = useQuery(USER_FEED_QUERY);
+  const { data, loading } = useQuery(USER_FEED_QUERY, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const firstNameProps = useQuery(GET_FIRST_NAME);
 
@@ -329,6 +331,8 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
     return weeks;
   }
 
+  // console.log(data.getUser);
+
   return (
     <Wrapper>
       <header>
@@ -356,9 +360,6 @@ const App: NextPage<{ records: RecordsData }> = ({ records }) => {
                 <div className="journal-cta">
                   <Link href="/app/entry" passHref>
                     <Button>Add new record</Button>
-                    {/* <h4>
-                      <i className="fas fa-pencil-alt"></i>
-                    </h4> */}
                   </Link>
                 </div>
               ) : null)}

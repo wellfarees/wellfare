@@ -53,7 +53,10 @@ export default {
       else
         return {
           ...decryptedData,
-          lastSubmitted: differenceInHours(new Date(), data.records[0].date),
+          lastSubmitted: differenceInHours(
+            new Date(),
+            decryptedData.records[decryptedData.records.length - 1].date
+          ),
         };
     },
   },
