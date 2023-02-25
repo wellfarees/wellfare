@@ -354,6 +354,7 @@ const Entry: NextPage = () => {
     useLazyQuery(GET_LAST_SUBMITTED);
 
   const [addRecord, recordMutationProps] = useMutation(ADD_RECORD, {
+    refetchQueries: ["GetUserFeed"],
     update(cache, receivedData) {
       const records = receivedData.data.addRecord;
 
