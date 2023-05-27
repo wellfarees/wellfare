@@ -16,7 +16,6 @@
     "typegen": "graphql-codegen --config codegen.yml",
     "test": "uvu -r tsm tests"
   },
-  "author": "geneva",
   "license": "MIT",
   "devDependencies": {
     "@graphql-codegen/cli": "2.16.1",

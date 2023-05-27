@@ -26,6 +26,13 @@ export default {
       args: { query: string },
       headers: { token: string }
     ) => {
+      // Contributions branch exclusive [CBE]
+      if (process.env.ALGOLIA_APP == "DEV") {
+        return {
+          records: [],
+        };
+      }
+
       if (!headers.token)
         return new NoTokenInHeaderError(
           "No token was found in the header. Please provide in Authorization header."

@@ -35,6 +35,13 @@ export default {
         },
       });
 
+      // Contributions branch exclusive [CBE]
+      if (process.env._AWS_ACCESS_KEY == "DEV") {
+        return {
+          location: data.information.pfp,
+        };
+      }
+
       const { createReadStream, filename } = await args.image;
       const extension = "." + /[^.]+$/.exec(filename);
       const stream = createReadStream();

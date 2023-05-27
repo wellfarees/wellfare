@@ -16,6 +16,13 @@ export const sendEmail = async (
   email: string,
   options: EmailOptions
 ): Promise<void> => {
+  // Contributions branch exclusive [CBE]
+  if (process.env.SENDGRID_API_KEY == "DEV") {
+    return new Promise(() => {
+      Promise.resolve();
+    });
+  }
+
   const encodedEmail = generateJWT({ id: email }, "client");
   const unsubEmail = `${CLIENT_URL}/auth/unsub?token=${encodedEmail}`;
 

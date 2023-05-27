@@ -14,6 +14,13 @@ export default {
       args: { email: string },
       headers: { ipv6: string }
     ) => {
+      // Contributions branch exclusive [CBE]
+      if (process.env.SENDGRID_API_KEY == "DEV") {
+        return {
+          success: true,
+        };
+      }
+
       const { ipv6 } = headers;
       const IPUser = await server.db.newsletterIPUsers.findFirst({
         where: {

@@ -3,10 +3,5 @@ node_modules
 dist
 coverage
 
-.env
-.env.*
-.env.local
-.env.*.local
-
 /yarn-error.log
 node_modules
