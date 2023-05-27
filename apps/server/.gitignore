@@ -3,5 +3,12 @@ node_modules
 dist
 coverage
 
+prisma/migrations
+
+.env
+.env.*
+.env.local
+.env.*.local
+
 /yarn-error.log
 node_modules
