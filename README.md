@@ -17,7 +17,7 @@
 
 <h3>Installation</h3>
 <p>
-To install all necessary packages and avoid any issues you must use node version `16.0.4`. If you are using linux, use nvm to switch versions. After that you can install all the packages from the root using npm or yarn:</p>
+To install all necessary packages and avoid any issues you must use node version `16.0.4`. If you are using linux, use nvm to switch versions. After that you can install all the packages from the root using npm or yarn</p>
 
 ```
 npm install
@@ -36,6 +36,12 @@ yarn
 
 ```
 sudo -u postgres psql
+```
+
+<p>If you are on Windows, try</p>
+
+```
+psql -U userName
 ```
 
 <p>Set your password to be able to connect to the database like following</p>
@@ -64,7 +70,14 @@ CREATE DATABASE wellfare;
 DATABASE_URL=postgresql://postgres:<password>@127.0.0.1:5432/wellfare?schema=user
 ```
 
-Remember change `<password>` to password you set previously.
+<p>Depending on your connectivity information you may or may not need to adjust certain parts in the string like username or port. In order to check database connectivity related information, you can run </p>
+
+```
+\conninfo
+```
+
+Remember to change `<password>` to password you set earlier.
+The following <a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-node-mysql"> source </a> can be helpful to understand what each part in the string means.
 
 <p>Now create the migration files running one of the following commands in the same directory</p>
 
