@@ -22,9 +22,7 @@ gain valuable insights into your emotional state with its user-friendly interfac
 The project is currently in the <u>alpha</u> stage, no ETA for beta.
 
 <h2>Contributing & Bugs</h2>
-First and foremost, thanks for taking your time to contribute to this project.
-
-<p>This project is primarily being developed on linux (ubuntu), the current setup includes but is not limited to,</p>
+First and foremost, thanks for taking your time to contribute to this project. This project is primarily being developed on linux (ubuntu), the current setup includes but is not limited to,
 
 * Typescript as the main language
 * Apollo GraphQl
