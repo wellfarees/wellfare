@@ -1,14 +1,28 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+<div align="center">
+<br>
+<img src="https://cdn.discordapp.com/attachments/859840791824039936/1121124034172702750/wellfare-logo_50.png" alt="failed to load">
 <h1>Wellfare</h1>
-<p>  Introducing your future</p>
+<p>Introducing your future well-being assistant, mood tracker & confidential journal.</p>
 
-* Wellbeing assistant
-* Mood tracker
-* Psychoterapist
-* Confidential journal
 
-<h3>Tech stack</h3>
-<p>Mainly being developed on linux, ubuntu, the current setup includes but is not limited to:</p>
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+
+</div>
+
+<h1>About</h1>
+
+Projects' homepage 👉 **https://www.wellfare.space/**
+
+Discover your ultimate well-being companion at Wellfare's innovative website 
+that introduces a future-forward assistant. Seamlessly track your moods, unlock patterns, and 
+gain valuable insights into your emotional state with its user-friendly interface. 
+
+The project is currently in the <u>alpha</u> stage, no ETA for beta.
+
+<h2>Contributing & Bugs</h2>
+First and foremost, thanks for taking your time to contribute to this project. This project is primarily being developed on linux (ubuntu), the current setup includes but is not limited to,
 
 * Typescript as the main language
 * Apollo GraphQl
@@ -18,14 +32,6 @@
 * NextJs
 * Styled components
 
-<h3>Current Status</h3>
-Application is in <b>alpha</b> stage.<br>
-No current eta for beta.
+Please look at the [contributing branch](https://github.com/wellfarees/wellfare/tree/contributions) for more information on how to contribute to this project.
 
-<h3>Bugs</h3>
-<p>Our app has free access to anyone. If by any chance you encounter an unspeaken bug, you will be much appreciated having it reported.
-To do so, open an issue in this repository and choose the bug report template.</p>
-<p>The development policy is very strict when it comes down to bugs and imperfections, no major release will be arranged before the app reaches certain level of stability</p>
-<h3>License</h3>
-Wellfare is licensed under GNU General Public License v3.0 <br>
-<a href="https://github.com/wellfarees/wellfare/blob/main/LICENSE">GNU GPL V3</a>
+If by any chance you encounter a bug, please report it by [opening an issue](https://github.com/wellfarees/wellfare/issues/new/choose) and selecting the bug report template.
